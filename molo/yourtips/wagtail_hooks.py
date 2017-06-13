@@ -28,13 +28,6 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
 
     search_fields = ('story_name',)
 
-    def get_queryset(self, request):
-        qs = super(YourTipsEntriesModelAdmin, self).get_queryset(request)
-        # Only show questions related to that site
-        main = request.site.root_page
-        parent_qs = YourTips.objects.descendant_of(main)
-        return qs
-
     def _convert(self, obj, *args, **kwargs):
         if obj.converted_article_page:
             return (
@@ -66,7 +59,6 @@ class YourTipsModelAdmin(ModelAdmin, YourTipsAdmin):
 
     def get_queryset(self, request):
         qs = super(YourTipsModelAdmin, self).get_queryset(request)
-        # Only show questions related to that site
         main = request.site.root_page
         return qs.descendant_of(main)
 

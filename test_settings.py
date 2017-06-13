@@ -6,7 +6,7 @@ PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__))))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'testapp_test2.db'
+        'NAME': 'testapp_test.db'
     }
 }
 

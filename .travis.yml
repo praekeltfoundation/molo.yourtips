@@ -17,6 +17,8 @@ script:
   - molo scaffold testapp --include molo.yourtips ^yourtips/
   - mkdir -p testapp/testapp/templates/core/tags/
   - cp test_settings.py testapp/testapp/settings/local.py
+    - cp molo/yourwords/test_templates/section_page.html testapp/testapp/templates/core/section_page.html
+  - cp molo/yourwords/test_templates/section_listing_homepage.html testapp/testapp/templates/core/tags/section_listing_homepage.html
   - flake8 testapp
   - testapp/./manage.py compress --settings=testapp.settings.production --force
   - pip install -e testapp

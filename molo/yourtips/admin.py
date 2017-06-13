@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.conf.urls import patterns
 from django.template.defaultfilters import truncatechars
 from django.shortcuts import get_object_or_404, redirect
+from django import forms
 
 from wagtail.wagtailcore.utils import cautious_slugify
 

@@ -1,5 +1,5 @@
 
-{% load wagtailcore_tags wagtailimages_tags core_tags competition_tag %}
+{% load wagtailcore_tags wagtailimages_tags core_tags tip_tag %}
 
 {% if sections %}
 {% for section in sections %}
@@ -21,7 +21,7 @@
   </ul>
   {% endfor %}
   
-  {% your_words_competition_in_section section %}
+  {% your_tips_tip_in_section section %}
 
 </div>
 {% endfor %}

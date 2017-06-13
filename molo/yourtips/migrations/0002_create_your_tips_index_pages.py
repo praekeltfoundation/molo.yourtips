@@ -10,7 +10,7 @@ def create_yourtips_index(apps, schema_editor):
     main = Main.objects.all().first()
 
     if main:
-        tip_index = YourTipsIndexPage(title='Your Tips', slug='Your-tips')
+        tip_index = YourTipsIndexPage(title='Your tips', slug='your-tips')
         main.add_child(instance=tip_index)
         tip_index.save_revision().publish()
 

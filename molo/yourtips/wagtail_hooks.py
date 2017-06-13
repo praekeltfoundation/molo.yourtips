@@ -26,7 +26,7 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
     list_filter = [('submission_date', DateFilter), 'is_read',
                    'is_shortlisted']
 
-    search_fields = ('story_name',)
+    search_fields = ('tip_name',)
 
     def _convert(self, obj, *args, **kwargs):
         if obj.converted_article_page:

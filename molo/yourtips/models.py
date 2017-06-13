@@ -14,12 +14,8 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from molo.core.blocks import MarkDownBlock
 from molo.core.utils import generate_slug
 from molo.core.models import (
-    ArticlePage,
-    SectionPage,
-    TranslatablePageMixinNotRoutable,
-    PreventDeleteMixin,
-    Main,
-    index_pages_after_copy,
+    ArticlePage, SectionPage, TranslatablePageMixinNotRoutable,
+    PreventDeleteMixin, Main, index_pages_after_copy,
 )
 
 SectionPage.subpage_types += ['yourtips.YourTips']
@@ -48,8 +44,7 @@ def create_yourtips_index_page(sender, instance, **kwargs):
 
 
 class YourTips(TranslatablePageMixinNotRoutable, Page):
-    parent_page_types = [
-        'core.Main']
+    parent_page_types = ['core.Main']
     subpage_types = ['yourtips.YourTipsTermsAndConditions', 'yourtips.YourTipsThankYou']
     description = models.TextField(null=True, blank=True)
     image = models.ForeignKey(
@@ -115,7 +110,7 @@ class YourTipsEntry(models.Model):
     tip_name = models.CharField(max_length=128)
     tip_text = models.CharField(max_length=140)
     terms_or_conditions_approved = models.BooleanField()
-    hide_real_name = models.BooleanField()
+    hide_real_name = models.BooleanField(default=False)
     is_read = models.BooleanField(default=False)
     is_shortlisted = models.BooleanField(default=False)
 
@@ -125,7 +120,7 @@ class YourTipsEntry(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text=_('Page to which the entry was converted to')
+        help_text=_('Article page to which the entry was converted to')
     )
     related_article_page = models.ForeignKey(
         'core.ArticlePage',
@@ -133,7 +128,7 @@ class YourTipsEntry(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        help_text=_('Page to which the entry was converted to')
+        help_text=_('Article page related to this entry')
     )
 
     panels = [

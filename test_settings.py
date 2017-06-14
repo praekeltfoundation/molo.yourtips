@@ -40,5 +40,3 @@ TEMPLATES = [
         },
     },
 ]
-
-INSTALLED_APPS += ['django_comments']

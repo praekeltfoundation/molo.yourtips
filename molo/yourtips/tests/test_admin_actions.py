@@ -1,15 +1,6 @@
-import datetime
-
 from molo.core.models import ArticlePage
 
-from molo.yourtips.models import (
-    YourTips,
-    YourTipsEntry,
-)
-from molo.yourwords.admin import (
-    download_as_csv,
-    YourWordsCompetitionEntryAdmin
-)
+from molo.yourtips.models import YourTipsEntry
 from molo.yourtips.tests.base import BaseYourTipsTestCase
 
 
@@ -28,12 +19,6 @@ class TestAdminActions(BaseYourTipsTestCase):
             terms_or_conditions_approved=True,
             hide_real_name=True
         )
-
-        # import pdb; pdb.set_trace()
-
-        # article = ArticlePage.objects.create(
-        #     title='test'
-        # )
 
         response = self.client.get(
             '/django-admin/yourtips/yourtipsentry/%d/convert/' %

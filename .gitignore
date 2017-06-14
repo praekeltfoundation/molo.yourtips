@@ -7,7 +7,7 @@ build
 
 /testapp/
 htmlcov/
-.coverage*
+.coverage
 .cache
 *.sqlite3
 /the_app/

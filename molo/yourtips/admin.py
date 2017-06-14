@@ -10,9 +10,9 @@ from django import forms
 from wagtail.wagtailcore.utils import cautious_slugify
 
 from molo.core.models import ArticlePage
-from molo.yourtips.models import (YourTipsEntry,
-                                   YourTips,
-                                   YourTipsIndexPage)
+from molo.yourtips.models import (
+    YourTipsEntry, YourTips, YourTipsIndexPage
+)
 
 
 @staff_member_required

@@ -1,5 +1,4 @@
 from django import template
-from copy import copy
 from molo.yourtips.models import YourTipsThankYou
 from molo.core.templatetags.core_tags import get_pages
 

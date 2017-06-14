@@ -16,7 +16,7 @@ script:
   - flake8 molo
   - molo scaffold testapp \
     --require=molo.commenting --include=molo.commenting ^commenting/ \
-    --include molo.yourtips ^yourtips/
+    --include=molo.yourtips ^yourtips/
   - mkdir -p testapp/testapp/templates/core/tags/
   - cp test_settings.py testapp/testapp/settings/local.py
   - cp molo/yourwords/test_templates/section_page.html testapp/testapp/templates/core/section_page.html
@@ -24,7 +24,7 @@ script:
   - flake8 testapp
   - testapp/./manage.py compress --settings=testapp.settings.production --force
   - pip install -e testapp
-  - py.test --cov=molo --cov-config=.coveragerc
+  - py.test --cov=molo --cov-config .coveragerc
 after_success:
   - coveralls
 deploy:

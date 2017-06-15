@@ -18,11 +18,9 @@ from molo.yourtips.models import (
 @staff_member_required
 def convert_to_article(request, entry_id):
     def get_entry_author(entry):
-        written_by_user = 'Written by: %s' % entry.user.username
-        written_by_anon = 'Written by: Anonymous'
         if entry.hide_real_name:
-            return written_by_anon
-        return written_by_user
+            return 'Written by: Anonymous'
+        return 'Written by: %s' % entry.user.username
 
     entry = get_object_or_404(YourTipsEntry, pk=entry_id)
     if not entry.converted_article_page:

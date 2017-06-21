@@ -1,15 +1,13 @@
-
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
-
 {% block content %}
-
-<div class="yourtips yourtips-share-your-tip">
-  <h4 class="tip__share--description">
+<div class="yourtips yourtips--share-cta">
+  <h3 class="yourtips__share--description">
     {% trans "Do you have advice you can share with other youth on relationships?" %}
-  </h4>
-  <a href="{% url 'molo.yourtips:tip_entry' 'tip' %}" class="call-to-action">
-    {% trans "Click here share your tip!" %}
-  </a>
+  </h3>
+  <div class="call-to-action">
+    <a href="{% url 'molo.yourtips:tip_entry' 'tip' %}" class="call-to-action__nav-item-text">
+      {% trans "Click here share your tip!" %}
+    </a>
+  </div>
 </div>
-
 {% endblock %}

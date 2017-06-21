@@ -1,21 +1,23 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
-
 {% block content %}
-<div class="yourtips yourtips--entries">
-  <div class="heading-container {% if self.image %}feature-image{% endif %}">
-    {% if tip.thank_you_page.get_parent_page.get_effective_image %}
-      {% image tip.thank_you_page.get_parent_page.get_effective_image width-98 as tmp_photo_small %}
-      {% image tip.thank_you_page.get_parent_page.get_effective_image width-320 as tmp_photo_large %}
-       <img src="{{ tmp_photo_small.url }}" srcset="{{ tmp_photo_large.url }}" alt="{{ self.get_parent_page.get_effective_image.title }}"/>
-    {% endif %}
-    <h1 class="heading heading--yourtips">
-        {% trans "Share your tip" %}
-    </h1>
-  </div>
+<div class="yourtips yourtips--entry-page">
+  {% if self.image %}
+    <div class="yourtips__image">
+      {% if tip.thank_you_page.get_parent_page.get_effective_image %}
+        {% image tip.thank_you_page.get_parent_page.get_effective_image width-98 as tmp_photo_small %}
+        {% image tip.thank_you_page.get_parent_page.get_effective_image width-320 as tmp_photo_large %}
+         <img src="{{ tmp_photo_small.url }}" srcset="{{ tmp_photo_large.url }}" alt="{{ self.get_parent_page.get_effective_image.title }}"/>
+      {% endif %}
+    </div>
+  {% endif %}
+  <h1 class="heading heading--yourtips">{% trans "Share your tip" %}</h1>
+  <h2 class="heading heading--yourtips-title">{{tip.title}}</h3>
+  <h4 class="yourtips__description">
+    {{tip.description}}
+    <a href="" class="call-to-action__nav-item-text">{% trans "See examples of other tips below"%}</a>
+  </h4>
 
-  <h3 class="tip__title">{{tip.title}}</h3>
-  <h4 class="tip__title tip__title--description">{{tip.description}}</h4>
   <div class="yourtips--inner-content">
     {% for block in tip.content %}
         {% if block.block_type == 'heading' %}
@@ -49,38 +51,39 @@
     </div>
     <form method="post" class="yourtips-form">
     {% csrf_token %}
-        <fieldset>
-          <label>{% trans "Title of your tip (max 60 characters)" %}</label>
-          {{ form.tip_name }}
-           {% if form.tip_name.errors %}
-            <p class="alert-error">* {{form.tip_name.errors|join:' '}}</p>
-          {% endif %}
-        </fieldset>
+      <fieldset>
+        <label>{% trans "Title of your tip (max 60 characters)" %}</label>
+        {{ form.tip_name }}
+         {% if form.tip_name.errors %}
+          <p class="alert-error">* {{form.tip_name.errors|join:' '}}</p>
+        {% endif %}
+      </fieldset>
 
-        <fieldset>
-          <label for="">{% trans "Tell us your tip here (max 140 characters)" %}</label>
-          {{ form.tip_text }}
-          {% if form.tip_text.errors %}
-            <p class="alert-error" >* {{form.tip_text.errors|join:' '}}</p>
-          {% endif %}
-        </fieldset>
+      <fieldset>
+        <label>{% trans "Tell us your tip here (max 140 characters)" %}</label>
+        {{ form.tip_text }}
+        {% if form.tip_text.errors %}
+          <p class="alert-error" >* {{form.tip_text.errors|join:' '}}</p>
+        {% endif %}
+      </fieldset>
 
-         <fieldset>
-          {{ form.user_name }}
-          <label>{% trans "Include your name (optional)" %}</label>
-        </fieldset>
+       <fieldset>
+        <label>{% trans "Include your name (optional)" %}</label>
+        {{ form.user_name }}
+      </fieldset>
 
-        <fieldset>
-           {{ form.terms_or_conditions_approved }}
-           <label for="id_terms_or_conditions_approved">{% trans "I accept the Terms and Conditions" %}</label>
-           {% if form.terms_or_conditions_approved.errors %}
-          <p class="alert-error">* {{form.terms_or_conditions_approved.errors|join:' '}}</p>
-          {% endif %}
-        </fieldset>
-
-        <input type="submit" value="Submit Your Tip" />
+      <fieldset>
+         {{ form.terms_or_conditions_approved }}
+         <label for="id_terms_or_conditions_approved">{% trans "I accept the Terms and Conditions" %}</label>
+         {% if form.terms_or_conditions_approved.errors %}
+        <p class="alert-error">* {{form.terms_or_conditions_approved.errors|join:' '}}</p>
+        {% endif %}
+      </fieldset>
+      <input type="submit" value="Submit Your Tip" />
     </form>
-
-    <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item call-to-action__nav-item--yourtips call-to-action__nav-item--back-home">{% trans "Home" %}</a>
+</div>
+<div class="call-to-action">
+  <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item call-to-action__nav-item--back-home">
+  {% trans "Home" %}</a>
 </div>
 {% endblock %}

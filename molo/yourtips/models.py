@@ -44,7 +44,9 @@ def create_yourtips_index_page(sender, instance, **kwargs):
 
 
 class YourTips(TranslatablePageMixinNotRoutable, Page):
-    parent_page_types = ['core.Main']
+    parent_page_types = [
+        'yourtips.YourTipsIndexPage', 'core.SectionPage'
+    ]
     subpage_types = [
         'yourtips.YourTipsTermsAndConditions',
         'yourtips.YourTipsThankYou'

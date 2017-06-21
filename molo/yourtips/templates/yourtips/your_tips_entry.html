@@ -66,6 +66,11 @@
           {% endif %}
         </fieldset>
 
+         <fieldset>
+          {{ form.user_name }}
+          <label>{% trans "Include your name (optional)" %}</label>
+        </fieldset>
+
         <fieldset>
            {{ form.terms_or_conditions_approved }}
            <label for="id_terms_or_conditions_approved">{% trans "I accept the Terms and Conditions" %}</label>
@@ -74,10 +79,6 @@
           {% endif %}
         </fieldset>
 
-        <fieldset>
-          {{ form.hide_real_name }}
-          <label>{% trans "Share my tip anonymously" %}</label>
-        </fieldset>
         <input type="submit" value="Submit Your Tip" />
     </form>
 

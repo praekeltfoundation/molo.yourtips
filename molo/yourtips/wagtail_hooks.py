@@ -13,6 +13,7 @@ from molo.yourtips.admin import YourTipsAdmin
 from molo.yourtips.models import YourTipsEntry, \
     YourTips
 
+
 class DateFilter(DateRangeFilter):
     template = 'admin/yourtips/yourtips_date_range_filter.html'
 

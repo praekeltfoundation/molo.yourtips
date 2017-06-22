@@ -1,7 +1,6 @@
 from django import template
 from copy import copy
-from molo.yourtips.models import (YourTipsIndexPage,
-                                  YourTipsThankYou)
+from molo.yourtips.models import YourTipsThankYou
 from molo.core.models import ArticlePage
 from molo.core.templatetags.core_tags import get_pages
 
@@ -33,7 +32,7 @@ def load_thank_you_page_for_yourtips(context, tip):
 )
 def your_tips_tip(context):
     context = copy(context)
-    #TODO: Change this query - to allow overwrite
+    # TODO: Change this query - to allow overwrite
     latest_article = ArticlePage.objects.filter(
         tip_entry__isnull=False,
         featured_in_homepage_start_date__isnull=False

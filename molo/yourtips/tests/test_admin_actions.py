@@ -19,9 +19,9 @@ class TestAdminActions(BaseYourTipsTestCase):
         )
 
         response = self.client.get(
-            '/django-admin/yourtips/yourtipsentry/%d/convert/' %
-            entry.id)
-        article = ArticlePage.objects.get(title='Tip-%s'% entry.id)
+            '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id
+        )
+        article = ArticlePage.objects.get(title='Tip-%s' % entry.id)
         entry = YourTipsEntry.objects.get(pk=entry.pk)
         self.assertEquals(entry.converted_article_page, article)
         self.assertEquals(article.body.stream_data, [

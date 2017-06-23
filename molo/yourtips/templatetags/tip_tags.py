@@ -30,11 +30,19 @@ def load_thank_you_page_for_yourtips(context, tip):
     'yourtips/your_tips_tip_tag.html',
     takes_context=True
 )
-
 def your_tips_tip(context):
     context = copy(context)
+    # TODO: Change this query - to allow overwrite
+    latest_article = ArticlePage.objects.filter(
+        tip_entry__isnull=False,
+        featured_in_homepage_start_date__isnull=False
+    ).order_by('-featured_in_homepage_start_date')
+
+    context.update({
+        'article_tip': latest_article.first()
     })
     return context
+
 
 @register.inclusion_tag(
     'yourtips/your_tips_share_your_tip.html',

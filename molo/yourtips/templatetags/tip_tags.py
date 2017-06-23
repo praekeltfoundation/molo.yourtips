@@ -1,6 +1,9 @@
 from django import template
+from copy import copy
 from molo.yourtips.models import YourTipsThankYou
+from molo.core.models import ArticlePage
 from molo.core.templatetags.core_tags import get_pages
+
 
 register = template.Library()
 
@@ -21,3 +24,21 @@ def load_thank_you_page_for_yourtips(context, tip):
         return get_pages(context, qs, locale)
     else:
         return []
+
+
+@register.inclusion_tag(
+    'yourtips/your_tips_tip_tag.html',
+    takes_context=True
+)
+
+def your_tips_tip(context):
+    context = copy(context)
+    })
+    return context
+
+@register.inclusion_tag(
+    'yourtips/your_tips_share_your_tip.html',
+    takes_context=True
+)
+def your_tips_share_your_tip(context):
+    pass

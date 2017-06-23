@@ -33,10 +33,7 @@ def load_thank_you_page_for_yourtips(context, tip):
 def your_tips_tip(context):
     context = copy(context)
     # TODO: Change this query - to allow overwrite
-    latest_article = YourTipsEntryPage.objects.filter(
-        tip_entries__isnull=False,
-        featured_in_homepage_start_date__isnull=False
-    ).order_by('-featured_in_homepage_start_date')
+    latest_article = YourTipsEntryPage.objects.all()
 
     context.update({
         'article_tip': latest_article.first()

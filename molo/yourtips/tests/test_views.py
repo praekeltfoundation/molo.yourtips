@@ -40,7 +40,7 @@ class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
         response = self.client.post(
             reverse('molo.yourtips:tip_entry', args=[tip.slug]), {
                 'tip_text': 'The text',
-                'terms_or_conditions_approved': 'true'})
+                'allow_share_on_social_media': 'true'})
         self.assertEqual(
             response['Location'],
             '/yourtips/thankyou/test-tip/')

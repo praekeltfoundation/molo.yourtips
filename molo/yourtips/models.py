@@ -19,12 +19,12 @@ from molo.core.models import (
     PreventDeleteMixin, Main, index_pages_after_copy,
 )
 
-SectionPage.subpage_types += ['yourtips.YourTips']
+SectionPage.subpage_types += ['yourtips.YourTips', 'yourtips.YourTipsArticleIndexPage']
 
 
 class YourTipsIndexPage(Page, PreventDeleteMixin):
     parent_page_types = ['core.Main']
-    subpage_types = ['yourtips.YourTips']
+    subpage_types = ['yourtips.YourTips', 'yourtips.YourTipsArticleIndexPage']
 
     def copy(self, *args, **kwargs):
         site = kwargs['to'].get_site()
@@ -50,12 +50,31 @@ def create_yourtips_index_page(sender, instance, **kwargs):
         yourtips_tip_page_index.save_revision().publish()
 
 
+class YourTipsArticleIndexPage(Page, PreventDeleteMixin):
+    parent_page_types = ['yourtips.YourTipsIndexPage', 'core.SectionPage']
+    subpage_types = []
+
+    def copy(self, *args, **kwargs):
+        YourTipsArticleIndexPage.objects.child_of(YourTipsIndexPage).delete()
+        super(YourTipsArticleIndexPage, self).copy(*args, **kwargs)
+
+
+@receiver(index_pages_after_copy, sender=Main)
+def create_yourtips_article_index_page(sender, instance, **kwargs):
+    if not instance.get_children().filter(
+            title='Read Tips').exists:
+        yourtips_tip_article_page_index = YourTipsArticleIndexPage(
+            title='Read Tips', slug=('read-yourtips-%s' % (
+                generate_slug(instance.title), )))
+        instance.add_child(instance=yourtips_tip_article_page_index)
+        yourtips_tip_article_page_index.save_revision().publish()
+
+
 class YourTips(TranslatablePageMixinNotRoutable, Page):
     parent_page_types = [
         'yourtips.YourTipsIndexPage', 'core.SectionPage'
     ]
     subpage_types = [
-        'yourtips.YourTipsTermsAndConditions',
         'yourtips.YourTipsThankYou'
     ]
     description = models.TextField(null=True, blank=True)
@@ -121,14 +140,14 @@ class YourTipsEntry(models.Model):
     user_name = models.CharField(null=True, blank=True, max_length=30)
     user = models.ForeignKey('auth.User', blank=True, null=True)
     tip_text = models.CharField(max_length=140)
-    terms_or_conditions_approved = models.BooleanField()
+    allow_share_on_social_media = models.BooleanField()
 
     converted_article_page = models.ForeignKey(
-        'core.ArticlePage',
+        'yourtips.YourTipsEntryPage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='tip_entry',
+        related_name='tip_entries',
         help_text=_('Article page to which the entry was converted to')
     )
 
@@ -143,6 +162,20 @@ class YourTipsEntry(models.Model):
     class Meta:
         verbose_name = 'YourTips Entry'
         verbose_name_plural = 'YourTips Entries'
+
+
+class YourTipsEntryPage(ArticlePage):
+    parent_page_types = ['yourtips.YourTipsArticleIndexPage']
+    subpage_types = []
+
+    def get_parent_page(self):
+        return YourTipsArticleIndexPage.objects.all().ancestor_of(self).last()
+
+
+YourTipsEntryPage.promote_panels = [
+    MultiFieldPanel(
+        Page.promote_panels,
+        "Common page configuration", "collapsible collapsed")]
 
 
 class YourTipsTermsAndConditions(ArticlePage):

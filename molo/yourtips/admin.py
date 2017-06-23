@@ -9,9 +9,8 @@ from django import forms
 
 from wagtail.wagtailcore.utils import cautious_slugify
 
-from molo.core.models import ArticlePage
 from molo.yourtips.models import (
-    YourTipsEntry, YourTips, YourTipsIndexPage
+    YourTipsEntry, YourTips, YourTipsArticleIndexPage, YourTipsEntryPage
 )
 
 
@@ -25,8 +24,8 @@ def convert_to_article(request, entry_id):
     entry = get_object_or_404(YourTipsEntry, pk=entry_id)
     if not entry.converted_article_page:
         tip_page_index_page = (
-            YourTipsIndexPage.objects.live().first())
-        article = ArticlePage(
+            YourTipsArticleIndexPage.objects.live().first())
+        article = YourTipsEntryPage(
             title='Tip-%s' % str(entry.id),
             slug='yourtips-entry-%s' % cautious_slugify(entry.id),
             body=json.dumps([
@@ -40,7 +39,6 @@ def convert_to_article(request, entry_id):
 
         entry.converted_article_page = article
         entry.save()
-        return redirect('/admin/pages/%d/move/' % article.id)
     return redirect('/admin/pages/%d/edit/' % entry.converted_article_page.id)
 
 
@@ -53,7 +51,7 @@ class YourTipsEntryForm(forms.ModelForm):
 
 class YourTipsEntryAdmin(admin.ModelAdmin):
     list_display = ['truncate_text', 'user', 'user_name',
-                    'submission_date', 'terms_or_conditions_approved',
+                    'submission_date', 'allow_share_on_social_media',
                     '_convert']
     list_filter = ['submission_date']
     date_hierarchy = 'submission_date'

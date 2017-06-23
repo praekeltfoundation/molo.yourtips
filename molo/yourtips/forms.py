@@ -8,5 +8,5 @@ class YourTipsEntryForm(forms.ModelForm):
     class Meta:
         model = YourTipsEntry
         fields = [
-            'user_name', 'tip_text', 'terms_or_conditions_approved'
+            'user_name', 'tip_text', 'allow_share_on_social_media'
         ]

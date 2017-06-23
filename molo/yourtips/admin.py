@@ -53,7 +53,7 @@ class YourTipsEntryForm(forms.ModelForm):
 
 class YourTipsEntryAdmin(admin.ModelAdmin):
     list_display = ['truncate_text', 'user', 'user_name',
-                    'submission_date', 'terms_or_conditions_approved',
+                    'submission_date', 'allow_share_on_social_media',
                     '_convert']
     list_filter = ['submission_date']
     date_hierarchy = 'submission_date'

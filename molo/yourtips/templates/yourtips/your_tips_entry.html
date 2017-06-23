@@ -64,10 +64,10 @@
         </fieldset>
 
         <fieldset>
-           {{ form.terms_or_conditions_approved }}
-           <label for="id_terms_or_conditions_approved">{% trans "I agree that my tip can be shared on Facebook and Twitter (optional)" %}</label>
-           {% if form.terms_or_conditions_approved.errors %}
-          <p class="alert-error">* {{form.terms_or_conditions_approved.errors|join:' '}}</p>
+           {{ form.allow_share_on_social_media }}
+           <label for="id_allow_share_on_social_media">{% trans "I agree that my tip can be shared on Facebook and Twitter (optional)" %}</label>
+           {% if form.allow_share_on_social_media.errors %}
+          <p class="alert-error">* {{form.allow_share_on_social_media.errors|join:' '}}</p>
           {% endif %}
         </fieldset>
 

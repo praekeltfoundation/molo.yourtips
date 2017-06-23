@@ -15,7 +15,7 @@ class TestAdminActions(BaseYourTipsTestCase):
         entry = YourTipsEntry.objects.create(
             user_name='Test',
             tip_text='test body',
-            terms_or_conditions_approved=True,
+            allow_share_on_social_media=True,
         )
 
         response = self.client.get(

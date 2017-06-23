@@ -25,7 +25,7 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
     add_to_settings_menu = False
     list_display = [
         'tip', 'submission_date', 'user', 'user_name',
-        'terms_or_conditions_approved', '_convert'
+        'allow_share_on_social_media', '_convert'
     ]
     list_filter = [('submission_date', DateFilter)]
 

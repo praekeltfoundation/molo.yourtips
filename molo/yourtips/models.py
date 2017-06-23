@@ -121,7 +121,7 @@ class YourTipsEntry(models.Model):
     user_name = models.CharField(null=True, blank=True, max_length=30)
     user = models.ForeignKey('auth.User', blank=True, null=True)
     tip_text = models.CharField(max_length=140)
-    terms_or_conditions_approved = models.BooleanField()
+    allow_share_on_social_media = models.BooleanField()
 
     converted_article_page = models.ForeignKey(
         'core.ArticlePage',

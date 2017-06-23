@@ -52,35 +52,28 @@
     </div>
     <form method="post" class="yourtips-form">
     {% csrf_token %}
-      <fieldset>
-        <label>{% trans "Title of your tip (max 60 characters)" %}</label>
-        {{ form.tip_name }}
-         {% if form.tip_name.errors %}
-          <p class="alert-error">* {{form.tip_name.errors|join:' '}}</p>
-        {% endif %}
-      </fieldset>
+        <fieldset>
+          <label>{% trans "Compose your tip (1 - 2 sentences)" %}</label>
+          {{ form.tip_text }}
+          {% if form.tip_text.errors %}
+            <p class="alert-error" >* {{form.tip_text.errors|join:' '}}</p>
+          {% endif %}
+        </fieldset>
 
-      <fieldset>
-        <label>{% trans "Tell us your tip here (max 140 characters)" %}</label>
-        {{ form.tip_text }}
-        {% if form.tip_text.errors %}
-          <p class="alert-error" >* {{form.tip_text.errors|join:' '}}</p>
-        {% endif %}
-      </fieldset>
+         <fieldset>
+          {{ form.user_name }}
+          <label>{% trans "Include your name (optional)" %}</label>
+        </fieldset>
 
-       <fieldset>
-        <label>{% trans "Include your name (optional)" %}</label>
-        {{ form.user_name }}
-      </fieldset>
+        <fieldset>
+           {{ form.terms_or_conditions_approved }}
+           <label for="id_terms_or_conditions_approved">{% trans "I agree that my tip can be shared on Facebook and Twitter (optional)" %}</label>
+           {% if form.terms_or_conditions_approved.errors %}
+          <p class="alert-error">* {{form.terms_or_conditions_approved.errors|join:' '}}</p>
+          {% endif %}
+        </fieldset>
 
-      <fieldset>
-         {{ form.terms_or_conditions_approved }}
-         <label for="id_terms_or_conditions_approved">{% trans "I accept the Terms and Conditions" %}</label>
-         {% if form.terms_or_conditions_approved.errors %}
-        <p class="alert-error">* {{form.terms_or_conditions_approved.errors|join:' '}}</p>
-        {% endif %}
-      </fieldset>
-      <input type="submit" value="Submit Your Tip" />
+        <input type="submit" value="Submit Your Tip" />
     </form>
 </div>
 <div class="call-to-action">

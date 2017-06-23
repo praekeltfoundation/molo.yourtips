@@ -18,20 +18,20 @@ from molo.yourtips.models import (
 @staff_member_required
 def convert_to_article(request, entry_id):
     def get_entry_author(entry):
-        if entry.hide_real_name:
-            return 'Written by: Anonymous'
-        return 'Written by: %s' % entry.user.username
+        if not entry.user_name:
+            return 'By Anonymous'
+        return 'By %s' % entry.user_name
 
     entry = get_object_or_404(YourTipsEntry, pk=entry_id)
     if not entry.converted_article_page:
         tip_page_index_page = (
             YourTipsIndexPage.objects.live().first())
         article = ArticlePage(
-            title=entry.tip_name,
-            slug='yourtips-entry-%s' % cautious_slugify(entry.tip_name),
+            title='Tip-%s' % str(entry.id),
+            slug='yourtips-entry-%s' % cautious_slugify(entry.id),
             body=json.dumps([
-                {"type": "paragraph", "value": get_entry_author(entry)},
-                {"type": "paragraph", "value": entry.tip_text}
+                {"type": "paragraph", "value": entry.tip_text},
+                {"type": "paragraph", "value": get_entry_author(entry)}
             ])
         )
         tip_page_index_page.add_child(instance=article)
@@ -48,21 +48,17 @@ class YourTipsEntryForm(forms.ModelForm):
 
     class Meta:
         model = YourTipsEntry
-        fields = ['tip_name', 'tip_text', 'user', 'hide_real_name',
-                  'is_read', 'is_shortlisted']
+        fields = ['tip_text', 'user_name']
 
 
 class YourTipsEntryAdmin(admin.ModelAdmin):
-    list_display = ['tip_name', 'truncate_text', 'user', 'hide_real_name',
-                    'submission_date', 'is_read', 'is_shortlisted',
+    list_display = ['truncate_text', 'user', 'user_name',
+                    'submission_date', 'terms_or_conditions_approved',
                     '_convert']
-    list_filter = ['is_read', 'is_shortlisted',
-                   'submission_date']
-    list_editable = ['is_read', 'is_shortlisted']
+    list_filter = ['submission_date']
     date_hierarchy = 'submission_date'
     form = YourTipsEntryForm
-    readonly_fields = ('tip_name', 'tip_text', 'user',
-                       'hide_real_name', 'submission_date')
+    readonly_fields = ('tip_text', 'user_name', 'submission_date')
 
     def truncate_text(self, obj, *args, **kwargs):
         return truncatechars(obj.tip_text, 30)

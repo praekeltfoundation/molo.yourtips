@@ -1,7 +1,6 @@
 from django import template
 from copy import copy
-from molo.yourtips.models import (YourTipsIndexPage,
-                                  YourTipsThankYou)
+from molo.yourtips.models import YourTipsThankYou
 from molo.core.models import ArticlePage
 from molo.core.templatetags.core_tags import get_pages
 
@@ -31,18 +30,11 @@ def load_thank_you_page_for_yourtips(context, tip):
     'yourtips/your_tips_tip_tag.html',
     takes_context=True
 )
+
 def your_tips_tip(context):
     context = copy(context)
-    locale_code = context.get('locale_code')
-    main = context['request'].site.root_page
-    page = YourTipsIndexPage.objects.child_of(main).live().first()
-    #TODO: Change this query
-    latest_article = ArticlePage.objects.last()
-    context.update({
-        'article_tip': latest_article
     })
     return context
-
 
 @register.inclusion_tag(
     'yourtips/your_tips_share_your_tip.html',

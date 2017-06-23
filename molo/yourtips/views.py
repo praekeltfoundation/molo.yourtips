@@ -30,7 +30,10 @@ class YourTipsEntryView(CreateView):
             YourTips, slug=self.kwargs.get('slug'))
         form.instance.tip = (
             tip.get_main_language_page().specific)
-        form.instance.user = self.request.user
+        if self.request.user.is_anonymous():
+            form.instance.user = None
+        else:
+            form.instance.user = self.request.user
         return super(YourTipsEntryView, self).form_valid(form)
 
 

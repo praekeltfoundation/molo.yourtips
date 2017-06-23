@@ -39,7 +39,6 @@ class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
 
         response = self.client.post(
             reverse('molo.yourtips:tip_entry', args=[tip.slug]), {
-                'tip_name': 'This is a story',
                 'tip_text': 'The text',
                 'terms_or_conditions_approved': 'true'})
         self.assertEqual(

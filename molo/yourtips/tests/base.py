@@ -24,7 +24,7 @@ class BaseYourTipsTestCase(TestCase, MoloTestCaseMixin):
             language_setting=self.language_setting,
             locale='fr',
             is_active=True)
-        self.user = self.login()
+        self.user = 'Test'
 
         # Create tip index page
         self.tip_index = YourTipsIndexPage(title='Your tips', slug='your-tips')

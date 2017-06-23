@@ -11,6 +11,7 @@ from wagtail.wagtailadmin.edit_handlers import (
     MultiFieldPanel)
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
+from molo.core import constants
 from molo.core.blocks import MarkDownBlock
 from molo.core.utils import generate_slug
 from molo.core.models import (
@@ -30,6 +31,12 @@ class YourTipsIndexPage(Page, PreventDeleteMixin):
         main = site.root_page
         YourTipsIndexPage.objects.child_of(main).delete()
         super(YourTipsIndexPage, self).copy(*args, **kwargs)
+
+    @staticmethod
+    def get_effective_commenting_settings(self):
+        commenting_settings = dict()
+        commenting_settings['state'] = constants.COMMENTING_DISABLED
+        return commenting_settings
 
 
 @receiver(index_pages_after_copy, sender=Main)
@@ -111,38 +118,24 @@ YourTips.settings_panels = [
 class YourTipsEntry(models.Model):
     submission_date = models.DateField(null=True, blank=True,
                                        auto_now_add=True)
-    user = models.ForeignKey('auth.User')
-    tip_name = models.CharField(max_length=128)
+    user_name = models.CharField(null=True, blank=True, max_length=30)
+    user = models.ForeignKey('auth.User', blank=True, null=True)
     tip_text = models.CharField(max_length=140)
     terms_or_conditions_approved = models.BooleanField()
-    hide_real_name = models.BooleanField(default=False)
-    is_read = models.BooleanField(default=False)
-    is_shortlisted = models.BooleanField(default=False)
 
     converted_article_page = models.ForeignKey(
         'core.ArticlePage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='+',
+        related_name='tip_entry',
         help_text=_('Article page to which the entry was converted to')
-    )
-    related_article_page = models.ForeignKey(
-        'core.ArticlePage',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+',
-        help_text=_('Article page related to this entry')
     )
 
     panels = [
         MultiFieldPanel(
             [
-                FieldPanel('tip_name'),
-                FieldPanel('tip_text'),
-                FieldPanel('is_read'),
-                FieldPanel('is_shortlisted'),
+                FieldPanel('tip_text')
             ],
             heading="Entry Settings",)
     ]

@@ -13,23 +13,20 @@ class TestAdminActions(BaseYourTipsTestCase):
         )
 
         entry = YourTipsEntry.objects.create(
-            user=self.user,
-            tip_name='Test page 0',
+            user_name='Test',
             tip_text='test body',
             terms_or_conditions_approved=True,
-            hide_real_name=True
         )
 
         response = self.client.get(
-            '/django-admin/yourtips/yourtipsentry/%d/convert/' %
-            entry.id)
-        article = ArticlePage.objects.get(title='Test page 0')
+            '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id
+        )
+        article = ArticlePage.objects.get(title='Tip-%s' % entry.id)
         entry = YourTipsEntry.objects.get(pk=entry.pk)
-        self.assertEquals(entry.tip_name, article.title)
         self.assertEquals(entry.converted_article_page, article)
         self.assertEquals(article.body.stream_data, [
-            {"type": "paragraph", "value": "Written by: Anonymous"},
-            {"type": "paragraph", "value": entry.tip_text}
+            {"type": "paragraph", "value": entry.tip_text},
+            {"type": "paragraph", "value": "By Test"}
         ])
 
         self.assertEquals(ArticlePage.objects.all().count(), 1)

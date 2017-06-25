@@ -5,7 +5,7 @@ from django.views.generic.base import TemplateView
 from django.core.urlresolvers import reverse
 
 from molo.yourtips.forms import YourTipsEntryForm
-from molo.yourtips.models import YourTips
+from molo.yourtips.models import YourTipsPage
 
 
 class YourTipsEntryView(CreateView):
@@ -16,7 +16,7 @@ class YourTipsEntryView(CreateView):
         context = super(
             YourTipsEntryView, self).get_context_data(*args, **kwargs)
         tip = get_object_or_404(
-            YourTips, slug=self.kwargs.get('slug'))
+            YourTipsPage, slug=self.kwargs.get('slug'))
         context.update({'tip': tip})
         return context
 
@@ -27,7 +27,7 @@ class YourTipsEntryView(CreateView):
 
     def form_valid(self, form):
         tip = get_object_or_404(
-            YourTips, slug=self.kwargs.get('slug'))
+            YourTipsPage, slug=self.kwargs.get('slug'))
         form.instance.tip = (
             tip.get_main_language_page().specific)
         if self.request.user.is_anonymous():
@@ -43,6 +43,6 @@ class ThankYouView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(ThankYouView, self).get_context_data(*args, **kwargs)
         tip = get_object_or_404(
-            YourTips, slug=self.kwargs.get('slug'))
+            YourTipsPage, slug=self.kwargs.get('slug'))
         context.update({'tip': tip})
         return context

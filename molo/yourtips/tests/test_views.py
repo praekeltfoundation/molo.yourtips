@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 
 from molo.yourtips.tests.base import BaseYourTipsTestCase
-from molo.yourtips.models import YourTips
+from molo.yourtips.models import YourTipsPage
 
 
 class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
@@ -12,7 +12,7 @@ class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
             password=self.superuser_password
         )
 
-        tip = YourTips(
+        tip = YourTipsPage(
             title='Test Tip',
             description='This is the description',
             slug='test-tip')
@@ -30,7 +30,7 @@ class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
             password=self.superuser_password
         )
 
-        tip = YourTips(
+        tip = YourTipsPage(
             title='Test Tip',
             description='This is the description',
             slug='test-tip')

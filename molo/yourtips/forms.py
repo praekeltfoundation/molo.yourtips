@@ -4,6 +4,8 @@ from molo.yourtips.models import YourTipsEntry
 
 
 class YourTipsEntryForm(forms.ModelForm):
+    tip_text = forms.CharField(widget=forms.Textarea(
+    ))
 
     class Meta:
         model = YourTipsEntry

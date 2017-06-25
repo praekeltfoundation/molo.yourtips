@@ -1,0 +1,22 @@
+
+{% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
+
+{% block content %}
+
+{% if article_tip %}
+  <div class="yourtips yourtips">
+    <h3 class="heading heading--yourtips heading--hero-yourtips">
+      {% trans "Recent Tips" %}
+    </h3>
+        <h3 class="subheading subheading--yourtips subheading--hero-yourtips">
+      {% trans "The latest, recently posted tips" %}
+    </h3>
+
+    <h4 class="tip__body">{{ article_tip.body }}</h4>
+    <a href="{% url 'molo.yourtips:tip_entry' 'tips' %}" class="call-to-action__nav-item call-to-action__nav-item--login">
+      {% trans "Submit a tip" %}
+    </a>
+  </div>
+
+{% endif %}
+{% endblock %}

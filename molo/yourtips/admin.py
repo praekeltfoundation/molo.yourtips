@@ -25,7 +25,7 @@ def convert_to_article(request, entry_id):
     if not entry.converted_article_page:
         tip_page_index_page = (
             YourTipsArticleIndexPage.objects.live().get(
-                title='Read Tips', slug='read-tips'
+                slug='read-tips'
             )
         )
         article = YourTipsEntryPage(

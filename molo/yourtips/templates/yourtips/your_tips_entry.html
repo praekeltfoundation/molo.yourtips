@@ -5,9 +5,9 @@
 
 <div class="yourtips yourtips--entries">
   <div class="heading-container {% if self.image %}feature-image{% endif %}">
-    {% if tip.get_effective_image %}
-      {% image tip.get_effective_image width-98 as tmp_photo_small %}
-      {% image tip.get_effective_image width-320 as tmp_photo_large %}
+    {% if tip_page.get_effective_image %}
+      {% image tip_page.get_effective_image width-98 as tmp_photo_small %}
+      {% image tip_page.get_effective_image width-320 as tmp_photo_large %}
        <img src="{{ tmp_photo_small.url }}" srcset="{{ tmp_photo_large.url }}" alt="{{ self.get_parent_page.get_effective_image.title }}"/>
     {% endif %}
     <h1 class="heading heading--yourtips">
@@ -15,39 +15,8 @@
     </h1>
   </div>
 
-  <h3 class="tip__title">{{tip.title}}</h3>
-  <h4 class="tip__title tip__title--description">{{tip.description}}</h4>
-  <div class="yourtips--inner-content">
-    {% for block in tip.content %}
-        {% if block.block_type == 'heading' %}
-            <h1 class="heading yourtips">
-              {{ block.value }}
-            </h1>
-        {% else %}
-            {% if block.block_type == 'image' %}
-                {% image block.value width-240 %}
-            {% else %}
-                {% if block.block_type == 'numbered_list' %}
-                    <ol>
-                    {% for item in block.value %}
-                        <li>{{ item|handle_markdown }}</li>
-                    {% endfor %}
-                    </ol>
-                {% else %}
-                    {% if block.block_type == 'list' %}
-                      <ul>
-                      {% for item in block.value %}
-                        <li>{{ item|handle_markdown }}</li>
-                      {% endfor %}
-                    </ul>
-                    {% else %}
-                        {{ block }}
-                    {% endif %}
-                {% endif %}
-            {% endif %}
-        {% endif %}
-    {% endfor %}
-    </div>
+  <h3 class="tip__title">{{tip_page.title}}</h3>
+  <h4 class="tip__title tip__title--description">{{tip_page.description}}</h4>
     <form method="post" class="yourtips-form">
     {% csrf_token %}
         <fieldset>

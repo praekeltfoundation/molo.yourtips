@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 
 def create_yourtips_index(apps, schema_editor):
-    from molo.core.models import Main
+    from molo.core.models import Main, SectionPage, SectionIndexPage
     from molo.yourtips.models import (
         YourTipsIndexPage, YourTipsArticleIndexPage, YourTipsPage
     )
@@ -13,10 +13,10 @@ def create_yourtips_index(apps, schema_editor):
 
     if main:
         tip_index = YourTipsIndexPage.objects.get(
-            title='Your tips', slug='your-tips'
+            title='Tips', slug='tips'
         )
         tip_article_index = YourTipsArticleIndexPage(
-            title='Tips', slug='tips'
+            title='Read Tips', slug='read-tips'
         )
         tip_index.add_child(instance=tip_article_index)
         tip_article_index.save_revision().publish()
@@ -27,12 +27,22 @@ def create_yourtips_index(apps, schema_editor):
         tip_index.add_child(instance=tip_page)
         tip_page.save_revision().publish()
         tip_index.save()
+        section = SectionPage(
+            title='Your tips',
+            slug='your-tips'
+        )
+        section_index = SectionIndexPage.objects.get(
+            title='Sections', slug='sections'
+        )
+        section_index.add_child(instance=section)
+        section.save_revision().publish()
+
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('yourtips', '0005_auto_20170623_0804'),
+        ('yourtips', '0006_auto_20170626_1448'),
     ]
 
     operations = [

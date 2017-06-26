@@ -17,19 +17,14 @@ from molo.core import constants
 from molo.core.blocks import MarkDownBlock
 from molo.core.utils import generate_slug
 from molo.core.models import (
-    ArticlePage, SectionPage, TranslatablePageMixinNotRoutable,
+    ArticlePage, TranslatablePageMixinNotRoutable,
     PreventDeleteMixin, Main, index_pages_after_copy,
 )
-
-SectionPage.subpage_types += [
-    'yourtips.YourTips', 'yourtips.YourTipsIndexPage',
-    'yourtips.YourTipsArticleIndexPage'
-]
 
 
 class YourTipsIndexPage(Page, PreventDeleteMixin):
     parent_page_types = ['core.Main']
-    subpage_types = ['yourtips.YourTips', 'yourtips.YourTipsArticleIndexPage']
+    subpage_types = ['yourtips.YourTipsPage', 'yourtips.YourTipsArticleIndexPage']
 
     def copy(self, *args, **kwargs):
         site = kwargs['to'].get_site()
@@ -56,29 +51,20 @@ def create_yourtips_index_page(sender, instance, **kwargs):
 
 
 class YourTipsArticleIndexPage(Page, PreventDeleteMixin):
-    parent_page_types = ['yourtips.YourTipsIndexPage', 'core.SectionPage']
+    parent_page_types = ['yourtips.YourTipsIndexPage']
     subpage_types = []
 
     def copy(self, *args, **kwargs):
         YourTipsArticleIndexPage.objects.child_of(YourTipsIndexPage).delete()
         super(YourTipsArticleIndexPage, self).copy(*args, **kwargs)
 
-    @staticmethod
-    def latest_articles():
-        return YourTipsEntryPage.objects.filter(
-            featured_in_homepage=True,
-            languages__language__is_main_language=True).exclude(
-            demote_date__gt=timezone.now()).order_by(
-            '-featured_in_latest_start_date',
-            '-promote_date', '-latest_revision_created_at').specific()
-
 
 @receiver(index_pages_after_copy, sender=Main)
 def create_yourtips_article_index_page(sender, instance, **kwargs):
     if not instance.get_children().filter(
-            title='Read Tips').exists:
+            title='Tips').exists:
         yourtips_tip_article_page_index = YourTipsArticleIndexPage(
-            title='Read Tips', slug=('read-tips-%s' % (
+            title='Tips', slug=('tips-%s' % (
                 generate_slug(instance.title), )))
         instance.add_child(instance=yourtips_tip_article_page_index)
         yourtips_tip_article_page_index.save_revision().publish()
@@ -86,10 +72,10 @@ def create_yourtips_article_index_page(sender, instance, **kwargs):
 
 class YourTipsPage(TranslatablePageMixinNotRoutable, Page):
     parent_page_types = [
-        'yourtips.YourTipsIndexPage', 'core.SectionPage'
+        'yourtips.YourTipsIndexPage'
     ]
     subpage_types = [
-        'yourtips.YourTipsThankYou'
+        'yourtips.YourTipsThankYouPage', 'yourtips.YourTipsRecentTipsPage'
     ]
     description = models.TextField(null=True, blank=True)
     image = models.ForeignKey(
@@ -123,7 +109,7 @@ class YourTipsPage(TranslatablePageMixinNotRoutable, Page):
         return self.image
 
     def thank_you_page(self):
-        qs = YourTipsThankYou.objects.live().child_of(self)
+        qs = YourTipsThankYouPage.objects.live().child_of(self)
         if qs.exists():
             return qs.last()
         return None
@@ -184,8 +170,8 @@ class YourTipsEntryPage(ArticlePage):
 
     featured_homepage_promote_panels = [
         FieldPanel('featured_in_homepage'),
-        FieldPanel('featured_in_latest_start_date'),
-        FieldPanel('featured_in_latest_end_date'),
+        FieldPanel('featured_in_homepage_start_date'),
+        FieldPanel('featured_in_homepage_end_date'),
     ]
 
     def get_parent_page(self):
@@ -234,7 +220,7 @@ YourTipsEntryPage.promote_panels = [
 
 
 class YourTipsTermsAndConditions(ArticlePage):
-    parent_page_types = ['yourtips.YourTips']
+    parent_page_types = ['yourtips.YourTipsPage']
     subpage_types = []
 
     def get_parent_page(self):
@@ -247,15 +233,29 @@ YourTipsTermsAndConditions.promote_panels = [
         "Common page configuration", "collapsible collapsed")]
 
 
-class YourTipsThankYou(ArticlePage):
-    parent_page_types = ['yourtips.YourTips']
+class YourTipsThankYouPage(ArticlePage):
+    parent_page_types = ['yourtips.YourTipsPage']
     subpage_types = []
 
     def get_parent_page(self):
         return YourTipsPage.objects.all().ancestor_of(self).last()
 
 
-YourTipsThankYou.promote_panels = [
+YourTipsThankYouPage.promote_panels = [
+    MultiFieldPanel(
+        Page.promote_panels,
+        "Common page configuration", "collapsible collapsed")]
+
+
+class YourTipsRecentTipsPage(ArticlePage):
+    parent_page_types = ['yourtips.YourTipsPage']
+    subpage_types = []
+
+    def get_parent_page(self):
+        return YourTipsPage.objects.all().ancestor_of(self).last()
+
+
+YourTipsRecentTipsPage.promote_panels = [
     MultiFieldPanel(
         Page.promote_panels,
         "Common page configuration", "collapsible collapsed")]

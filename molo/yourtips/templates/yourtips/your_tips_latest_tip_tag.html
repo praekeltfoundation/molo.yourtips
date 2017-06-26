@@ -1,4 +1,3 @@
-
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
 
 {% block content %}
@@ -10,8 +9,11 @@
     </h1>
 
     <h4 class="tip__body">{{ article_tip.body }}</h4>
-    <a href="{% url 'molo.yourtips:tip_entry' 'tips' %}" class="call-to-action__nav-item call-to-action__nav-item--login">
+    <a href="{% url 'molo.yourtips:tip_entry' 'your-tips-page' %}" class="call-to-action__nav-item call-to-action__nav-item">
       {% trans "Submit a tip" %}
+    </a>
+    <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item call-to-action__nav-item">
+      {% trans "Recent Tips" %}
     </a>
   </div>
 

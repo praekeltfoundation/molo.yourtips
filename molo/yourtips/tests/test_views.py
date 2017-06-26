@@ -13,16 +13,15 @@ class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
         )
 
         tip = YourTipsPage(
-            title='Test Tip',
-            description='This is the description',
-            slug='test-tip')
+            title='Your Tips Page',
+            description='Your Tips page description',
+            slug='your-tips-page')
         self.tip_index.add_child(instance=tip)
         tip.save_revision().publish()
         self.tip_index.save()
 
         response = self.client.get(tip.url)
-        self.assertContains(response, 'Test Tip')
-        self.assertContains(response, 'This is the description')
+        self.assertContains(response, 'Your Tips Page')
 
     def test_yourtips_thank_you_page(self):
         self.client.login(

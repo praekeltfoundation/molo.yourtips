@@ -1,5 +1,3 @@
-from molo.core.models import ArticlePage
-
 from molo.yourtips.models import YourTipsEntry, YourTipsEntryPage
 from molo.yourtips.tests.base import BaseYourTipsTestCase
 
@@ -30,9 +28,6 @@ class TestAdminActions(BaseYourTipsTestCase):
         ])
 
         self.assertEquals(YourTipsEntryPage.objects.all().count(), 1)
-        self.assertEquals(
-            response['Location'],
-            '/admin/pages/%d/move/' % article.id)
 
         # second time it should redirect to the edit page
         response = self.client.get(
@@ -41,4 +36,4 @@ class TestAdminActions(BaseYourTipsTestCase):
         self.assertEquals(
             response['Location'],
             '/admin/pages/%d/edit/' % article.id)
-        self.assertEquals(ArticlePage.objects.all().count(), 1)
+        self.assertEquals(YourTipsEntryPage.objects.all().count(), 1)

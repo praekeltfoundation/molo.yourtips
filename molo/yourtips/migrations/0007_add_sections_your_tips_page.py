@@ -38,7 +38,6 @@ def create_yourtips_index(apps, schema_editor):
         section.save_revision().publish()
 
 
-
 class Migration(migrations.Migration):
 
     dependencies = [

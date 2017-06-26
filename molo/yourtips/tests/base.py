@@ -8,7 +8,9 @@ from molo.core.models import (
     Main
 )
 
-from molo.yourtips.models import YourTipsIndexPage
+from molo.yourtips.models import (
+    YourTipsIndexPage, YourTipsArticleIndexPage
+)
 
 
 class BaseYourTipsTestCase(TestCase, MoloTestCaseMixin):
@@ -30,6 +32,11 @@ class BaseYourTipsTestCase(TestCase, MoloTestCaseMixin):
         self.tip_index = YourTipsIndexPage(title='Your tips', slug='your-tips')
         self.main.add_child(instance=self.tip_index)
         self.tip_index.save_revision().publish()
+        self.tip_article_index = YourTipsArticleIndexPage(
+            title='Read Tips', slug='read-tips'
+        )
+        self.tip_index.add_child(instance=self.tip_article_index)
+        self.tip_article_index.save_revision().publish()
 
         self.superuser_name = 'test_superuser'
         self.superuser_password = 'password'

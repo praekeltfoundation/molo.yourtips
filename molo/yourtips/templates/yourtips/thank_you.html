@@ -2,56 +2,35 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n tip_tags %}
 
 {% block content %}
-<div class="yourtips yourtips-entries">
-  <div class="heading-container {% if self.image %}feature-image{% endif %}">
-    {% if tip.thank_you_page.get_parent_page.get_effective_image %}
-      {% image tip.thank_you_page.get_parent_page.get_effective_image width-98 as tmp_photo_small %}
-      {% image tip.thank_you_page.get_parent_page.get_effective_image width-320 as tmp_photo_large %}
-       <img src="{{ tmp_photo_small.url }}" srcset="{{ tmp_photo_large.url }}" alt="{{ self.get_parent_page.get_effective_image.title }}"/>
+<div class="yourtips yourtips--page">
+{% if self.image %}
+  {% if tip.thank_you_page.get_parent_page.get_effective_image %}
+    {% image tip.thank_you_page.get_parent_page.get_effective_image width-98 as tmp_photo_small %}
+    {% image tip.thank_you_page.get_parent_page.get_effective_image width-320 as tmp_photo_large %}
+     <img src="{{ tmp_photo_small.url }}" srcset="{{ tmp_photo_large.url }}" alt="{{ self.get_parent_page.get_effective_image.title }}"/>
+  {% endif %}
+{% endif %}
+{% load_thank_you_page_for_yourtips tip as thank_you_pages %}
+{% if thank_you_pages %}
+  {% for page in thank_you_pages %}
+    <h1 class="heading heading--yourtips">{{page.title}}</h1>
+    {% if page.subtitle %}
+      <h2 class="heading heading--yourtips-subtitle">
+        {{page.subtitle}}
+      </h2>
     {% endif %}
-  </div>
-
-  {% load_thank_you_page_for_yourtips tip as thank_you_pages %}
-    {% if thank_you_pages %}
-    {% for page in thank_you_pages %}
-      <h1 class="heading heading--yourtips">{{page.title}}</h1>
-      {% if page.subtitle %}
-        <h2 class="heading heading--yourtips-subtitle">
-          {{page.subtitle}}
-        </h2>
-      {% endif %}
     <div class="yourtips--inner-content">
       {% if page.body %}
-        {% for block in page.body %}
-          {% if block.block_type == 'heading' %}
-              <h1 class="heading heading--yourtips">
-                {{ block.value }}
-              </h1>
-          {% else %}
-          {% if block.block_type == 'image' %}
-            {% image block.value width-240 %}
-          {% else %}
-          {% if block.block_type == 'numbered_list' %}
-            <ol>
-            {% for item in block.value %}
-              <li>{{ item|handle_markdown }}</li>
-            {% endfor %}
-            </ol>
-          {% else %}
-            {{ block }}
-          {% endif %}
-          {% endif %}
-          {% endif %}
-        {% endfor %}
+        {% include "patterns/basics/yourtips/form.html" with content_type=page.body %}
       {% endif %}
-    {% endfor %}
     </div>
-  {% else %}
-    <h1 class="heading heading--yourtips">{% trans 'Thank you!' %}</h1>
-    <h4 class="yourtips__description">
-      {% trans 'Your tip has been received and waiting approval from the site admin.' %}
-    </h4>
-  {% endif %}
+  {% endfor %}
+{% else %}
+  <h1 class="heading heading--yourtips">{% trans 'Thank you!' %}</h1>
+  <h4 class="yourtips__description">
+    {% trans 'Your tip has been received and waiting approval from the site admin.' %}
+  </h4>
+{% endif %}
   <div class="call-to-action">
     <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item-text call-to-action__nav-item-text--back">
       {% trans "Back home" %}

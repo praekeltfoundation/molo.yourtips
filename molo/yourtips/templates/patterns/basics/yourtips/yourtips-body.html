@@ -1,6 +1,6 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags tip_tags i18n %}
 <div class="yourtips--inner-content">
-{% for block in tip.content %}
+{% for block in content_type %}
   {% if block.block_type == 'heading' %}
     <h1 class="heading yourtips">
       {{ block.value }}

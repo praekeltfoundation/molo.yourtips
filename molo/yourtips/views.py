@@ -57,31 +57,38 @@ class YourTipsRecentView(ListView):
     template_name = "yourtips/recent_tips.html"
 
     def get_queryset(self, *args, **kwargs):
-        count = 10
         main = self.request.site.root_page
         context = {'request': self.request}
         locale = self.request.LANGUAGE_CODE
-        articles = YourTipsEntryPage.objects.all().descendant_of(main).order_by(
-            '-latest_revision_created_at')
+        articles = YourTipsEntryPage.objects.all(
+        ).descendant_of(main).order_by('-latest_revision_created_at')
         return get_pages(context, articles, locale)
 
     def get_context_data(self, *args, **kwargs):
-        context = super(YourTipsRecentView, self).get_context_data(*args, **kwargs)
-        context.update({'recent_tips_page': YourTipsRecentTipsPage.objects.get(
-            slug='recent-tips')})
+        context = super(YourTipsRecentView, self).get_context_data(
+            *args, **kwargs
+        )
+        context.update({
+            'recent_tips_page': YourTipsRecentTipsPage.objects.get(
+                slug='recent-tips'
+            )
+        })
         return context
 
 
 @page_template('yourtips/recent_tip_for_paging.html')
-def recent_tips_index(request, extra_context=None,
-              template=('yourtips/recent_tip_for_paging.html')):
+def recent_tips_index(
+    request,
+    extra_context=None,
+    template=('yourtips/recent_tip_for_paging.html')
+):
 
     main = request.site.root_page
     context = {'request': request}
     locale = request.LANGUAGE_CODE
 
     articles = YourTipsEntryPage.objects.all().descendant_of(main).order_by(
-            'latest_revision_created_at'
+        'latest_revision_created_at'
     )
     object_list = get_pages(context, articles, locale)
     locale_code = request.GET.get('locale')
@@ -89,7 +96,9 @@ def recent_tips_index(request, extra_context=None,
     return render(
         request, template, {
             'object_list': object_list,
-            'recent_tips_page': YourTipsRecentTipsPage.objects.get(slug='recent-tips'),
+            'recent_tips_page': YourTipsRecentTipsPage.objects.get(
+                slug='recent-tips'
+            ),
             'locale_code': locale_code
         }
     )

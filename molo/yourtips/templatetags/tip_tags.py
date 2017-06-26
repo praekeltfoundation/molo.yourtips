@@ -66,4 +66,3 @@ def your_tips_menu_in_section(context, section):
         'section': 'your-tips'
     })
     return context
-

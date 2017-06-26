@@ -1,6 +1,5 @@
 from django.db import models
 from django.dispatch import receiver
-from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from wagtail.wagtailcore.models import Page
@@ -24,7 +23,9 @@ from molo.core.models import (
 
 class YourTipsIndexPage(Page, PreventDeleteMixin):
     parent_page_types = ['core.Main']
-    subpage_types = ['yourtips.YourTipsPage', 'yourtips.YourTipsArticleIndexPage']
+    subpage_types = [
+        'yourtips.YourTipsPage', 'yourtips.YourTipsArticleIndexPage'
+    ]
 
     def copy(self, *args, **kwargs):
         site = kwargs['to'].get_site()
@@ -210,7 +211,9 @@ YourTipsEntryPage.promote_panels = [
     MultiFieldPanel(
         ArticlePage.featured_section_promote_panels, "Featuring in Section"),
     MultiFieldPanel(
-        YourTipsEntryPage.featured_homepage_promote_panels, "Featuring in Homepage"),
+        YourTipsEntryPage.featured_homepage_promote_panels,
+        "Featuring in Homepage"
+    ),
     MultiFieldPanel(ArticlePage.topic_of_the_day_panels, "Topic of the Day"),
     MultiFieldPanel(ArticlePage.metedata_promote_panels, "Metadata"),
     MultiFieldPanel(

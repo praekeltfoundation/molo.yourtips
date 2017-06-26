@@ -3,84 +3,54 @@
 {% block content %}
 <div class="yourtips yourtips--entry-page">
   {% if page.image %}
-    <div class="yourtips__image">
-      {% if tip.get_parent_page.get_effective_image %}
-        {% image tip.get_parent_page.get_effective_image width-98 as tmp_photo_small %}
-        {% image tip.get_parent_page.get_effective_image width-320 as tmp_photo_large %}
-         <img src="{{ tmp_photo_small.url }}" srcset="{{ tmp_photo_large.url }}" alt="{{ self.get_parent_page.get_effective_image.title }}"/>
-      {% endif %}
-    </div>
+  <div class="yourtips__image">
+    {% if tip.get_parent_page.get_effective_image %}
+      {% image tip.get_parent_page.get_effective_image width-98 as tmp_photo_small %}
+      {% image tip.get_parent_page.get_effective_image width-320 as tmp_photo_large %}
+       <img src="{{ tmp_photo_small.url }}" srcset="{{ tmp_photo_large.url }}" alt="{{ self.get_parent_page.get_effective_image.title }}"/>
+    {% endif %}
+  </div>
   {% endif %}
   <h1 class="heading heading--yourtips">{% trans "Share your tip" %}</h1>
   <h2 class="heading heading--yourtips-title">{{tip.title}}</h3>
   <h4 class="yourtips__description">
     {{tip.description}}
-    <a href="#yourtips_list" class="call-to-action__nav-item-text">{% trans "See examples of other tips below"%}</a>
+    <!--If posted tips exists - use template tag -->
+    <a href="#yourtips_list" class="call-to-action__nav-item-text">
+      {% trans "See examples of other tips below"%}
+    </a>
   </h4>
 
-  <!-- This should be a pattern -->
-  <div class="yourtips--inner-content">
-    {% for block in tip.content %}
-        {% if block.block_type == 'heading' %}
-            <h1 class="heading yourtips">
-              {{ block.value }}
-            </h1>
-        {% else %}
-            {% if block.block_type == 'image' %}
-                {% image block.value width-240 %}
-            {% else %}
-                {% if block.block_type == 'numbered_list' %}
-                    <ol>
-                    {% for item in block.value %}
-                        <li>{{ item|handle_markdown }}</li>
-                    {% endfor %}
-                    </ol>
-                {% else %}
-                    {% if block.block_type == 'list' %}
-                      <ul>
-                      {% for item in block.value %}
-                        <li>{{ item|handle_markdown }}</li>
-                      {% endfor %}
-                    </ul>
-                    {% else %}
-                        {{ block }}
-                    {% endif %}
-                {% endif %}
-            {% endif %}
-        {% endif %}
-    {% endfor %}
-    </div>
-    <form method="post" class="yourtips-form">
-    {% csrf_token %}
-        <fieldset>
-          <label>{% trans "Compose your tip (1 - 2 sentences)" %}</label>
-          {{ form.tip_text }}
-          {% if form.tip_text.errors %}
-            <p class="alert-error" >* {{form.tip_text.errors|join:' '}}</p>
-          {% endif %}
-        </fieldset>
-
-         <fieldset>
-          {{ form.user_name }}
-          <label>{% trans "Include your name (optional)" %}</label>
-        </fieldset>
-
-        <fieldset>
-           {{ form.allow_share_on_social_media }}
-           <label for="id_allow_share_on_social_media">{% trans "I agree that my tip can be shared on Facebook and Twitter (optional)" %}</label>
-           {% if form.allow_share_on_social_media.errors %}
-          <p class="alert-error">* {{form.allow_share_on_social_media.errors|join:' '}}</p>
-          {% endif %}
-        </fieldset>
-
-        <input type="submit" value="Submit Your Tip" />
-    </form>
+  {% include "patterns/basics/yourtips/yourtips-body.html" %}
+  <form method="post" class="yourtips-form">
+  {% csrf_token %}
+    <fieldset>
+      <label>{% trans "Compose your tip (1 - 2 sentences)" %}</label>
+      {{ form.tip_text }}
+      {% if form.tip_text.errors %}
+        <p class="alert-error" >* {{form.tip_text.errors|join:' '}}</p>
+      {% endif %}
+    </fieldset>
+     <fieldset>
+      {{ form.user_name }}
+      <label>{% trans "Include your name (optional)" %}</label>
+    </fieldset>
+    <fieldset>
+       {{ form.allow_share_on_social_media }}
+       <label for="id_allow_share_on_social_media">{% trans "I agree that my tip can be shared on Facebook and Twitter (optional)" %}</label>
+       {% if form.allow_share_on_social_media.errors %}
+      <p class="alert-error">* {{form.allow_share_on_social_media.errors|join:' '}}</p>
+      {% endif %}
+    </fieldset>
+    <input type="submit" value="Submit Your Tip" />
+  </form>
 </div>
 <div id="yourtips_list">
   {% your_tips_tip %}
 </div>
 <div class="call-to-action">
-  <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item call-to-action__nav-item--back-home">
-  {% trans "Home" %}</a>
+  <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item-text call-to-action__nav-item-text--back">
+    {% trans "Back home" %}
+  </a>
 </div>
 {% endblock %}

@@ -46,15 +46,16 @@
       {% endif %}
     {% endfor %}
     </div>
-    {% else %}
+  {% else %}
     <h1 class="heading heading--yourtips">{% trans 'Thank you!' %}</h1>
-    <h4 class="heading heading--yourtips-description">
-      {% trans 'Thanks for submitting your tip!' %}
+    <h4 class="yourtips__description">
+      {% trans 'Your tip has been received and waiting approval from the site admin.' %}
     </h4>
-    {% endif %}
-    <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item call-to-action__nav-item--yourtips call-to-action__nav-item--back-home">
-      {% trans "Home" %}
+  {% endif %}
+  <div class="call-to-action">
+    <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item-text call-to-action__nav-item-text--back">
+      {% trans "Back home" %}
     </a>
+  </div>
 </div>
-
 {% endblock %}

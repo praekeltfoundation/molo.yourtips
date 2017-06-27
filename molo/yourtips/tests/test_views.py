@@ -51,6 +51,14 @@ class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
             username=self.superuser_name,
             password=self.superuser_password
         )
+
+        tip_page = YourTipsPage(
+            title='Test Tip',
+            description='This is the description',
+            slug='test-tip')
+        self.tip_index.add_child(instance=tip_page)
+        tip_page.save_revision().publish()
+
         entry = YourTipsEntry.objects.create(
             optional_name='Test',
             tip_text='test body',

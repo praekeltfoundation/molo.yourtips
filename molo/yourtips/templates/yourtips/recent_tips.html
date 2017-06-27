@@ -7,12 +7,6 @@
       {% breadcrumbs %}
     {% endblock %}
   </div>
-  <div class="heading-container {% if self.image %}feature-image{% endif %}">
-    {% if recent_tips_page.get_effective_image %}
-      {% image recent_tips_page.get_effective_image width-98 as tmp_photo_small %}
-      {% image recent_tips_page.get_effective_image width-320 as tmp_photo_large %}
-       <img src="{{ tmp_photo_small.url }}" srcset="{{ tmp_photo_large.url }}" alt="{{ recent_tips_page.get_parent_page.get_effective_image.title }}"/>
-    {% endif %}
     <h1>{{ recent_tips_page.title }}</h1>
     <h3>{{ recent_tips_page.subtitle }}</h3>
   </div>
@@ -29,11 +23,8 @@
       </li>
     {% endfor %}
   </ol>
-  <div id="pagination">
-    {% include "patterns/basics/pagination/pagination-pageof.html" %}
-  </div>
-  {% get_pages %}
-  {% if pages.next %}
-    <a id="more-link" class="call-to-action call-to-action__item more-link" href="#" data-next="{% url 'molo.yourtips:recent_tips_index' %}?page={{pages.next.number}}&locale={{locale_code}}">Load More</a>
-  {% endif %}
+  <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action">
+    {% trans "Submit a Tip" %}
+  </a>
+   {% show_more 'See more Tips' %}
 {% endblock %}

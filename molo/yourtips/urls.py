@@ -18,10 +18,5 @@ urlpatterns = patterns(
         r'^recent-tips/$',
         views.YourTipsRecentView.as_view(),
         name='recent_tips'
-    ),
-    url(
-        r'^recent-tips-index/$',
-        'molo.yourtips.views.recent_tips_index',
-        name='recent_tips_index'
     )
 )

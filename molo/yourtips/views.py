@@ -2,14 +2,12 @@ from django.core.urlresolvers import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
 from django.views.generic.base import TemplateView
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 
 from molo.core.templatetags.core_tags import get_pages
 
 from molo.yourtips.forms import YourTipsEntryForm
 from molo.yourtips.models import YourTipsPage, YourTipsEntryPage
-
-from el_pagination.decorators import page_template
 
 
 class YourTipsEntryView(CreateView):
@@ -67,29 +65,7 @@ class YourTipsRecentView(ListView):
         context = super(YourTipsRecentView, self).get_context_data(
             *args, **kwargs
         )
+        context.update({
+            'your_tip_page_slug': YourTipsPage.objects.first().slug
+        })
         return context
-
-
-@page_template('yourtips/recent_tip_for_paging.html')
-def recent_tips_index(
-    request,
-    extra_context=None,
-    template=('yourtips/recent_tip_for_paging.html')
-):
-
-    main = request.site.root_page
-    context = {'request': request}
-    locale = request.LANGUAGE_CODE
-
-    articles = YourTipsEntryPage.objects.all().descendant_of(main).order_by(
-        'latest_revision_created_at'
-    )
-    object_list = get_pages(context, articles, locale)
-    locale_code = request.GET.get('locale')
-
-    return render(
-        request, template, {
-            'object_list': object_list,
-            'locale_code': locale_code
-        }
-    )

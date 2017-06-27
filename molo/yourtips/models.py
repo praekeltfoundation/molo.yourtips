@@ -152,6 +152,7 @@ class YourTipsEntryPage(ArticlePage):
         FieldPanel('featured_in_homepage_end_date'),
     ]
 
+
 YourTipsEntryPage.promote_panels = [
     MultiFieldPanel(
         YourTipsEntryPage.featured_homepage_promote_panels,

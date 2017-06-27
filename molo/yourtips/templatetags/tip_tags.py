@@ -47,7 +47,7 @@ def your_tips_on_tip_submission_form(context):
     ).first()
 
     most_recent_tip = YourTipsEntryPage.objects.all(
-        ).order_by('-latest_revision_created_at').first()
+    ).order_by('-latest_revision_created_at').first()
 
     context.update({
         'tip_of_the_day': tip_of_the_day,

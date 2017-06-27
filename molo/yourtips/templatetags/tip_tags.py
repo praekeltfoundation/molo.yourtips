@@ -1,49 +1,33 @@
 from copy import copy
 
+from django.core.exceptions import MultipleObjectsReturned
 from django import template
 
-from molo.core.templatetags.core_tags import get_pages
 from molo.yourtips.models import (
-    YourTipsThankYouPage, YourTipsEntryPage
+    YourTipsEntryPage, YourTipsPage
 )
 
 register = template.Library()
 
 
-@register.assignment_tag(takes_context=True)
-def load_thank_you_page_for_yourtips(context, tip):
-
-    page = tip.get_main_language_page()
-    locale = context.get('locale_code')
-
-    qs = YourTipsThankYouPage.objects.child_of(page).filter(
-        languages__language__is_main_language=True
-    )
-
-    if not locale:
-        return qs
-
-    if qs:
-        return get_pages(context, qs, locale)
-    else:
-        return []
-
-
 @register.inclusion_tag(
-    'yourtips/your_tips_latest_tip_tag.html',
+    'yourtips/your_tips_on_homepage.html',
     takes_context=True
 )
-def your_tips_latest_tip(context):
-
+def your_tips_on_homepage(context):
     context = copy(context)
-    # TODO: Change this query - to allow overwrite
-    latest_article = YourTipsEntryPage.objects.filter(
-        tip_entries__isnull=False,
-        featured_in_homepage_start_date__isnull=False
-    ).order_by('-featured_in_homepage_start_date')
+
+    try:
+        tip_on_homepage = YourTipsEntryPage.objects.get(
+            featured_in_homepage=True
+        )
+    except (YourTipsEntryPage.DoesNotExist, MultipleObjectsReturned):
+        tip_on_homepage = YourTipsEntryPage.objects.all(
+        ).order_by('-featured_in_homepage_start_date').first()
 
     context.update({
-        'article_tip': latest_article.first()
+        'article_tip': tip_on_homepage,
+        'your_tip_page_slug': YourTipsPage.objects.first().slug
     })
     return context
 
@@ -53,16 +37,22 @@ def your_tips_latest_tip(context):
     takes_context=True
 )
 def your_tips_share_your_tip(context):
-    pass
+    context = copy(context)
+    context.update({
+        'your_tip_page_slug': YourTipsPage.objects.first().slug
+    })
+    return context
 
 
 @register.inclusion_tag(
-    'yourtips/your_tips_menu.html',
+    'yourtips/your_tips_section_menu.html',
     takes_context=True
 )
 def your_tips_menu_in_section(context, section):
-    context = copy(context)
-    context.update({
-        'section': 'your-tips'
-    })
+    if section.slug == 'your-tips':
+        context = copy(context)
+        context.update({
+            'section': section,
+            'show_tips_menu': True
+        })
     return context

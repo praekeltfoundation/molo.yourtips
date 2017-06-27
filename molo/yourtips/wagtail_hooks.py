@@ -24,7 +24,7 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
     menu_icon = 'edit'
     add_to_settings_menu = False
     list_display = [
-        'tip', 'submission_date', 'user', 'user_name',
+        'tip', 'submission_date', 'user', 'optional_name',
         'allow_share_on_social_media', '_convert'
     ]
     list_filter = [('submission_date', DateFilter)]

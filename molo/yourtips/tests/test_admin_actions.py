@@ -11,7 +11,7 @@ class TestAdminActions(BaseYourTipsTestCase):
         )
 
         entry = YourTipsEntry.objects.create(
-            user_name='Test',
+            optional_name='Test',
             tip_text='test body',
             allow_share_on_social_media=True,
         )

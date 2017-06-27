@@ -7,8 +7,7 @@ from django.shortcuts import get_object_or_404, render
 from molo.core.templatetags.core_tags import get_pages
 
 from molo.yourtips.forms import YourTipsEntryForm
-from molo.yourtips.models import YourTipsPage, YourTipsEntryPage, \
-    YourTipsRecentTipsPage
+from molo.yourtips.models import YourTipsPage, YourTipsEntryPage
 
 from el_pagination.decorators import page_template
 
@@ -68,11 +67,6 @@ class YourTipsRecentView(ListView):
         context = super(YourTipsRecentView, self).get_context_data(
             *args, **kwargs
         )
-        context.update({
-            'recent_tips_page': YourTipsRecentTipsPage.objects.get(
-                slug='recent-tips'
-            )
-        })
         return context
 
 
@@ -96,9 +90,6 @@ def recent_tips_index(
     return render(
         request, template, {
             'object_list': object_list,
-            'recent_tips_page': YourTipsRecentTipsPage.objects.get(
-                slug='recent-tips'
-            ),
             'locale_code': locale_code
         }
     )

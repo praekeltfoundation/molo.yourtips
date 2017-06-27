@@ -17,9 +17,9 @@ from molo.yourtips.models import (
 @staff_member_required
 def convert_to_article(request, entry_id):
     def get_entry_author(entry):
-        if not entry.user_name:
+        if not entry.optional_name:
             return 'By Anonymous'
-        return 'By %s' % entry.user_name
+        return 'By %s' % entry.optional_name
 
     entry = get_object_or_404(YourTipsEntry, pk=entry_id)
     if not entry.converted_article_page:
@@ -49,17 +49,17 @@ class YourTipsEntryForm(forms.ModelForm):
 
     class Meta:
         model = YourTipsEntry
-        fields = ['tip_text', 'user_name']
+        fields = ['tip_text', "optional_name"]
 
 
 class YourTipsEntryAdmin(admin.ModelAdmin):
-    list_display = ['truncate_text', 'user', 'user_name',
+    list_display = ['truncate_text', 'user', 'optional_name',
                     'submission_date', 'allow_share_on_social_media',
                     '_convert']
     list_filter = ['submission_date']
     date_hierarchy = 'submission_date'
     form = YourTipsEntryForm
-    readonly_fields = ('tip_text', 'user_name', 'submission_date')
+    readonly_fields = ('tip_text', 'optional_name', 'submission_date')
 
     def truncate_text(self, obj, *args, **kwargs):
         return truncatechars(obj.tip_text, 30)

@@ -12,6 +12,9 @@ def create_yourtips_index(apps, schema_editor):
     main = Main.objects.all().first()
 
     if main:
+        tip_index = YourTipsIndexPage(title='Tips', slug='tips')
+        main.add_child(instance=tip_index)
+        tip_index.save_revision().publish()
         tip_index = YourTipsIndexPage.objects.get(
             title='Tips', slug='tips'
         )
@@ -41,7 +44,7 @@ def create_yourtips_index(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('yourtips', '0006_auto_20170626_1448'),
+        ('yourtips', '0001_initial'),
     ]
 
     operations = [

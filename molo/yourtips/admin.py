@@ -1,8 +1,10 @@
+import csv
 import json
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import admin
 from django.conf.urls import patterns
+from django.http import HttpResponse
 from django.template.defaultfilters import truncatechars
 from django.shortcuts import get_object_or_404, redirect
 from django import forms
@@ -14,6 +16,19 @@ from molo.yourtips.models import (
 )
 
 
+def download_as_csv(YourTipsEntryAdmin, request, queryset):
+    opts = queryset.model._meta
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment;filename=export.csv'
+    writer = csv.writer(response)
+    field_names = [field.name for field in opts.fields]
+    writer.writerow(field_names)
+    for obj in queryset:
+        writer.writerow([getattr(obj, field) for field in field_names])
+    return response
+
+
+download_as_csv.short_description = "Download selected as csv"
 @staff_member_required
 def convert_to_article(request, entry_id):
     def get_entry_author(entry):
@@ -60,6 +75,7 @@ class YourTipsEntryAdmin(admin.ModelAdmin):
     date_hierarchy = 'submission_date'
     form = YourTipsEntryForm
     readonly_fields = ('tip_text', 'optional_name', 'submission_date')
+    actions = [download_as_csv]
 
     def truncate_text(self, obj, *args, **kwargs):
         return truncatechars(obj.tip_text, 30)

@@ -129,14 +129,6 @@ class YourTipsEntry(models.Model):
         help_text=_('Article page to which the entry was converted to')
     )
 
-    panels = [
-        MultiFieldPanel(
-            [
-                FieldPanel('tip_text')
-            ],
-            heading="Entry Settings",)
-    ]
-
     class Meta:
         verbose_name = 'YourTips Entry'
         verbose_name_plural = 'YourTips Entries'

@@ -1,7 +1,9 @@
 from django.core.urlresolvers import reverse
 
 from molo.yourtips.tests.base import BaseYourTipsTestCase
-from molo.yourtips.models import YourTipsPage
+from molo.yourtips.models import (
+    YourTipsPage, YourTipsEntry, YourTipsEntryPage
+)
 
 
 class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
@@ -43,3 +45,24 @@ class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
         self.assertEqual(
             response['Location'],
             '/yourtips/thankyou/test-tip/')
+
+    def test_yourtips_recent_tip_view(self):
+        self.client.login(
+            username=self.superuser_name,
+            password=self.superuser_password
+        )
+        entry = YourTipsEntry.objects.create(
+            optional_name='Test',
+            tip_text='test body',
+            allow_share_on_social_media=True,
+        )
+
+        self.client.get(
+            '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id
+        )
+        article = YourTipsEntryPage.objects.get(title='Tip-%s' % entry.id)
+        article.save_revision().publish()
+
+        response = self.client.get(reverse('molo.yourtips:recent_tips'))
+        self.assertContains(response, 'Test')
+        self.assertContains(response, 'test body')

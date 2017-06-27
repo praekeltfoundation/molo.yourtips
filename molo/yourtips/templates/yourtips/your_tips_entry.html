@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
+{% load wagtailcore_tags wagtailimages_tags tip_tags static core_tags i18n %}
 
 {% block content %}
 
@@ -32,7 +32,6 @@
 
         <input type="submit" value="Submit Your Tip" />
     </form>
-
-    <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item call-to-action__nav-item--yourtips call-to-action__nav-item--back-home">{% trans "Home" %}</a>
+    {% your_tips_on_tip_submission_form %}
 </div>
 {% endblock %}

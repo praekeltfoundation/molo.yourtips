@@ -157,5 +157,6 @@ YourTipsEntryPage.promote_panels = [
     MultiFieldPanel(
         YourTipsEntryPage.featured_homepage_promote_panels,
         "Featuring in Homepage"
-    )
+    ),
+    MultiFieldPanel(ArticlePage.topic_of_the_day_panels, "Topic of the Day"),
 ]

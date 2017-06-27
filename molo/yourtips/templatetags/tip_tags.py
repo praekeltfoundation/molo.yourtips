@@ -33,10 +33,22 @@ def your_tips_on_homepage(context):
 
 
 @register.inclusion_tag(
-    'yourtips/your_tips_share_your_tip.html',
+    'yourtips/your_tips_create_tip_on_homepage.html',
     takes_context=True
 )
-def your_tips_share_your_tip(context):
+def your_tips_create_tip_on_homepage(context):
+    context = copy(context)
+    context.update({
+        'your_tip_page_slug': YourTipsPage.objects.first().slug
+    })
+    return context
+
+
+@register.inclusion_tag(
+    'yourtips/your_tips_create_tip_on_article.html',
+    takes_context=True
+)
+def your_tips_create_tip_on_article(context):
     context = copy(context)
     context.update({
         'your_tip_page_slug': YourTipsPage.objects.first().slug

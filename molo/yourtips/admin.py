@@ -29,6 +29,8 @@ def download_as_csv(YourTipsEntryAdmin, request, queryset):
 
 
 download_as_csv.short_description = "Download selected as csv"
+
+
 @staff_member_required
 def convert_to_article(request, entry_id):
     def get_entry_author(entry):

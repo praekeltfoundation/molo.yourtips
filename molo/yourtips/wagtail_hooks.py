@@ -9,9 +9,15 @@ from wagtail.contrib.modeladmin.options import (
 )
 from wagtail.contrib.modeladmin.views import IndexView
 
-from molo.yourtips.admin import YourTipsPageAdmin
-from molo.yourtips.models import YourTipsEntry, \
-    YourTipsPage
+from molo.yourtips.admin import (
+    YourTipsPageAdmin,
+    YourTipsEntryPageAdmin
+)
+from molo.yourtips.models import (
+    YourTipsEntry,
+    YourTipsPage,
+    YourTipsEntryPage
+)
 
 
 class DateFilter(DateRangeFilter):
@@ -65,11 +71,28 @@ class YourTipsModelAdmin(ModelAdmin, YourTipsPageAdmin):
         return qs.descendant_of(main)
 
 
+class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryPageAdmin):
+    model = YourTipsEntryPage
+    menu_label = 'Tips'
+    menu_icon = 'doc-full-inverse'
+    index_view_class = ModelAdminTipPageTemplate
+    add_to_settings_menu = False
+    list_display = ['title', 'latest_revision_created_at','vote_total', 'live']
+
+    def get_queryset(self, request):
+        qs = super(YourTipsEntryPageModelAdmin, self).get_queryset(request)
+        main = request.site.root_page
+        return qs.descendant_of(main)
+
+
 class YourTipsAdminGroup(ModelAdminGroup):
     menu_label = 'YourTips'
     menu_icon = 'folder-open-inverse'
     menu_order = 400
-    items = (YourTipsEntriesModelAdmin, YourTipsModelAdmin)
+    items = (
+        YourTipsEntriesModelAdmin, YourTipsEntryPageModelAdmin,
+        YourTipsModelAdmin,
+    )
 
 
 modeladmin_register(YourTipsAdminGroup)

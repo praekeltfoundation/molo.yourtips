@@ -9,6 +9,11 @@
         {% trans "This week's top tip" %}
       </h1>
       <h4 class="tip__body">{{ tip_of_the_day.body }}</h4>
+    {% elif most_popular_tip %}
+      <h1 class="heading heading--yourtips heading--hero-yourtips">
+        {% trans "Most popular tip" %}
+      </h1>
+      <h4 class="tip__body">{{ most_popular_tip.body }}</h4>
     {% endif %}
     {% if most_recent_tip %}
       <h1 class="heading heading--yourtips heading--hero-yourtips">

@@ -8,12 +8,18 @@
       <h1 class="heading heading--yourtips heading--hero-yourtips">
         {% trans "Tip of the Day" %}
       </h1>
+      <h4 class="tip__body">{{ article_tip.body }}</h4>
+    {% elif most_popular_tip %}
+      <h1 class="heading heading--yourtips heading--hero-yourtips">
+        {% trans "Most popular tip" %}
+      </h1>
+      <h4 class="tip__body">{{ most_popular_tip.body }}</h4>
     {% else %}
       <h1 class="heading heading--yourtips heading--hero-yourtips">
         {% trans "Your Tips - Latest Tip" %}
       </h1>
+      <h4 class="tip__body">{{ article_tip.body }}</h4>
     {% endif %}
-    <h4 class="tip__body">{{ article_tip.body }}</h4>
 
     <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action__nav-item call-to-action__nav-item">
       {% trans "Submit a tip" %}

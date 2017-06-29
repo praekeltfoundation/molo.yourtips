@@ -27,8 +27,12 @@ def your_tips_on_homepage(context):
         ).order_by('-featured_in_homepage_start_date').first()
         featured_on_homepage = False
 
+    most_popular_tip = YourTipsEntryPage.objects.all(
+    ).order_by('-total_upvotes').first()
+
     context.update({
         'featured_on_homepage': featured_on_homepage,
+        'most_popular_tip': most_popular_tip,
         'article_tip': tip_on_homepage,
         'your_tip_page_slug': YourTipsPage.objects.first().slug
     })
@@ -49,9 +53,13 @@ def your_tips_on_tip_submission_form(context):
     most_recent_tip = YourTipsEntryPage.objects.all(
     ).order_by('-latest_revision_created_at').first()
 
+    most_popular_tip = YourTipsEntryPage.objects.all(
+    ).order_by('-total_upvotes').first()
+
     context.update({
         'tip_of_the_day': tip_of_the_day,
         'most_recent_tip': most_recent_tip,
+        'most_popular_tip': most_popular_tip,
         'your_tip_page_slug': YourTipsPage.objects.first().slug
     })
     return context

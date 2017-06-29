@@ -10,7 +10,7 @@
     <h1>{{ recent_tips_page.title }}</h1>
     <h3>{{ recent_tips_page.subtitle }}</h3>
   </div>
-  {% paginate 10 object_list as articles %}
+  {% paginate 15 object_list as articles %}
   <ol>
     {% for each_article in articles %}
       <li>
@@ -27,5 +27,5 @@
   <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action">
     {% trans "Submit a Tip" %}
   </a>
-   {% show_more 'See more Tips' %}
+  {% show_more 'See more Tips' %}
 {% endblock %}

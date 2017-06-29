@@ -10,12 +10,12 @@
     <h1>{{ recent_tips_page.title }}</h1>
     <h3>{{ recent_tips_page.subtitle }}</h3>
   </div>
-  {% paginate 10 object_list as articles %}
+  {% paginate 15 object_list as articles %}
   <ol>
     {% for each_article in articles %}
       <li>
         <div class="posted_date">
-          Posted:: {{ each_article.latest_revision_created_at }}
+          Posted: {{ each_article.latest_revision_created_at }}
         </div>
         <div class="content">
           {{ each_article.body }}

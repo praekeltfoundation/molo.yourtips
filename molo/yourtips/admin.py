@@ -10,7 +10,8 @@ from django import forms
 from wagtail.wagtailcore.utils import cautious_slugify
 
 from molo.yourtips.models import (
-    YourTipsEntry, YourTipsPage, YourTipsArticleIndexPage, YourTipsEntryPage
+    YourTipsEntry, YourTipsPage, YourTipsArticleIndexPage,
+    YourTipsEntryPage, YourTipsEntryPage
 )
 
 
@@ -95,5 +96,12 @@ class YourTipsPageAdmin(admin.ModelAdmin):
         return 'Unpublished'
 
 
+class YourTipsEntryPageAdmin(admin.ModelAdmin):
+    list_display = ['title', 'latest_revision_created_at', 'votes', 'live']
+    list_filter = ['title']
+    search_fields = ['title', 'content', 'description']
+    date_hierarchy = 'latest_revision_created_at'
+
 admin.site.register(YourTipsEntry, YourTipsEntryAdmin)
+admin.site.register(YourTipsEntryPage, YourTipsEntryPageAdmin)
 admin.site.register(YourTipsPage, YourTipsPageAdmin)

@@ -2,6 +2,8 @@ from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
+from secretballot import enable_voting_on
+
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore import blocks
@@ -160,3 +162,4 @@ YourTipsEntryPage.promote_panels = [
     ),
     MultiFieldPanel(ArticlePage.topic_of_the_day_panels, "Topic of the Day"),
 ]
+enable_voting_on(YourTipsEntryPage)

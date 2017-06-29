@@ -66,6 +66,27 @@ class YourTipsRecentView(ListView):
             *args, **kwargs
         )
         context.update({
-            'your_tip_page_slug': YourTipsPage.objects.first().slug
+            'your_tip_page_slug': YourTipsPage.objects.first().slug,
+        })
+        return context
+
+
+class YourTipsPopularView(ListView):
+    template_name = "yourtips/popular_tips.html"
+
+    def get_queryset(self, *args, **kwargs):
+        main = self.request.site.root_page
+        context = {'request': self.request}
+        locale = self.request.LANGUAGE_CODE
+        articles = YourTipsEntryPage.objects.all(
+        ).descendant_of(main).order_by('-total_upvotes')
+        return get_pages(context, articles, locale)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(YourTipsPopularView, self).get_context_data(
+            *args, **kwargs
+        )
+        context.update({
+            'your_tip_page_slug': YourTipsPage.objects.first().slug,
         })
         return context

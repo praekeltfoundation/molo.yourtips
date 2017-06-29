@@ -10,6 +10,11 @@
       </a>
     </h1>
     <h1 class="yourtips link--yourtips">
+      <a href="{% url 'molo.yourtips:popular_tips' %}" class="call-to-action__nav-item call-to-action__nav-item--yourtips">
+        {% trans "Popular Tips" %}
+      </a>
+    </h1>
+    <h1 class="yourtips link--yourtips">
       <a href="{% url 'molo.yourtips:tip_entry' 'your-tips-page' %}" class="call-to-action__nav-item call-to-action__nav-item--yourtips">
         {% trans "Submit a Tip!" %}
       </a>

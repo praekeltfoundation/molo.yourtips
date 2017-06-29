@@ -71,8 +71,10 @@ def your_tips_on_tip_submission_form(context):
 )
 def your_tips_create_tip_on_homepage(context):
     context = copy(context)
+    homepage_action_copy = YourTipsPage.objects.first().homepage_action_copy
     context.update({
-        'your_tip_page_slug': YourTipsPage.objects.first().slug
+        'your_tip_page_slug': YourTipsPage.objects.first().slug,
+        'homepage_action_copy': homepage_action_copy
     })
     return context
 

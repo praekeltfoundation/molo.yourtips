@@ -1,10 +1,10 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
 {% block content %}
-<div class="yourtips yourtips--share-cta">
+<div class="yourtips yourtips--banner">
   <h3 class="yourtips__description">
     {% trans "Do you have advice you can share with other youth on relationships?" %}
   </h4>
-  <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action">
+  <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action__nav-item">
     {% trans "Click here share your tip!" %}
   </a>
 </div>

@@ -14,4 +14,9 @@ urlpatterns = patterns(
         r'^thankyou/(?P<slug>[\w-]+)/$',
         views.ThankYouView.as_view(),
         name='thank_you'),
+    url(
+        r'^recent-tips/$',
+        views.YourTipsRecentView.as_view(),
+        name='recent_tips'
+    )
 )

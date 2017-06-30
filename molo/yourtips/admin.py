@@ -10,21 +10,24 @@ from django import forms
 from wagtail.wagtailcore.utils import cautious_slugify
 
 from molo.yourtips.models import (
-    YourTipsEntry, YourTips, YourTipsArticleIndexPage, YourTipsEntryPage
+    YourTipsEntry, YourTipsPage, YourTipsArticleIndexPage, YourTipsEntryPage
 )
 
 
 @staff_member_required
 def convert_to_article(request, entry_id):
     def get_entry_author(entry):
-        if not entry.user_name:
+        if not entry.optional_name:
             return 'By Anonymous'
-        return 'By %s' % entry.user_name
+        return 'By %s' % entry.optional_name
 
     entry = get_object_or_404(YourTipsEntry, pk=entry_id)
     if not entry.converted_article_page:
         tip_page_index_page = (
-            YourTipsArticleIndexPage.objects.live().first())
+            YourTipsArticleIndexPage.objects.live().get(
+                slug='read-tips'
+            )
+        )
         article = YourTipsEntryPage(
             title='Tip-%s' % str(entry.id),
             slug='yourtips-entry-%s' % cautious_slugify(entry.id),
@@ -46,17 +49,17 @@ class YourTipsEntryForm(forms.ModelForm):
 
     class Meta:
         model = YourTipsEntry
-        fields = ['tip_text', 'user_name']
+        fields = ['tip_text', "optional_name"]
 
 
 class YourTipsEntryAdmin(admin.ModelAdmin):
-    list_display = ['truncate_text', 'user', 'user_name',
+    list_display = ['truncate_text', 'user', 'optional_name',
                     'submission_date', 'allow_share_on_social_media',
                     '_convert']
     list_filter = ['submission_date']
     date_hierarchy = 'submission_date'
     form = YourTipsEntryForm
-    readonly_fields = ('tip_text', 'user_name', 'submission_date')
+    readonly_fields = ('tip_text', 'optional_name', 'submission_date')
 
     def truncate_text(self, obj, *args, **kwargs):
         return truncatechars(obj.tip_text, 30)
@@ -81,7 +84,7 @@ class YourTipsEntryAdmin(admin.ModelAdmin):
     _convert.short_description = ''
 
 
-class YourTipsAdmin(admin.ModelAdmin):
+class YourTipsPageAdmin(admin.ModelAdmin):
     list_display = ['status']
     list_filter = ['title']
     search_fields = ['title', 'content', 'description']
@@ -93,4 +96,4 @@ class YourTipsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(YourTipsEntry, YourTipsEntryAdmin)
-admin.site.register(YourTips, YourTipsAdmin)
+admin.site.register(YourTipsPage, YourTipsPageAdmin)

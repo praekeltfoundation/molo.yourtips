@@ -3,11 +3,9 @@
 <div class="yourtips yourtips--share-cta">
   <h3 class="yourtips__description">
     {% trans "Do you have advice you can share with other youth on relationships?" %}
-  </h3>
-  <div class="call-to-action">
-    <a href="{% url 'molo.yourtips:tip_entry' 'tips' %}" class="call-to-action__nav-item-text">
-      {% trans "Click here share your tip!" %}
-    </a>
-  </div>
+  </h4>
+  <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action">
+    {% trans "Click here share your tip!" %}
+  </a>
 </div>
 {% endblock %}

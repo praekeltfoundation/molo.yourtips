@@ -2,17 +2,15 @@
 {% block content %}
 {% if article_tip %}
 <div class="yourtips">
-  <h1 class="heading heading--yourtips">
-    {% trans "Your Tips - Latest Tip" %}
-  </h1>
-  <div class=" yourtips-list">
-    <h4 class="tip__body">{{ article_tip.body }}</h4>
+  <h1 class="heading heading--yourtips">{% trans "Your Tips - Latest Tip" %}</h1>
+  <div class="yourtips-list">
+    <div class="yourtips-list__item">
+      <h3 class="yourtips__description">{{ article_tip.body }}</h3>
+    </div>
   </div>
-  <div class="call-to-action">
-    <a href="{% url 'molo.yourtips:tip_entry' 'tips' %}" class="call-to-action__nav-item-text call-to-action__nav-item-text--login">
-      {% trans "Submit a tip" %}
-    </a>
-  </div>
+  <a href="{% url 'molo.yourtips:tip_entry' 'tips' %}" class="call-to-action__nav-item-text">
+    {% trans "Submit a tip" %}
+  </a>
 </div>
 {% endif %}
 {% endblock %}

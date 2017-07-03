@@ -1,21 +1,19 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
 {% block content %}
 {% if tip_of_the_day or most_recent_tip %}
-  {% if tip_of_the_day %}
-  <h2 class="heading heading--yourtips-title">
+{% if tip_of_the_day %}
+  <h2 class="heading heading--yourtips-title heading--line-break">
     {% trans "This week's top tip" %}
   </h2>
+  {% endif %}
   <div class="yourtips-list">
     <div class="yourtips-list__item">
-      <h3 class="yourtips__description">{{ tip_of_the_day.body }}</h3>
+      <h3 class="yourtips__description">
+        {{ tip_of_the_day.body }}</h3>
     </div>
   </div>
-  {% endif %}
-
   {% if most_recent_tip %}
-  <h2 class="heading heading--yourtips-title">
-    {% trans "Most recent tip" %}
-  </h2>
+  <h2 class="heading heading--yourtips-title">{% trans "Most recent tip" %}</h2>
   <div class="yourtips-list">
     <div class="yourtips-list__item">
       <h3 class="yourtips__description">{{ most_recent_tip.body }}</h3>

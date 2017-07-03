@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
-
 {% block content %}
 <div class="yourtips">
   {% if self.thank_you_page.get_parent_page.get_effective_image %}
@@ -14,7 +13,7 @@
     </a>
   </h1>
   <h2 class="heading heading--yourtips-title">{{self.title}}</h2>
-  <h4 class="yourtips__description">{{self.description}}</h4>
+  <h3 class="yourtips__description">{{self.description}}</h3>
   <div class="call-to-action">
     <a href="{% url 'molo.yourtips:tip_entry' self.slug %}"class="call-to-action__nav-item call-to-action__nav-item--login">
       {% trans "Enter" %}

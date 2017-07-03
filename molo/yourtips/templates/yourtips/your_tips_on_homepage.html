@@ -10,19 +10,21 @@
     {% endif %}
   </h1>
   <div class="yourtips-list">
-    <h3 class="yourtips__description">
-      <!-- This returns extra markup
-      E.g. <div class="block-paragraph"><p>
-      -->
+    <div class="yourtips-list__item">
+      <h3 class="yourtips__description yourtips__description-homepage">
+        <!-- This returns extra markup
+          E.g. <div class="block-paragraph"><p>
+        -->
         {{ article_tip.body }}
-    </h3>
-    <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action__nav-item">
-      {% trans "Submit a tip" %}
-    </a>
-    <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item">
-      {% trans "Recent Tips" %}
-    </a>
+      </h3>
+      <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action__nav-item">
+        {% trans "Submit a tip" %}
+      </a>
+      <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item">
+        {% trans "Recent Tips" %}
+      </a>
+    </div>
   </div>
-  </div>
+</div>
 {% endif %}
 {% endblock %}

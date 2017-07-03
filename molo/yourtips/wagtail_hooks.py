@@ -11,7 +11,7 @@ from wagtail.contrib.modeladmin.views import IndexView
 
 from molo.yourtips.admin import YourTipsPageAdmin
 from molo.yourtips.models import YourTipsEntry, \
-    YourTipsPage
+    YourTip
 
 
 class DateFilter(DateRangeFilter):
@@ -52,7 +52,7 @@ class ModelAdminTipPageTemplate(IndexView):
 
 
 class YourTipsModelAdmin(ModelAdmin, YourTipsPageAdmin):
-    model = YourTipsPage
+    model = YourTip
     menu_label = 'Your Tips Page'
     menu_icon = 'doc-full'
     index_view_class = ModelAdminTipPageTemplate

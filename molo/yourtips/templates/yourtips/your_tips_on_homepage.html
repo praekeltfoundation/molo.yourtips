@@ -4,15 +4,9 @@
 
 {% if article_tip %}
   <div class="yourtips yourtips">
-    {% if featured_on_homepage %}
       <h1 class="heading heading--yourtips heading--hero-yourtips">
         {% trans "Tip of the Day" %}
       </h1>
-    {% else %}
-      <h1 class="heading heading--yourtips heading--hero-yourtips">
-        {% trans "Your Tips - Latest Tip" %}
-      </h1>
-    {% endif %}
     <h4 class="tip__body">{{ article_tip.body }}</h4>
 
     <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action__nav-item call-to-action__nav-item">

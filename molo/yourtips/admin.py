@@ -40,9 +40,12 @@ def convert_to_article(request, entry_id):
 
     entry = get_object_or_404(YourTipsEntry, pk=entry_id)
     if not entry.converted_article_page:
-        tip_page_index_page = (
-            YourTipsArticleIndexPage.objects.live().get(
-                slug='read-tips'
+        tip_section_index_page = (
+            YourTipsSectionIndexPage.objects.live().first())
+        if not tip_section_index_page:
+            tip_index = YourTipsIndexPage.objects.live().first()
+            tip_section_index_page = YourTipsSectionIndexPage(
+                title='Your Tips Section', slug='your-tips-section-index-page'
             )
         )
         article = YourTipsEntryPage(

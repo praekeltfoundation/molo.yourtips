@@ -1,5 +1,4 @@
 from testapp.settings import *  # noqa
-from testapp.settings.base import INSTALLED_APPS as TESTAPP_INSTALLED_APPS
 from testapp.settings.base import MIDDLEWARE_CLASSES as TESTAPP_MIDDLEWARE_CLASSES
 from os.path import abspath, dirname, join
 
@@ -16,10 +15,6 @@ DEBUG = True
 CELERY_ALWAYS_EAGER = True
 
 DEFAULT_SITE_PORT = 8000
-
-INSTALLED_APPS = TESTAPP_INSTALLED_APPS + [
-    'secretballot'
-]
 
 MIDDLEWARE_CLASSES = TESTAPP_MIDDLEWARE_CLASSES + [
     'likes.middleware.SecretBallotUserIpUseragentMiddleware',

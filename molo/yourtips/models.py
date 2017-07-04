@@ -150,4 +150,4 @@ YourTipsArticlePage.promote_panels = [
     ),
     MultiFieldPanel(ArticlePage.topic_of_the_day_panels, "Topic of the Day"),
 ]
-enable_voting_on(YourTipsEntryPage)
+enable_voting_on(YourTipsArticlePage)

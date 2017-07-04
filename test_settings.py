@@ -15,14 +15,14 @@ CELERY_ALWAYS_EAGER = True
 
 DEFAULT_SITE_PORT = 8000
 
-INSTALLED_APPS += [
+INSTALLED_APPS += (
     'secretballot',
     'likes'
-]
+)
 
-MIDDLEWARE_CLASSES += [
-    'likes.middleware.SecretBallotUserIpUseragentMiddleware'
-]
+MIDDLEWARE_CLASSES += (
+    'likes.middleware.SecretBallotUserIpUseragentMiddleware',
+)
 
 TEMPLATES = [
     {

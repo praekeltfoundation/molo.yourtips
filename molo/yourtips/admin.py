@@ -34,7 +34,7 @@ def convert_to_article(request, entry_id):
             slug='yourtips-entry-%s' % cautious_slugify(entry.id),
             body=json.dumps([
                 {"type": "paragraph", "value": entry.tip_text},
-                {"type": "paragraph", "value": get_entry_author(entry)}
+                {"type": "heading", "value": get_entry_author(entry)}
             ])
         )
         tip_page_index_page.add_child(instance=article)

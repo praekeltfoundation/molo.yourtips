@@ -47,7 +47,6 @@ def convert_to_article(request, entry_id):
             tip_section_index_page = YourTipsSectionIndexPage(
                 title='Your Tips Section', slug='your-tips-section-index-page'
             )
-        )
         article = YourTipsEntryPage(
             title='Tip-%s' % str(entry.id),
             slug='yourtips-entry-%s' % cautious_slugify(entry.id),

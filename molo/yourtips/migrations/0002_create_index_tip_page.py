@@ -6,7 +6,7 @@ from django.db import migrations, models
 
 def create_yourtips_index(apps, schema_editor):
     from molo.core.models import Main
-    from molo.yourtips.models import (YourTipsIndexPage)
+    from molo.yourtips.models import YourTipsIndexPage
     main = Main.objects.all().first()
 
     if main:

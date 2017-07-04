@@ -1,5 +1,7 @@
 from daterange_filter.filter import DateRangeFilter
+from import_export import resources
 
+from django.http import HttpResponse
 from django.template.defaultfilters import truncatechars
 
 from wagtail.contrib.modeladmin.options import (
@@ -9,19 +11,40 @@ from wagtail.contrib.modeladmin.options import (
 )
 from wagtail.contrib.modeladmin.views import IndexView
 
-from molo.yourtips.admin import YourTipsAdmin
+from molo.yourtips.admin import YourTipsPageAdmin
 from molo.yourtips.models import YourTipsEntry, \
-    YourTip
+    YourTipsPage
 
 
 class DateFilter(DateRangeFilter):
     template = 'admin/yourtips/yourtips_date_range_filter.html'
 
 
+class YourTipsEntriesResource(resources.ModelResource):
+    class Meta:
+        model = YourTipsEntry
+        exclude = ('id', '_convert', 'converted_article_page')
+
+
+class ModelAdminTemplate(IndexView):
+    def post(self, request, *args, **kwargs):
+
+        dataset = YourTipsEntriesResource().export()
+
+        response = HttpResponse(dataset.csv, content_type="csv")
+        response['Content-Disposition'] = \
+            'attachment; filename=yourtips_entries.csv'
+        return response
+
+    def get_template_names(self):
+        return 'admin/yourtips/model_admin_template.html'
+
+
 class YourTipsEntriesModelAdmin(ModelAdmin):
     model = YourTipsEntry
     menu_label = 'Entries'
     menu_icon = 'edit'
+    index_view_class = ModelAdminTemplate
     add_to_settings_menu = False
     list_display = [
         'tip', 'submission_date', 'user', 'optional_name',
@@ -46,16 +69,16 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
         return truncatechars(obj.tip_text, 30)
 
 
-class ModelAdminTipTemplate(IndexView):
+class ModelAdminTipPageTemplate(IndexView):
     def get_template_names(self):
-        return 'admin/yourtips/model_admin_your_tip_template.html'
+        return 'admin/yourtips/model_admin_tip_page_template.html'
 
 
-class YourTipsModelAdmin(ModelAdmin, YourTipsAdmin):
-    model = YourTip
+class YourTipsModelAdmin(ModelAdmin, YourTipsPageAdmin):
+    model = YourTipsPage
     menu_label = 'Your Tips Page'
     menu_icon = 'doc-full'
-    index_view_class = ModelAdminTipTemplate
+    index_view_class = ModelAdminTipPageTemplate
     add_to_settings_menu = False
     list_display = ['title', 'status']
 

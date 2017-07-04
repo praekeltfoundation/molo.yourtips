@@ -1,20 +1,22 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
-
 {% block content %}
-
 {% if show_tips_menu %}
-  <div class="yourtips yourtip--menus">
-    <h1 class="yourtips link--yourtips">
-      <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item call-to-action__nav-item--yourtips">
-        {% trans "Recent Tips" %}
-      </a>
-    </h1>
-    <h1 class="yourtips link--yourtips">
-      <a href="{% url 'molo.yourtips:tip_entry' 'your-tips-page' %}" class="call-to-action__nav-item call-to-action__nav-item--yourtips">
-        {% trans "Submit a Tip!" %}
-      </a>
-    </h1>
+  <div class="yourtips">
+    <ul class="yourtips-menu">
+      <li class="yourtips-menu__item">
+        <!--Menu Icon - from CMS?-->
+        <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item">
+          {% trans "Recent Tips" %}
+          <!--Menu description - From CMS?-->
+        </a>
+      </li>
+      <li class="yourtips-menu__item">
+        <a href="{% url 'molo.yourtips:tip_entry' 'your-tips-page' %}" class="call-to-action__nav-item">
+          {% trans "Submit a Tip!" %}
+          <!--Menu description - From CMS?-->
+        </a>
+      </li>
+    </ul>
   </div>
 {% endif %}
-
 {% endblock %}

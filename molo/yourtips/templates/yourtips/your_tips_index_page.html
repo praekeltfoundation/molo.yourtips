@@ -1,29 +1,31 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags static core_tags tip_tags i18n %}
-
 {% block content %}
-<h1 class="list-header">test</h1>
-    <div class="articles nav">
-      {% load_child_sections_for_section self as sections %}
-      {% for section in sections %}
-        <h2 class="list-header">
-          {% if section.image %}
-            <a href="{% pageurl section %}">{% image section.image width-60 %}</a>
-          {% endif %}
-          <a href="{% pageurl section %}">{{section.title}}</a>
-          <ul class="list-block">
-            <li>
-              {% if section.description %}<p>{{section.description}}</p>{% endif %}
-              {% load_descendant_articles_for_section section featured_in_section=True as featured_articles %}
-              {% if featured_articles %}
-              {% for article in featured_articles %}
-                <h3><a href="{% pageurl article %}">{{article.title}}</a></h3>
-                <p>{{article.subtitle}}</p>
-              {% endfor %}
-              {% endif %}
-            </li>
-          </ul>
-        </h2>
+<div class="articles nav">
+{% load_child_sections_for_section self as sections %}
+{% for section in sections %}
+  {% if section.image %}
+    <a href="{% pageurl section %}">{% image section.image width-60 %}</a>
+  {% endif %}
+  <h1 class="heading heading--yourtips">
+    <a href="{% pageurl section %}">{{section.title}}</a>
+  </h1>
+  <ul class="yourtips-menu">
+    <li class="yourtips-menu__item">
+    {% if section.description %}
+      <h3 class="yourtips__description">{{section.description}}</h3>
+    {% endif %}
+    {% load_descendant_articles_for_section section featured_in_section=True as featured_articles %}
+    {% if featured_articles %}
+      {% for article in featured_articles %}
+      <h2 class="heading heading--yourtips-title">
+        <a href="{% pageurl article %}">{{article.title}}</a>
+      </h2>
+      <h3 class="yourtips__description">{{article.subtitle}}</h3>
       {% endfor %}
-    </div>
+    {% endif %}
+    </li>
+  </ul>
+{% endfor %}
+</div>
 {% endblock %}

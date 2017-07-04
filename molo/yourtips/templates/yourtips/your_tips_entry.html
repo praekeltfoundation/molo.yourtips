@@ -1,37 +1,13 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags tip_tags static core_tags i18n %}
-
 {% block content %}
-
-<div class="yourtips yourtips--entries">
-
-  <h3 class="tip__title">{{tip_page.title}}</h3>
-  <h4 class="tip__title tip__title--description">{{tip_page.description}}</h4>
-    <form method="post" class="yourtips-form">
-    {% csrf_token %}
-        <fieldset>
-          <label for="">{% trans "Compose your tip (1 - 2 sentences)" %}</label>
-          {{ form.tip_text }}
-          {% if form.tip_text.errors %}
-            <p class="alert-error" >* {{form.tip_text.errors|join:' '}}</p>
-          {% endif %}
-        </fieldset>
-
-         <fieldset>
-          {{ form.optional_name }}
-          <label>{% trans "Include your name (optional)" %}</label>
-        </fieldset>
-
-        <fieldset>
-           {{ form.allow_share_on_social_media }}
-           <label for="id_allow_share_on_social_media">{% trans "I agree that my tip can be shared on Facebook and Twitter (optional)" %}</label>
-           {% if form.allow_share_on_social_media.errors %}
-          <p class="alert-error">* {{form.allow_share_on_social_media.errors|join:' '}}</p>
-          {% endif %}
-        </fieldset>
-
-        <input type="submit" value="Submit Your Tip" />
-    </form>
-    {% your_tips_on_tip_submission_form %}
+<div class="yourtips yourtips--page">
+  <h1 class="heading heading--yourtips-page">{{tip_page.title}}</h1>
+  <h3 class="yourtips__description">{{tip_page.description}}</h3>
+  {% include "patterns/basics/forms/form.html" %}
+  {% your_tips_on_tip_submission_form %}
+  <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item">
+    {% trans "Home" %}
+  </a>
 </div>
 {% endblock %}

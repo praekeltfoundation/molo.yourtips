@@ -1,23 +1,19 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags static core_tags tip_tags i18n %}
-
 {% block content %}
-  <div class="breadcrumbs">
-    {% block breadcrumbs %}
-      {% breadcrumbs %}
-    {% endblock %}
-  </div>
-  <h1>{{ page.title }}</h1>
-  <h3>{{ page.subtitle }}</h3>
-
-  <ol>
+{% block breadcrumbs %}
+  {% include "patterns/basics/breadcrumbs/breadcrumbs.html" %}
+{% endblock %}
+  <h1 class="heading heading--yourtips">{{ page.title }}</h1>
+  <h3 class="yourtips__description">{{ page.subtitle }}</h3>
+  <ul class="yourtips-menu">
     {% for tip in page.get_children|dictsortreversed:"latest_revision_created_at" %}
-      {% with tip=tip.specific %}
-        <li>
-          {{ tip.latest_revision_created_at }}
-          {{ tip.body }}
-        </li>
-      {% endwith %}
+    {% with tip=tip.specific %}
+    <li class="yourtips-menu__item">
+      <p class="yourtips__posted-date">{{ tip.latest_revision_created_at }}</p>
+      <h3 class="yourtips__description">{{ tip.body }}</h3>
+    </li>
+    {% endwith %}
     {% endfor %}
   </ol>
 {% endblock %}

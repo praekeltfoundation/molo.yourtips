@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 
 from molo.yourtips.tests.base import BaseYourTipsTestCase
 from molo.yourtips.models import (
-    YourTipsEntry, YourTipsArticlePage
+    YourTipsEntry, YourTipsEntryPage
 )
 
 
@@ -46,7 +46,7 @@ class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
         self.client.get(
             '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id
         )
-        article = YourTipsArticlePage.objects.get(title='Tip-%s' % entry.id)
+        article = YourTipsEntryPage.objects.get(title='Tip-%s' % entry.id)
         article.save_revision().publish()
 
         response = self.client.get(reverse('molo.yourtips:recent_tips'))

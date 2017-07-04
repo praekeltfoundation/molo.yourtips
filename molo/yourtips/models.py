@@ -74,7 +74,8 @@ class YourTip(TranslatablePageMixinNotRoutable, Page):
             "and all its descendants"))
 
     homepage_action_copy = models.CharField(
-        default='Do you have advice you can share with other youth on relationships?',
+        default='Do you have advice '
+                'you can share with other youth on relationships?',
         max_length=255)
 
     def get_effective_extra_style_hints(self):
@@ -92,10 +93,13 @@ YourTip.content_panels = [
 
 YourTip.settings_panels = [
     MultiFieldPanel(
-        [FieldRowPanel(
-            [FieldPanel('extra_style_hints'),
-             FieldPanel('homepage_action_copy')
-             ], classname="label-above")
+        [
+            FieldRowPanel(
+                [
+                    FieldPanel('extra_style_hints'),
+                    FieldPanel('homepage_action_copy')
+                ], classname="label-above"
+            )
         ],
         "Meta")
 ]

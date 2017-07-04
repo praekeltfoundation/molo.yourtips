@@ -76,7 +76,9 @@ class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
     menu_icon = 'doc-full-inverse'
     index_view_class = ModelAdminTipTemplate
     add_to_settings_menu = False
-    list_display = ['title', 'latest_revision_created_at','vote_total', 'live']
+    list_display = [
+        'title', 'latest_revision_created_at', 'vote_total', 'live'
+    ]
 
     def get_queryset(self, request):
         qs = super(YourTipsEntryPageModelAdmin, self).get_queryset(request)

@@ -47,7 +47,7 @@ class YourTipsSectionIndexPage(Page, PreventDeleteMixin):
 
 
 @receiver(index_pages_after_copy, sender=Main)
-def create_yourtips_article_index_page(sender, instance, **kwargs):
+def create_yourtips_section_index_page(sender, instance, **kwargs):
     if not instance.get_children().filter(
             title='Tips').exists:
         yourtips_tip_section_page_index = YourTipsSectionIndexPage(
@@ -101,7 +101,7 @@ class YourTipsEntry(models.Model):
     allow_share_on_social_media = models.BooleanField()
 
     converted_article_page = models.ForeignKey(
-        'yourtips.YourTipsEntry',
+        'yourtips.YourTipsArticlePage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

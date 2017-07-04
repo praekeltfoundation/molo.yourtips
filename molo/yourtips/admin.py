@@ -89,7 +89,7 @@ class YourTipsEntryAdmin(admin.ModelAdmin):
     _convert.short_description = ''
 
 
-class YourTipsPageAdmin(admin.ModelAdmin):
+class YourTipsAdmin(admin.ModelAdmin):
     list_display = ['status']
     list_filter = ['title']
     search_fields = ['title', 'content', 'description']
@@ -101,4 +101,4 @@ class YourTipsPageAdmin(admin.ModelAdmin):
 
 
 admin.site.register(YourTipsEntry, YourTipsEntryAdmin)
-admin.site.register(YourTip, YourTipsPageAdmin)
+admin.site.register(YourTip, YourTipsAdmin)

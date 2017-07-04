@@ -10,13 +10,12 @@ from wagtail.contrib.modeladmin.options import (
 from wagtail.contrib.modeladmin.views import IndexView
 
 from molo.yourtips.admin import (
-    YourTipsPageAdmin,
-    YourTipsEntryPageAdmin
+    YourTipsAdmin,
+    YourTipsEntryAdmin
 )
 from molo.yourtips.models import (
     YourTipsEntry,
-    YourTipsPage,
-    YourTipsEntryPage
+    YourTip
 )
 
 
@@ -52,16 +51,16 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
         return truncatechars(obj.tip_text, 30)
 
 
-class ModelAdminTipPageTemplate(IndexView):
+class ModelAdminTipTemplate(IndexView):
     def get_template_names(self):
-        return 'admin/yourtips/model_admin_tip_page_template.html'
+        return 'admin/yourtips/model_admin_your_tip_template.html'
 
 
-class YourTipsModelAdmin(ModelAdmin, YourTipsPageAdmin):
-    model = YourTipsPage
+class YourTipsModelAdmin(ModelAdmin, YourTipsAdmin):
+    model = YourTip
     menu_label = 'Your Tips Page'
     menu_icon = 'doc-full'
-    index_view_class = ModelAdminTipPageTemplate
+    index_view_class = ModelAdminTipTemplate
     add_to_settings_menu = False
     list_display = ['title', 'status']
 
@@ -71,11 +70,11 @@ class YourTipsModelAdmin(ModelAdmin, YourTipsPageAdmin):
         return qs.descendant_of(main)
 
 
-class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryPageAdmin):
-    model = YourTipsEntryPage
+class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
+    model = YourTipsEntry
     menu_label = 'Tips'
     menu_icon = 'doc-full-inverse'
-    index_view_class = ModelAdminTipPageTemplate
+    index_view_class = ModelAdminTipTemplate
     add_to_settings_menu = False
     list_display = ['title', 'latest_revision_created_at','vote_total', 'live']
 

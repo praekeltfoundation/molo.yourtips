@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from molo.core.templatetags.core_tags import get_pages
 
 from molo.yourtips.forms import YourTipsEntryForm
-from molo.yourtips.models import YourTipsPage, YourTipsEntryPage
+from molo.yourtips.models import YourTip, YourTipsArticlePage
 
 
 class YourTipsEntryView(CreateView):
@@ -18,7 +18,7 @@ class YourTipsEntryView(CreateView):
         context = super(
             YourTipsEntryView, self).get_context_data(*args, **kwargs)
         tip_page = get_object_or_404(
-            YourTipsPage, slug=self.kwargs.get('slug'))
+            YourTip, slug=self.kwargs.get('slug'))
         context.update({'tip_page': tip_page})
         return context
 
@@ -29,7 +29,7 @@ class YourTipsEntryView(CreateView):
 
     def form_valid(self, form):
         tip_page = get_object_or_404(
-            YourTipsPage, slug=self.kwargs.get('slug'))
+            YourTip, slug=self.kwargs.get('slug'))
         form.instance.tip_page = (
             tip_page.get_main_language_page().specific)
         if self.request.user.is_anonymous():
@@ -45,7 +45,7 @@ class ThankYouView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(ThankYouView, self).get_context_data(*args, **kwargs)
         tip_page = get_object_or_404(
-            YourTipsPage, slug=self.kwargs.get('slug'))
+            YourTip, slug=self.kwargs.get('slug'))
         context.update({'tip_page': tip_page})
         return context
 
@@ -57,7 +57,7 @@ class YourTipsRecentView(ListView):
         main = self.request.site.root_page
         context = {'request': self.request}
         locale = self.request.LANGUAGE_CODE
-        articles = YourTipsEntryPage.objects.all(
+        articles = YourTipsArticlePage.objects.all(
         ).descendant_of(main).order_by('-latest_revision_created_at')
         return get_pages(context, articles, locale)
 
@@ -66,7 +66,7 @@ class YourTipsRecentView(ListView):
             *args, **kwargs
         )
         context.update({
-            'your_tip_page_slug': YourTipsPage.objects.first().slug,
+            'your_tip_page_slug': YourTip.objects.first().slug
         })
         return context
 
@@ -78,7 +78,7 @@ class YourTipsPopularView(ListView):
         main = self.request.site.root_page
         context = {'request': self.request}
         locale = self.request.LANGUAGE_CODE
-        articles = YourTipsEntryPage.objects.all(
+        articles = YourTipsArticlePage.objects.all(
         ).descendant_of(main).order_by('-total_upvotes')
         return get_pages(context, articles, locale)
 
@@ -87,6 +87,6 @@ class YourTipsPopularView(ListView):
             *args, **kwargs
         )
         context.update({
-            'your_tip_page_slug': YourTipsPage.objects.first().slug,
+            'your_tip_page_slug': YourTip.objects.first().slug,
         })
         return context

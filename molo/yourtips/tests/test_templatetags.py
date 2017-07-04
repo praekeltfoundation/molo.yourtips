@@ -1,7 +1,7 @@
 from django.template import Template, Context
 
 from molo.yourtips.models import (
-    YourTipsEntry, YourTipsEntryPage
+    YourTipsEntry, YourTipsArticlePage
 )
 from molo.yourtips.tests.base import BaseYourTipsTestCase
 
@@ -23,7 +23,7 @@ class TestYourTipsTemplateTags(BaseYourTipsTestCase):
         self.client.get(
             '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id
         )
-        article = YourTipsEntryPage.objects.get(title='Tip-%s' % entry.id)
+        article = YourTipsArticlePage.objects.get(title='Tip-%s' % entry.id)
         article.save_revision().publish()
 
         template = Template("""
@@ -52,8 +52,7 @@ class TestYourTipsTemplateTags(BaseYourTipsTestCase):
         self.client.get(
             '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id
         )
-        article = YourTipsEntryPage.objects.get(title='Tip-%s' % entry.id)
-        article.feature_as_topic_of_the_day = True
+        article = YourTipsArticlePage.objects.get(title='Tip-%s' % entry.id)
         article.save_revision().publish()
 
         template = Template("""
@@ -61,8 +60,6 @@ class TestYourTipsTemplateTags(BaseYourTipsTestCase):
         {% your_tips_on_tip_submission_form %}
         """)
 
-        output = template.render(Context({
-            'object': self.user,
-        }))
+        output = template.render(Context())
 
         self.assertTrue('test body' in output)

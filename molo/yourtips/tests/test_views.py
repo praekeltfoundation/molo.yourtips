@@ -7,7 +7,6 @@ from molo.yourtips.models import (
 
 
 class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
-
     def test_yourtips_page(self):
         self.client.login(
             username=self.superuser_name,

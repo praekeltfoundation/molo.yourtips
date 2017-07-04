@@ -1,17 +1,14 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n tip_tags %}
-
 {% block content %}
-<div class="yourtips yourtips-entries">
-
+<div class="yourtips">
   <h1 class="heading heading--yourtips">{% trans 'Thank you!' %}</h1>
   <h4 class="heading heading--yourtips-description">
     {% trans 'Thanks for submitting your tip!' %}
   </h4>
-
-  <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item call-to-action__nav-item--yourtips call-to-action__nav-item--back-home">
+  {% your_tips_on_tip_submission_form %}
+  <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item-text">
     {% trans "Home" %}
   </a>
 </div>
-
 {% endblock %}

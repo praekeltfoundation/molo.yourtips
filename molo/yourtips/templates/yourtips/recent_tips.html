@@ -1,30 +1,26 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags static core_tags tip_tags el_pagination_tags i18n likes_inclusion_tags %}
-
 {% block content %}
-  <div class="breadcrumbs">
-    {% block breadcrumbs %}
-      {% breadcrumbs %}
-    {% endblock %}
-  </div>
-    <h1>{{ recent_tips_page.title }}</h1>
-    <h3>{{ recent_tips_page.subtitle }}</h3>
-  </div>
+{% block breadcrumbs %}
+  {% include "patterns/basics/breadcrumbs/breadcrumbs.html" %}
+{% endblock %}
+  <h1 class="heading heading--yourtips">{{ recent_tips_page.title }}</h1>
+  <h2 class="heading--yourtips-title">{{ recent_tips_page.subtitle }}</h2>
   {% paginate 15 object_list as articles %}
-  <ol>
+  <ul class="yourtips-list">
     {% for each_article in articles %}
-      <li>
-        <div class="posted_date">
-          Posted:: {{ each_article.latest_revision_created_at }}
-        </div>
-        <div class="content">
-          {{ each_article.body }}
-        </div>
-        {% likes each_article %}
-      </li>
+    <li class="yourtips-list__item">
+      <p class="yourtips__posted-date">
+        Posted: {{ each_article.latest_revision_created_at }}
+      </p>
+      <h3 class="yourtips__description">
+        {{ each_article.body }}
+      </h3>
+      {% likes each_article %}
+    </li>
     {% endfor %}
-  </ol>
-  <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action">
+  </ul>
+  <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action__nav-item">
     {% trans "Submit a Tip" %}
   </a>
   {% show_more 'See more Tips' %}

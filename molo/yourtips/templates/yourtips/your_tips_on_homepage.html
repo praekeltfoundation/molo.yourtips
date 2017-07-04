@@ -1,5 +1,6 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
 {% block content %}
+<<<<<<< HEAD
 {% if article_tip %}
 <div class="yourtips">
   <h1 class="heading heading--yourtips">
@@ -27,4 +28,21 @@
   </div>
 </div>
 {% endif %}
+=======
+  {% if article_tip %}
+    <div class="yourtips yourtips">
+      <h1 class="heading heading--yourtips heading--hero-yourtips">
+        {% trans "Tip of the Day" %}
+      </h1>
+      <h4 class="tip__body">{{ article_tip.body }}</h4>
+
+      <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action__nav-item call-to-action__nav-item">
+        {% trans "Submit a tip" %}
+      </a>
+      <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item call-to-action__nav-item">
+        {% trans "Recent Tips" %}
+      </a>
+    </div>
+  {% endif %}
+>>>>>>> feature/yourtips-phase1-tickets
 {% endblock %}

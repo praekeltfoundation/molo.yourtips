@@ -2,7 +2,7 @@ from copy import copy
 
 from django import template
 
-from molo.yourtips.models import YourTipsEntry, YourTip, YourTipsArticlePage
+from molo.yourtips.models import YourTip, YourTipsArticlePage
 
 register = template.Library()
 

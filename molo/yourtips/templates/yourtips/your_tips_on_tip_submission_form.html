@@ -1,6 +1,5 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
 {% block content %}
-<<<<<<< HEAD
 {% if tip_of_the_day or most_recent_tip %}
 {% if tip_of_the_day %}
   <h2 class="heading heading--yourtips-title heading--line-break">
@@ -12,23 +11,7 @@
       <h3 class="yourtips__description">
         {{ tip_of_the_day.body }}</h3>
     </div>
-=======
-
-{% if most_recent_tip %}
-  <div class="yourtips yourtips">
-    {% if most_recent_tip %}
-      <h1 class="heading heading--yourtips heading--hero-yourtips">
-        {% trans "Most recent tip" %}
-      </h1>
-      <h4 class="most_recent_tip">{{ most_recent_tip.body }}</h4>
-    {% endif %}
-    <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item call-to-action__nav-item">
-      {% trans "See more Tips" %}
-    </a>
->>>>>>> feature/yourtips-phase1-tickets
   </div>
-
-  {% if most_recent_tip %}
   {% if most_recent_tip %}
   <h2 class="heading heading--yourtips-title">{% trans "Most recent tip" %}</h2>
   <div class="yourtips-list">

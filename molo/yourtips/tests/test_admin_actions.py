@@ -1,4 +1,8 @@
-from molo.yourtips.models import YourTipsEntry, YourTipsArticlePage
+import datetime
+
+from molo.yourtips.models import (
+    YourTipsPage, YourTipsEntry, YourTipsEntryPage
+)
 from molo.yourtips.tests.base import BaseYourTipsTestCase
 from molo.yourtips.admin import (
     download_as_csv,
@@ -54,7 +58,7 @@ class TestAdminActions(BaseYourTipsTestCase):
         response = self.client.get(
             '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id
         )
-        article = YourTipsArticlePage.objects.get(title='Tip-%s' % entry.id)
+        article = YourTipsEntryPage.objects.get(title='Tip-%s' % entry.id)
         entry = YourTipsEntry.objects.get(pk=entry.pk)
         self.assertEquals(entry.converted_article_page, article)
         self.assertEquals(article.body.stream_data, [
@@ -62,7 +66,7 @@ class TestAdminActions(BaseYourTipsTestCase):
             {"type": "paragraph", "value": "By Test"}
         ])
 
-        self.assertEquals(YourTipsArticlePage.objects.all().count(), 1)
+        self.assertEquals(YourTipsEntryPage.objects.all().count(), 1)
 
         # second time it should redirect to the edit page
         response = self.client.get(
@@ -71,4 +75,4 @@ class TestAdminActions(BaseYourTipsTestCase):
         self.assertEquals(
             response['Location'],
             '/admin/pages/%d/edit/' % article.id)
-        self.assertEquals(YourTipsArticlePage.objects.all().count(), 1)
+        self.assertEquals(YourTipsEntryPage.objects.all().count(), 1)

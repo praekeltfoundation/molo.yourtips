@@ -27,7 +27,7 @@ def convert_to_article(request, entry_id):
         tip_section_index_page = (
             YourTipsSectionIndexPage.objects.live().first())
         if not tip_section_index_page:
-            tip_index = YourTipsIndexPage.objects.live().fisrt()
+            tip_index = YourTipsIndexPage.objects.live().first()
             tip_section_index_page = YourTipsSectionIndexPage(
                 title='Your Tips Section', slug='your-tips-section-index-page'
             )

@@ -4,9 +4,11 @@ from molo.yourtips.models import YourTipsEntry
 
 
 class YourTipsEntryForm(forms.ModelForm):
-    terms_or_conditions_approved = forms.BooleanField(required=True)
+    tip_text = forms.CharField(widget=forms.Textarea(
+    ))
 
     class Meta:
         model = YourTipsEntry
-        fields = ['tip_name', 'tip_text', 'terms_or_conditions_approved',
-                  'hide_real_name']
+        fields = [
+            "optional_name", 'tip_text', 'allow_share_on_social_media'
+        ]

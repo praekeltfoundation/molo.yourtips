@@ -9,38 +9,44 @@ from django import forms
 
 from wagtail.wagtailcore.utils import cautious_slugify
 
-from molo.core.models import ArticlePage
 from molo.yourtips.models import (
-    YourTipsEntry, YourTips, YourTipsIndexPage
+    YourTipsEntry, YourTip, YourTipsSectionIndexPage, YourTipsArticlePage,
+    YourTipsIndexPage
 )
 
 
 @staff_member_required
 def convert_to_article(request, entry_id):
     def get_entry_author(entry):
-        if entry.hide_real_name:
-            return 'Written by: Anonymous'
-        return 'Written by: %s' % entry.user.username
+        if not entry.optional_name:
+            return 'By Anonymous'
+        return 'By %s' % entry.optional_name
 
     entry = get_object_or_404(YourTipsEntry, pk=entry_id)
     if not entry.converted_article_page:
-        tip_page_index_page = (
-            YourTipsIndexPage.objects.live().first())
-        article = ArticlePage(
-            title=entry.tip_name,
-            slug='yourtips-entry-%s' % cautious_slugify(entry.tip_name),
+        tip_section_index_page = (
+            YourTipsSectionIndexPage.objects.live().first())
+        if not tip_section_index_page:
+            tip_index = YourTipsIndexPage.objects.live().first()
+            tip_section_index_page = YourTipsSectionIndexPage(
+                title='Your Tips Section', slug='your-tips-section-index-page'
+            )
+            tip_index.add_child(instance=tip_section_index_page)
+            tip_section_index_page.save_revision().publish()
+        tip_article = YourTipsArticlePage(
+            title='Tip-%s' % str(entry.id),
+            slug='yourtips-entry-%s' % cautious_slugify(entry.id),
             body=json.dumps([
-                {"type": "paragraph", "value": get_entry_author(entry)},
-                {"type": "paragraph", "value": entry.tip_text}
+                {"type": "paragraph", "value": entry.tip_text},
+                {"type": "paragraph", "value": get_entry_author(entry)}
             ])
         )
-        tip_page_index_page.add_child(instance=article)
-        article.save_revision()
-        article.unpublish()
+        tip_section_index_page.add_child(instance=tip_article)
+        tip_article.save_revision()
+        tip_article.unpublish()
 
-        entry.converted_article_page = article
+        entry.converted_article_page = tip_article
         entry.save()
-        return redirect('/admin/pages/%d/move/' % article.id)
     return redirect('/admin/pages/%d/edit/' % entry.converted_article_page.id)
 
 
@@ -48,21 +54,17 @@ class YourTipsEntryForm(forms.ModelForm):
 
     class Meta:
         model = YourTipsEntry
-        fields = ['tip_name', 'tip_text', 'user', 'hide_real_name',
-                  'is_read', 'is_shortlisted']
+        fields = ['tip_text', "optional_name"]
 
 
 class YourTipsEntryAdmin(admin.ModelAdmin):
-    list_display = ['tip_name', 'truncate_text', 'user', 'hide_real_name',
-                    'submission_date', 'is_read', 'is_shortlisted',
+    list_display = ['truncate_text', 'user', 'optional_name',
+                    'submission_date', 'allow_share_on_social_media',
                     '_convert']
-    list_filter = ['is_read', 'is_shortlisted',
-                   'submission_date']
-    list_editable = ['is_read', 'is_shortlisted']
+    list_filter = ['submission_date']
     date_hierarchy = 'submission_date'
     form = YourTipsEntryForm
-    readonly_fields = ('tip_name', 'tip_text', 'user',
-                       'hide_real_name', 'submission_date')
+    readonly_fields = ('tip_text', 'optional_name', 'submission_date')
 
     def truncate_text(self, obj, *args, **kwargs):
         return truncatechars(obj.tip_text, 30)
@@ -99,4 +101,4 @@ class YourTipsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(YourTipsEntry, YourTipsEntryAdmin)
-admin.site.register(YourTips, YourTipsAdmin)
+admin.site.register(YourTip, YourTipsAdmin)

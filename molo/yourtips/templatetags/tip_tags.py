@@ -1,23 +1,52 @@
+from copy import copy
+
 from django import template
-from molo.yourtips.models import YourTipsThankYou
-from molo.core.templatetags.core_tags import get_pages
+
+from molo.yourtips.models import YourTip, YourTipsArticlePage
 
 register = template.Library()
 
 
-@register.assignment_tag(takes_context=True)
-def load_thank_you_page_for_yourtips(context, tip):
+@register.inclusion_tag(
+    'yourtips/your_tips_on_homepage.html',
+    takes_context=True
+)
+def your_tips_on_homepage(context):
+    context = copy(context)
 
-    page = tip.get_main_language_page()
-    locale = context.get('locale_code')
+    tip_on_homepage = YourTipsArticlePage.objects.filter(
+        featured_in_homepage=True).order_by(
+            '-featured_in_homepage_start_date').first()
 
-    qs = YourTipsThankYou.objects.child_of(page).filter(
-        languages__language__is_main_language=True)
+    if not tip_on_homepage:
+        tip_on_homepage = YourTipsArticlePage.objects.all().order_by(
+            '-latest_revision_created_at').first()
 
-    if not locale:
-        return qs
+    context.update({
+        'article_tip': tip_on_homepage,
+        'your_tip_page_slug': get_your_tip(context).slug
+    })
+    return context
 
-    if qs:
-        return get_pages(context, qs, locale)
-    else:
-        return []
+
+@register.inclusion_tag(
+    'yourtips/your_tips_on_tip_submission_form.html',
+    takes_context=True
+)
+def your_tips_on_tip_submission_form(context):
+    context = copy(context)
+
+    most_recent_tip = YourTipsArticlePage.objects.all(
+    ).order_by('-latest_revision_created_at').first()
+
+    context.update({
+        'most_recent_tip': most_recent_tip,
+        'your_tip_page_slug': get_your_tip(context).slug
+    })
+    return context
+
+
+@register.simple_tag(takes_context=True)
+def get_your_tip(context):
+
+    return YourTip.objects.first()

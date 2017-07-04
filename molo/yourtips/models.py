@@ -1,29 +1,23 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.dispatch import receiver
+from django.utils.translation import ugettext_lazy as _
 
 from wagtail.wagtailcore.models import Page
-from wagtail.wagtailcore.fields import StreamField
-from wagtail.wagtailcore import blocks
-from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailadmin.edit_handlers import (
-    FieldPanel, StreamFieldPanel, FieldRowPanel,
-    MultiFieldPanel)
-from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
-
-from molo.core.blocks import MarkDownBlock
-from molo.core.utils import generate_slug
-from molo.core.models import (
-    ArticlePage, SectionPage, TranslatablePageMixinNotRoutable,
-    PreventDeleteMixin, Main, index_pages_after_copy,
+    FieldPanel, FieldRowPanel,
+    MultiFieldPanel
 )
 
-SectionPage.subpage_types += ['yourtips.YourTips']
+from molo.core.utils import generate_slug
+from molo.core.models import (
+    ArticlePage, TranslatablePageMixinNotRoutable,
+    PreventDeleteMixin, Main, index_pages_after_copy,
+)
 
 
 class YourTipsIndexPage(Page, PreventDeleteMixin):
     parent_page_types = ['core.Main']
-    subpage_types = ['yourtips.YourTips']
+    subpage_types = ['yourtips.YourTip']
 
     def copy(self, *args, **kwargs):
         site = kwargs['to'].get_site()
@@ -43,29 +37,32 @@ def create_yourtips_index_page(sender, instance, **kwargs):
         yourtips_tip_page_index.save_revision().publish()
 
 
-class YourTips(TranslatablePageMixinNotRoutable, Page):
-    parent_page_types = ['core.Main']
-    subpage_types = [
-        'yourtips.YourTipsTermsAndConditions',
-        'yourtips.YourTipsThankYou'
-    ]
-    description = models.TextField(null=True, blank=True)
-    image = models.ForeignKey(
-        'wagtailimages.Image',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
+class YourTipsSectionIndexPage(Page, PreventDeleteMixin):
+    parent_page_types = ['yourtips.YourTipsIndexPage']
+    subpage_types = []
 
-    content = StreamField([
-        ('heading', blocks.CharBlock(classname="full title")),
-        ('paragraph', MarkDownBlock()),
-        ('image', ImageChooserBlock()),
-        ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-        ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-        ('page', blocks.PageChooserBlock()),
-    ], null=True, blank=True)
+    def copy(self, *args, **kwargs):
+        YourTipsSectionIndexPage.objects.child_of(YourTipsIndexPage).delete()
+        super(YourTipsSectionIndexPage, self).copy(*args, **kwargs)
+
+
+@receiver(index_pages_after_copy, sender=Main)
+def create_yourtips_section_index_page(sender, instance, **kwargs):
+    if not instance.get_children().filter(
+            title='Tips').exists:
+        yourtips_tip_section_page_index = YourTipsSectionIndexPage(
+            title='Tips', slug=('tips-%s' % (
+                generate_slug(instance.title), )))
+        instance.add_child(instance=yourtips_tip_section_page_index)
+        yourtips_tip_section_page_index.save_revision().publish()
+
+
+class YourTip(TranslatablePageMixinNotRoutable, Page):
+    parent_page_types = [
+        'yourtips.YourTipsIndexPage'
+    ]
+    subpage_types = []
+    description = models.TextField(null=True, blank=True)
 
     extra_style_hints = models.TextField(
         default='',
@@ -77,28 +74,17 @@ class YourTips(TranslatablePageMixinNotRoutable, Page):
     def get_effective_extra_style_hints(self):
             return self.extra_style_hints
 
-    def get_effective_image(self):
-        return self.image
-
-    def thank_you_page(self):
-        qs = YourTipsThankYou.objects.live().child_of(self)
-        if qs.exists():
-            return qs.last()
-        return None
-
     class Meta:
         verbose_name = 'YourTip'
         verbose_name_plural = 'YourTips'
 
 
-YourTips.content_panels = [
+YourTip.content_panels = [
     FieldPanel('title', classname='full title'),
     FieldPanel('description'),
-    ImageChooserPanel('image'),
-    StreamFieldPanel('content')
 ]
 
-YourTips.settings_panels = [
+YourTip.settings_panels = [
     MultiFieldPanel(
         [FieldRowPanel(
             [FieldPanel('extra_style_hints')], classname="label-above")],
@@ -109,38 +95,25 @@ YourTips.settings_panels = [
 class YourTipsEntry(models.Model):
     submission_date = models.DateField(null=True, blank=True,
                                        auto_now_add=True)
-    user = models.ForeignKey('auth.User')
-    tip_name = models.CharField(max_length=128)
+    optional_name = models.CharField(null=True, blank=True, max_length=30)
+    user = models.ForeignKey('auth.User', blank=True, null=True)
     tip_text = models.CharField(max_length=140)
-    terms_or_conditions_approved = models.BooleanField()
-    hide_real_name = models.BooleanField(default=False)
-    is_read = models.BooleanField(default=False)
-    is_shortlisted = models.BooleanField(default=False)
+    allow_share_on_social_media = models.BooleanField()
 
     converted_article_page = models.ForeignKey(
-        'core.ArticlePage',
+        'yourtips.YourTipsArticlePage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='+',
-        help_text=_('Article page to which the entry was converted to')
-    )
-    related_article_page = models.ForeignKey(
-        'core.ArticlePage',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+',
-        help_text=_('Article page related to this entry')
+        related_name='tip_entries',
+        help_text=_(
+            'Your tip article page to which the entry was converted to')
     )
 
     panels = [
         MultiFieldPanel(
             [
-                FieldPanel('tip_name'),
-                FieldPanel('tip_text'),
-                FieldPanel('is_read'),
-                FieldPanel('is_shortlisted'),
+                FieldPanel('tip_text')
             ],
             heading="Entry Settings",)
     ]
@@ -150,29 +123,21 @@ class YourTipsEntry(models.Model):
         verbose_name_plural = 'YourTips Entries'
 
 
-class YourTipsTermsAndConditions(ArticlePage):
-    parent_page_types = ['yourtips.YourTips']
+class YourTipsArticlePage(ArticlePage):
+    parent_page_types = ['yourtips.YourTipsSectionIndexPage']
     subpage_types = []
 
-    def get_parent_page(self):
-        return YourTips.objects.all().ancestor_of(self).last()
+    featured_homepage_promote_panels = [
+        FieldPanel('featured_in_homepage'),
+        FieldPanel('featured_in_homepage_start_date'),
+        FieldPanel('featured_in_homepage_end_date'),
+    ]
 
 
-YourTipsTermsAndConditions.promote_panels = [
+YourTipsArticlePage.promote_panels = [
     MultiFieldPanel(
-        Page.promote_panels,
-        "Common page configuration", "collapsible collapsed")]
-
-
-class YourTipsThankYou(ArticlePage):
-    parent_page_types = ['yourtips.YourTips']
-    subpage_types = []
-
-    def get_parent_page(self):
-        return YourTips.objects.all().ancestor_of(self).last()
-
-
-YourTipsThankYou.promote_panels = [
-    MultiFieldPanel(
-        Page.promote_panels,
-        "Common page configuration", "collapsible collapsed")]
+        YourTipsArticlePage.featured_homepage_promote_panels,
+        "Featuring in Homepage"
+    ),
+    MultiFieldPanel(ArticlePage.topic_of_the_day_panels, "Topic of the Day"),
+]

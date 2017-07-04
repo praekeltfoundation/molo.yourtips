@@ -1,13 +1,17 @@
 from daterange_filter.filter import DateRangeFilter
-from molo.yourtips.admin import YourTipsAdmin
-from molo.yourtips.models import YourTipsEntry, \
-    YourTips
+
+from django.template.defaultfilters import truncatechars
+
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin,
     modeladmin_register,
     ModelAdminGroup,
 )
 from wagtail.contrib.modeladmin.views import IndexView
+
+from molo.yourtips.admin import YourTipsAdmin
+from molo.yourtips.models import YourTipsEntry, \
+    YourTip
 
 
 class DateFilter(DateRangeFilter):
@@ -19,14 +23,11 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
     menu_label = 'Entries'
     menu_icon = 'edit'
     add_to_settings_menu = False
-    list_display = ['tip_name', 'user', 'hide_real_name',
-                    'submission_date', 'is_read', 'is_shortlisted',
-                    '_convert']
-
-    list_filter = [('submission_date', DateFilter), 'is_read',
-                   'is_shortlisted']
-
-    search_fields = ('tip_name',)
+    list_display = [
+        'tip', 'submission_date', 'user', 'optional_name',
+        'allow_share_on_social_media', '_convert'
+    ]
+    list_filter = [('submission_date', DateFilter)]
 
     def _convert(self, obj, *args, **kwargs):
         if obj.converted_article_page:
@@ -41,21 +42,22 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
     _convert.allow_tags = True
     _convert.short_description = ''
 
+    def tip(self, obj, *args, **kwargs):
+        return truncatechars(obj.tip_text, 30)
 
-class ModelAdminTipPageTemplate(IndexView):
+
+class ModelAdminTipTemplate(IndexView):
     def get_template_names(self):
-        return 'admin/yourtips/model_admin_tip_page_template.html'
+        return 'admin/yourtips/model_admin_your_tip_template.html'
 
 
 class YourTipsModelAdmin(ModelAdmin, YourTipsAdmin):
-    model = YourTips
-    menu_label = 'Your Tip'
+    model = YourTip
+    menu_label = 'Your Tips Page'
     menu_icon = 'doc-full'
-    index_view_class = ModelAdminTipPageTemplate
+    index_view_class = ModelAdminTipTemplate
     add_to_settings_menu = False
     list_display = ['title', 'status']
-
-    search_fields = ('tip_name',)
 
     def get_queryset(self, request):
         qs = super(YourTipsModelAdmin, self).get_queryset(request)

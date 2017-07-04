@@ -10,7 +10,7 @@ def create_yourtips_index(apps, schema_editor):
     main = Main.objects.all().first()
 
     if main:
-        tip_index = YourTipsIndexPage(title='Your tips', slug='your-tips')
+        tip_index = YourTipsIndexPage(title='Your Tips', slug='your-tips')
         main.add_child(instance=tip_index)
         tip_index.save_revision().publish()
 
@@ -24,4 +24,3 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(create_yourtips_index),
     ]
-1

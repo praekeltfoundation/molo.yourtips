@@ -1,19 +1,20 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
-
 {% block content %}
-
-{% if most_recent_tip %}
-  <div class="yourtips yourtips">
-    {% if most_recent_tip %}
-      <h1 class="heading heading--yourtips heading--hero-yourtips">
-        {% trans "Most recent tip" %}
-      </h1>
-      <h4 class="most_recent_tip">{{ most_recent_tip.body }}</h4>
-    {% endif %}
-    <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item call-to-action__nav-item">
-      {% trans "See more Tips" %}
-    </a>
-  </div>
+{% if most_recent_tip %} <!--Possibly Error? -->
+  {% if most_recent_tip %}
+    <h2 class="heading heading--yourtips-title heading--line-break">
+      {% trans "Most recent tip" %}
+    </h2>
+    <div class="yourtips-list">
+      <div class="yourtips-list__item">
+        <h3 class="yourtips__description">
+          {{ most_recent_tip.body }}
+        </h3>
+      </div>
+    </div>
+  {% endif %}
+  <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item">
+    {% trans "See more Tips" %}
+  </a>
 {% endif %}
-
 {% endblock %}

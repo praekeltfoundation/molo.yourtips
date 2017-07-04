@@ -46,6 +46,18 @@ def your_tips_on_tip_submission_form(context):
     return context
 
 
+@register.inclusion_tag(
+    'yourtips/your_tips_create_tip_on_homepage.html',
+    takes_context=True
+)
+def your_tips_create_tip_on_homepage(context):
+    context = copy(context)
+    context.update({
+        'your_tip_page_slug': get_your_tip(context).slug,
+    })
+    return context
+
+
 @register.simple_tag(takes_context=True)
 def get_your_tip(context):
 

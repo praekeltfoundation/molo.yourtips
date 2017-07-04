@@ -110,14 +110,6 @@ class YourTipsEntry(models.Model):
             'Your tip article page to which the entry was converted to')
     )
 
-    panels = [
-        MultiFieldPanel(
-            [
-                FieldPanel('tip_text')
-            ],
-            heading="Entry Settings",)
-    ]
-
     class Meta:
         verbose_name = 'YourTips Entry'
         verbose_name_plural = 'YourTips Entries'
@@ -138,6 +130,5 @@ YourTipsArticlePage.promote_panels = [
     MultiFieldPanel(
         YourTipsArticlePage.featured_homepage_promote_panels,
         "Featuring in Homepage"
-    ),
-    MultiFieldPanel(ArticlePage.topic_of_the_day_panels, "Topic of the Day"),
+    )
 ]

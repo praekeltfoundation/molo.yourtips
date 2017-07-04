@@ -3,15 +3,11 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from wagtail.wagtailcore.models import Page
-from wagtail.wagtailcore.fields import StreamField
-from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import (
-    FieldPanel, StreamFieldPanel, FieldRowPanel,
+    FieldPanel, FieldRowPanel,
     MultiFieldPanel
 )
 
-from molo.core import constants
-from molo.core.blocks import MarkDownBlock
 from molo.core.utils import generate_slug
 from molo.core.models import (
     ArticlePage, TranslatablePageMixinNotRoutable,
@@ -21,21 +17,13 @@ from molo.core.models import (
 
 class YourTipsIndexPage(Page, PreventDeleteMixin):
     parent_page_types = ['core.Main']
-    subpage_types = [
-        'yourtips.YourTipsPage', 'yourtips.YourTipsArticleIndexPage'
-    ]
+    subpage_types = ['yourtips.YourTip']
 
     def copy(self, *args, **kwargs):
         site = kwargs['to'].get_site()
         main = site.root_page
         YourTipsIndexPage.objects.child_of(main).delete()
         super(YourTipsIndexPage, self).copy(*args, **kwargs)
-
-    @staticmethod
-    def get_effective_commenting_settings(self):
-        commenting_settings = dict()
-        commenting_settings['state'] = constants.COMMENTING_DISABLED
-        return commenting_settings
 
 
 @receiver(index_pages_after_copy, sender=Main)
@@ -49,39 +37,32 @@ def create_yourtips_index_page(sender, instance, **kwargs):
         yourtips_tip_page_index.save_revision().publish()
 
 
-class YourTipsArticleIndexPage(Page, PreventDeleteMixin):
+class YourTipsSectionIndexPage(Page, PreventDeleteMixin):
     parent_page_types = ['yourtips.YourTipsIndexPage']
     subpage_types = []
 
     def copy(self, *args, **kwargs):
-        YourTipsArticleIndexPage.objects.child_of(YourTipsIndexPage).delete()
-        super(YourTipsArticleIndexPage, self).copy(*args, **kwargs)
+        YourTipsSectionIndexPage.objects.child_of(YourTipsIndexPage).delete()
+        super(YourTipsSectionIndexPage, self).copy(*args, **kwargs)
 
 
 @receiver(index_pages_after_copy, sender=Main)
-def create_yourtips_article_index_page(sender, instance, **kwargs):
+def create_yourtips_section_index_page(sender, instance, **kwargs):
     if not instance.get_children().filter(
             title='Tips').exists:
-        yourtips_tip_article_page_index = YourTipsArticleIndexPage(
+        yourtips_tip_section_page_index = YourTipsSectionIndexPage(
             title='Tips', slug=('tips-%s' % (
                 generate_slug(instance.title), )))
-        instance.add_child(instance=yourtips_tip_article_page_index)
-        yourtips_tip_article_page_index.save_revision().publish()
+        instance.add_child(instance=yourtips_tip_section_page_index)
+        yourtips_tip_section_page_index.save_revision().publish()
 
 
-class YourTipsPage(TranslatablePageMixinNotRoutable, Page):
+class YourTip(TranslatablePageMixinNotRoutable, Page):
     parent_page_types = [
         'yourtips.YourTipsIndexPage'
     ]
+    subpage_types = []
     description = models.TextField(null=True, blank=True)
-
-    content = StreamField([
-        ('heading', blocks.CharBlock(classname="full title")),
-        ('paragraph', MarkDownBlock()),
-        ('list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-        ('numbered_list', blocks.ListBlock(blocks.CharBlock(label="Item"))),
-        ('page', blocks.PageChooserBlock()),
-    ], null=True, blank=True)
 
     extra_style_hints = models.TextField(
         default='',
@@ -98,13 +79,12 @@ class YourTipsPage(TranslatablePageMixinNotRoutable, Page):
         verbose_name_plural = 'YourTips'
 
 
-YourTipsPage.content_panels = [
+YourTip.content_panels = [
     FieldPanel('title', classname='full title'),
     FieldPanel('description'),
-    StreamFieldPanel('content')
 ]
 
-YourTipsPage.settings_panels = [
+YourTip.settings_panels = [
     MultiFieldPanel(
         [FieldRowPanel(
             [FieldPanel('extra_style_hints')], classname="label-above")],
@@ -121,12 +101,13 @@ class YourTipsEntry(models.Model):
     allow_share_on_social_media = models.BooleanField()
 
     converted_article_page = models.ForeignKey(
-        'yourtips.YourTipsEntryPage',
+        'yourtips.YourTipsArticlePage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='tip_entries',
-        help_text=_('Article page to which the entry was converted to')
+        help_text=_(
+            'Your tip article page to which the entry was converted to')
     )
 
     class Meta:
@@ -134,8 +115,8 @@ class YourTipsEntry(models.Model):
         verbose_name_plural = 'YourTips Entries'
 
 
-class YourTipsEntryPage(ArticlePage):
-    parent_page_types = ['yourtips.YourTipsArticleIndexPage']
+class YourTipsArticlePage(ArticlePage):
+    parent_page_types = ['yourtips.YourTipsSectionIndexPage']
     subpage_types = []
 
     featured_homepage_promote_panels = [
@@ -145,9 +126,9 @@ class YourTipsEntryPage(ArticlePage):
     ]
 
 
-YourTipsEntryPage.promote_panels = [
+YourTipsArticlePage.promote_panels = [
     MultiFieldPanel(
-        YourTipsEntryPage.featured_homepage_promote_panels,
+        YourTipsArticlePage.featured_homepage_promote_panels,
         "Featuring in Homepage"
     )
 ]

@@ -3,9 +3,17 @@
 
 {% block content %}
   <div class="breadcrumbs">
-    {% block breadcrumbs %}
-      {% breadcrumbs %}
-    {% endblock %}
+    <ul class="breadcrumbs-list">
+      <li class="breadcrumbs-list__item">
+        <a href="{{request.site.root_page.url}}" class="breadcrumbs-list__anchor">{% trans "Home" %}</a>
+      </li>
+      <li class="breadcrumbs-list__item">
+        <a href="{% url 'molo.yourtips:menu' %}" class="breadcrumbs-list__anchor">{% trans "Your Tips" %}</a>
+      </li>
+      <li class="breadcrumbs-list__item">
+        <span class="breadcrumbs-list-with-bg__anchor is-active">{% trans "Recent Tips" %}</span>
+      </li>
+    </ul>
   </div>
     <h1>{{ recent_tips_page.title }}</h1>
     <h3>{{ recent_tips_page.subtitle }}</h3>

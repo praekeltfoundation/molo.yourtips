@@ -27,6 +27,6 @@ urlpatterns = patterns(
     url(
         r'^menu/$',
         views.YourTipsMenuView.as_view(),
-        name='your_tips_menu'
+        name='menu'
     )
 )

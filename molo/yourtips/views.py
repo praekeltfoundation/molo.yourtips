@@ -90,3 +90,13 @@ class YourTipsPopularView(ListView):
             'your_tip_page_slug': YourTip.objects.first().slug,
         })
         return context
+
+
+class YourTipsMenuView(TemplateView):
+    template_name = 'yourtips/your_tips_menu.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(YourTipsMenuView, self).get_context_data(*args, **kwargs)
+        tip_page = YourTip.objects.all().first()
+        context.update({'tip_page': tip_page})
+        return context

@@ -23,5 +23,10 @@ urlpatterns = patterns(
         r'^popular-tips/$',
         views.YourTipsPopularView.as_view(),
         name='popular_tips'
+    ),
+    url(
+        r'^menu/$',
+        views.YourTipsMenuView.as_view(),
+        name='your_tips_menu'
     )
 )

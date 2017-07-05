@@ -1,6 +1,8 @@
 from testapp.settings import *  # noqa
 from testapp.settings.base import INSTALLED_APPS as TESTAPP_INSTALLED_APPS
-from testapp.settings.base import MIDDLEWARE_CLASSES as TESTAPP_MIDDLEWARE_CLASSES
+from testapp.settings.base import (
+    MIDDLEWARE_CLASSES as TESTAPP_MIDDLEWARE_CLASSES
+)
 from os.path import abspath, dirname, join
 
 PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__))))

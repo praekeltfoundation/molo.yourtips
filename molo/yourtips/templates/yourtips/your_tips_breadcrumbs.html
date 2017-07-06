@@ -1,0 +1,18 @@
+{% load tip_tags %}
+
+{% block content %}
+  {% get_your_tip as your_tip %}
+  <div class="breadcrumbs">
+    <ul class="breadcrumbs-list">
+      <li class="breadcrumbs-list__item">
+        <a href="{{ request.site.root_page.url }}" class="breadcrumbs-list__anchor">{% trans "Home" %}</a>
+      </li>
+      <li class="breadcrumbs-list__item">
+        <a href="{{ your_tip.url }}" class="breadcrumbs-list__anchor">{% trans your_tip.title %}</a>
+      </li>
+      <li class="breadcrumbs-list__item">
+        <span class="breadcrumbs-list-with-bg__anchor is-active">{% trans view_title %}</span>
+      </li>
+    </ul>
+  </div>
+{% endblock %}

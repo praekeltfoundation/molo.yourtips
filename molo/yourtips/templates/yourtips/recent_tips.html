@@ -1,20 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags static core_tags tip_tags el_pagination_tags i18n likes_inclusion_tags %}
 {% block content %}
-  {% get_your_tip as your_tip %}
-  <div class="breadcrumbs">
-    <ul class="breadcrumbs-list">
-      <li class="breadcrumbs-list__item">
-        <a href="{{request.site.root_page.url}}" class="breadcrumbs-list__anchor">{% trans "Home" %}</a>
-      </li>
-      <li class="breadcrumbs-list__item">
-        <a href="{{ your_tip.url }}}" class="breadcrumbs-list__anchor">{% trans your_tip.title %}</a>
-      </li>
-      <li class="breadcrumbs-list__item">
-        <span class="breadcrumbs-list-with-bg__anchor is-active">{% trans "Popular Tips" %}</span>
-      </li>
-    </ul>
-  </div>
+  {% your_tips_breadcrumbs %}
   <h1 class="heading heading--yourtips">{{ recent_tips_page.title }}</h1>
   <h2 class="heading--yourtips-title">{{ recent_tips_page.subtitle }}</h2>
   {% paginate 15 object_list as articles %}

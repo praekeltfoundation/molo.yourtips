@@ -63,6 +63,7 @@ class YourTipsRecentView(ListView):
             *args, **kwargs
         )
         context.update({
+            'view_title': 'Recent Tips',
             'your_tip_page_slug': YourTip.objects.first().slug
         })
         return context
@@ -84,6 +85,7 @@ class YourTipsPopularView(ListView):
             *args, **kwargs
         )
         context.update({
+            'view_title': 'Popular Tips',
             'your_tip_page_slug': YourTip.objects.first().slug,
         })
         return context

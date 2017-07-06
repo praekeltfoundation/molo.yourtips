@@ -1,6 +1,6 @@
 from molo.yourtips import views
 
-from django.conf.urls import patterns, url, include
+from django.conf.urls import patterns, url
 
 
 urlpatterns = patterns(
@@ -23,9 +23,5 @@ urlpatterns = patterns(
         r'^popular-tips/$',
         views.YourTipsPopularView.as_view(),
         name='popular_tips'
-    ),
-    url(r'^likes/',
-        include('likes.urls',
-                namespace='likes',
-                app_name='likes')),
+    )
 )

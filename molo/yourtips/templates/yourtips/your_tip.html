@@ -1,19 +1,40 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
+{% load wagtailcore_tags wagtailimages_tags static tip_tags core_tags i18n %}
 {% block content %}
-<div class="yourtips">
-  {% if self.image %}
-    {% if tip_page.get_effective_image %}
-      {% image tip_page.get_effective_image width-98 as tmp_photo_small %}
-      {% image tip_page.get_effective_image width-320 as tmp_photo_large %}
-       <img src="{{ tmp_photo_small.url }}" srcset="{{ tmp_photo_large.url }}" alt="{{ self.get_parent_page.get_effective_image.title }}" class="yourtips__article-image"/>
-    {% endif %}
-  {% endif %}
-  <h1 class="heading heading--yourtips">{% trans "Share your tip" %}</h1>
-  <h2 class="heading heading--yourtips-title">{{tip_page.title}}</h2>
-  <h3 class="yourtips__description">{{tip_page.description}}</h3>
-  {% include "patterns/basics/forms/form.html" %}
-  <a href="{{request.site.root_page.url}}" class="call-to-action__nav-item call-to-action__nav-item--back-home">
-  {% trans "Home" %}</a>
-</div>
+  {% get_your_tip as your_tip %}
+  <div class="breadcrumbs">
+    <ul class="breadcrumbs-list">
+      <li class="breadcrumbs-list__item">
+        <a href="{{request.site.root_page.url}}" class="breadcrumbs-list__anchor">{% trans "Home" %}</a>
+      </li>
+      <li class="breadcrumbs-list__item">
+        <span class="breadcrumbs-list-with-bg__anchor is-active">{% trans your_tip.title %}</span>
+      </li>
+    </ul>
+  </div>
+  <div class="yourtips">
+    <ul class="yourtips-menu">
+      <li class="yourtips-menu__item">
+        <!--Menu Icon - from CMS?-->
+        <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item">
+          {% trans "Recent Tips" %}
+          <!--Menu description - From CMS?-->
+        </a>
+      </li>
+      <li class="yourtips-menu__item">
+        <!--Menu Icon - from CMS?-->
+        <a href="{% url 'molo.yourtips:popular_tips' %}" class="call-to-action__nav-item">
+          {% trans "Popular Tips" %}
+          <!--Menu description - From CMS?-->
+        </a>
+      </li>
+      <li class="yourtips-menu__item">
+        <!--Menu Icon - from CMS?-->
+        <a href="{% url 'molo.yourtips:tip_entry' 'your-tips-page' %}" class="call-to-action__nav-item">
+          {% trans "Submit a Tip!" %}
+          <!--Menu description - From CMS?-->
+        </a>
+      </li>
+    </ul>
+  </div>
 {% endblock %}

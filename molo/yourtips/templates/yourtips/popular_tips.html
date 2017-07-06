@@ -1,15 +1,9 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags static core_tags tip_tags el_pagination_tags i18n likes_inclusion_tags %}
-
 {% block content %}
-  <div class="breadcrumbs">
-    {% block breadcrumbs %}
-      {% breadcrumbs %}
-    {% endblock %}
-  </div>
-    <h1>{{ recent_tips_page.title }}</h1>
-    <h3>{{ recent_tips_page.subtitle }}</h3>
-  </div>
+  {% your_tips_breadcrumbs active_breadcrumb_title='Popular Tips' %}
+  <h1>{{ recent_tips_page.title }}</h1>
+  <h3>{{ recent_tips_page.subtitle }}</h3>
   {% paginate 15 object_list as articles %}
   <ol>
     {% for each_article in articles %}

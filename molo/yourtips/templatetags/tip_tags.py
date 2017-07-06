@@ -12,23 +12,24 @@ register = template.Library()
 )
 def your_tips_on_homepage(context):
     context = copy(context)
+    if get_your_tip(context):
 
-    tip_on_homepage = YourTipsArticlePage.objects.filter(
-        featured_in_homepage=True).order_by(
-            '-featured_in_homepage_start_date').first()
+        tip_on_homepage = YourTipsArticlePage.objects.filter(
+            featured_in_homepage=True).order_by(
+                '-featured_in_homepage_start_date').first()
 
-    if not tip_on_homepage:
-        tip_on_homepage = YourTipsArticlePage.objects.all().order_by(
-            '-latest_revision_created_at').first()
+        if not tip_on_homepage:
+            tip_on_homepage = YourTipsArticlePage.objects.all().order_by(
+                '-latest_revision_created_at').first()
 
-    most_popular_tip = YourTipsArticlePage.objects.all(
-    ).order_by('-total_upvotes').first()
+        most_popular_tip = YourTipsArticlePage.objects.all(
+        ).order_by('-total_upvotes').first()
 
-    context.update({
-        'most_popular_tip': most_popular_tip,
-        'article_tip': tip_on_homepage,
-        'your_tip_page_slug': get_your_tip(context).slug
-    })
+        context.update({
+            'most_popular_tip': most_popular_tip,
+            'article_tip': tip_on_homepage,
+            'your_tip_page_slug': get_your_tip(context).slug
+        })
     return context
 
 
@@ -59,11 +60,13 @@ def your_tips_on_tip_submission_form(context):
 )
 def your_tips_create_tip_on_homepage(context):
     context = copy(context)
-    homepage_action_copy = YourTip.objects.first().homepage_action_copy
-    context.update({
-        'your_tip_page_slug': get_your_tip(context).slug,
-        'homepage_action_copy': homepage_action_copy
-    })
+    if get_your_tip(context):
+        homepage_action_copy = YourTip.objects.first().homepage_action_copy
+        context.update({
+            'your_tip_page_slug': get_your_tip(context).slug,
+            'homepage_action_copy': homepage_action_copy
+        })
+
     return context
 
 

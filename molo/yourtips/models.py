@@ -74,8 +74,7 @@ class YourTip(TranslatablePageMixinNotRoutable, Page):
             "and all its descendants"))
 
     homepage_action_copy = models.CharField(
-        default='Do you have advice '
-                'you can share with other youth on relationships?',
+        null=True, blank=True,
         max_length=255)
 
     def get_effective_extra_style_hints(self):

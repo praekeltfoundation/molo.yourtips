@@ -2,7 +2,7 @@
 {% block content %}
 <div class="yourtips yourtips--banner">
   <h3 class="yourtips__description">
-     {{ homepage_action_copy }}
+     {% trans homepage_action_copy|default:'Do you have advice you can share with other youth on relationships?' %}
   </h3>
   <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action__nav-item-text">
     {% trans "Click here share your tip!" %}

@@ -2,7 +2,6 @@ from django.core.urlresolvers import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
 from django.views.generic.base import TemplateView
-from django.shortcuts import get_object_or_404
 
 from molo.core.templatetags.core_tags import get_pages
 
@@ -17,8 +16,7 @@ class YourTipsEntryView(CreateView):
     def get_context_data(self, *args, **kwargs):
         context = super(
             YourTipsEntryView, self).get_context_data(*args, **kwargs)
-        tip_page = get_object_or_404(
-            YourTip, slug=self.kwargs.get('slug'))
+        tip_page = YourTip.objects.all().first()
         context.update({'tip_page': tip_page})
         return context
 
@@ -28,8 +26,7 @@ class YourTipsEntryView(CreateView):
             args=[self.object.tip_page.slug])
 
     def form_valid(self, form):
-        tip_page = get_object_or_404(
-            YourTip, slug=self.kwargs.get('slug'))
+        tip_page = YourTip.objects.all().first()
         form.instance.tip_page = (
             tip_page.get_main_language_page().specific)
         if self.request.user.is_anonymous():
@@ -44,8 +41,7 @@ class ThankYouView(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ThankYouView, self).get_context_data(*args, **kwargs)
-        tip_page = get_object_or_404(
-            YourTip, slug=self.kwargs.get('slug'))
+        tip_page = YourTip.objects.all().first()
         context.update({'tip_page': tip_page})
         return context
 
@@ -66,6 +62,29 @@ class YourTipsRecentView(ListView):
             *args, **kwargs
         )
         context.update({
+            'view_title': 'Recent Tips',
             'your_tip_page_slug': YourTip.objects.first().slug
+        })
+        return context
+
+
+class YourTipsPopularView(ListView):
+    template_name = "yourtips/popular_tips.html"
+
+    def get_queryset(self, *args, **kwargs):
+        main = self.request.site.root_page
+        context = {'request': self.request}
+        locale = self.request.LANGUAGE_CODE
+        articles = YourTipsArticlePage.objects.all(
+        ).descendant_of(main).order_by('-total_upvotes')
+        return get_pages(context, articles, locale)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(YourTipsPopularView, self).get_context_data(
+            *args, **kwargs
+        )
+        context.update({
+            'view_title': 'Popular Tips',
+            'your_tip_page_slug': YourTip.objects.first().slug,
         })
         return context

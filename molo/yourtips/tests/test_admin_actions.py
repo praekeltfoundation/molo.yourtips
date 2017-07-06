@@ -24,7 +24,7 @@ class TestAdminActions(BaseYourTipsTestCase):
         self.assertEquals(entry.converted_article_page, article)
         self.assertEquals(article.body.stream_data, [
             {"type": "paragraph", "value": entry.tip_text},
-            {"type": "paragraph", "value": "By Test"}
+            {"type": "heading", "value": "By Test"}
         ])
 
         self.assertEquals(YourTipsArticlePage.objects.all().count(), 1)

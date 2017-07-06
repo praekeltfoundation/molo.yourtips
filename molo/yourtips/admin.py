@@ -38,7 +38,7 @@ def convert_to_article(request, entry_id):
             slug='yourtips-entry-%s' % cautious_slugify(entry.id),
             body=json.dumps([
                 {"type": "paragraph", "value": entry.tip_text},
-                {"type": "paragraph", "value": get_entry_author(entry)}
+                {"type": "heading", "value": get_entry_author(entry)}
             ])
         )
         tip_section_index_page.add_child(instance=tip_article)
@@ -100,5 +100,13 @@ class YourTipsAdmin(admin.ModelAdmin):
         return 'Unpublished'
 
 
+class YourTipsArticlePageAdmin(admin.ModelAdmin):
+    list_display = ['title', 'latest_revision_created_at', 'votes', 'live']
+    list_filter = ['title']
+    search_fields = ['title', 'content', 'description']
+    date_hierarchy = 'latest_revision_created_at'
+
+
 admin.site.register(YourTipsEntry, YourTipsEntryAdmin)
+admin.site.register(YourTipsArticlePage, YourTipsArticlePageAdmin)
 admin.site.register(YourTip, YourTipsAdmin)

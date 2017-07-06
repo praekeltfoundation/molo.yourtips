@@ -2,6 +2,8 @@ from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
+from secretballot import enable_voting_on
+
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailadmin.edit_handlers import (
     FieldPanel, FieldRowPanel,
@@ -71,6 +73,10 @@ class YourTip(TranslatablePageMixinNotRoutable, Page):
             "Styling options that can be applied to this section "
             "and all its descendants"))
 
+    homepage_action_copy = models.CharField(
+        null=True, blank=True,
+        max_length=255)
+
     def get_effective_extra_style_hints(self):
             return self.extra_style_hints
 
@@ -86,8 +92,14 @@ YourTip.content_panels = [
 
 YourTip.settings_panels = [
     MultiFieldPanel(
-        [FieldRowPanel(
-            [FieldPanel('extra_style_hints')], classname="label-above")],
+        [
+            FieldRowPanel(
+                [
+                    FieldPanel('extra_style_hints'),
+                    FieldPanel('homepage_action_copy')
+                ], classname="label-above"
+            )
+        ],
         "Meta")
 ]
 
@@ -141,3 +153,4 @@ YourTipsArticlePage.promote_panels = [
     ),
     MultiFieldPanel(ArticlePage.topic_of_the_day_panels, "Topic of the Day"),
 ]
+enable_voting_on(YourTipsArticlePage)

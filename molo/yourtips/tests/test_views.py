@@ -73,13 +73,3 @@ class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
         response = self.client.get(reverse('molo.yourtips:popular_tips'))
         self.assertContains(response, 'Test')
         self.assertContains(response, 'test body')
-
-    def test_yourtips_menu_view(self):
-        self.client.login(
-            username=self.superuser_name,
-            password=self.superuser_password
-        )
-
-        response = self.client.get(reverse('molo.yourtips:menu'))
-        self.assertContains(response, 'Submit a Tip!')
-        self.assertContains(response, 'Popular Tips')

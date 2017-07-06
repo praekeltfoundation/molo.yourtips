@@ -2,7 +2,6 @@ from django.core.urlresolvers import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
 from django.views.generic.base import TemplateView
-from django.shortcuts import get_object_or_404
 
 from molo.core.templatetags.core_tags import get_pages
 

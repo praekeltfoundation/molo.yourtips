@@ -69,6 +69,23 @@ def your_tips_create_tip_on_homepage(context):
     return context
 
 
+@register.inclusion_tag(
+    'yourtips/your_tips_breadcrumbs.html',
+    takes_context=True
+)
+def your_tips_breadcrumbs(context, active_breadcrumb_title=None):
+    context = copy(context)
+    if get_your_tip(context):
+
+        context.update({
+            'your_tip_page_slug': get_your_tip(context).slug,
+            'active_breadcrumb_title': active_breadcrumb_title
+        })
+    return context
+
+
 @register.simple_tag(takes_context=True)
 def get_your_tip(context):
     return YourTip.objects.first()
+
+

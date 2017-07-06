@@ -87,5 +87,3 @@ def your_tips_breadcrumbs(context, active_breadcrumb_title=None):
 @register.simple_tag(takes_context=True)
 def get_your_tip(context):
     return YourTip.objects.first()
-
-

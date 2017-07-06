@@ -7,12 +7,15 @@
   </h1>
   <div class="yourtips-list">
     <div class="yourtips-list__item">
-      <h3 class="yourtips__description yourtips__description-homepage">
-        <!-- This returns extra markup
-          E.g. <div class="block-paragraph"><p>
-        -->
-        {{ article_tip.body }}
-      </h3>
+      {% for block in article_tip.body %}
+        {% if block.block_type == 'paragraph' %}
+          <h3 class="yourtips__description yourtips__description-homepage">
+            {{ block.value }}
+          </h3>
+        {% elif block.block_type == 'heading' %}
+          <p class="yourtips__author">{{ block.value }}</p>
+        {% endif %}
+      {% endfor %}
       <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action__nav-item">
         {% trans "Submit a tip" %}
       </a>

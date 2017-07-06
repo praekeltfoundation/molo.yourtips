@@ -1,25 +1,10 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags static core_tags tip_tags el_pagination_tags i18n likes_inclusion_tags %}
+{% load tip_tags el_pagination_tags %}
 {% block content %}
+<div class="yourtips">
   {% your_tips_breadcrumbs active_breadcrumb_title='Recent Tips' %}
-  <h1 class="heading heading--yourtips">{{ recent_tips_page.title }}</h1>
-  <h2 class="heading--yourtips-title">{{ recent_tips_page.subtitle }}</h2>
+  {% include "patterns/basics/promoted-tips/recent-tips-heading.html" %}
   {% paginate 15 object_list as articles %}
-  <ul class="yourtips-list">
-    {% for each_article in articles %}
-    <li class="yourtips-list__item">
-      <p class="yourtips__posted-date">
-        Posted: {{ each_article.latest_revision_created_at }}
-      </p>
-      <h3 class="yourtips__description">
-        {{ each_article.body }}
-      </h3>
-      {% likes each_article %}
-    </li>
-    {% endfor %}
-  </ul>
-  <a href="{% url 'molo.yourtips:tip_entry' your_tip_page_slug %}" class="call-to-action__nav-item">
-    {% trans "Submit a Tip" %}
-  </a>
-  {% show_more 'See more Tips' %}
+  {% include "patterns/basics/promoted-tips/recent-tips-list.html" %}
+</div>
 {% endblock %}

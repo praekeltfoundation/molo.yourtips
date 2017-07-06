@@ -1,24 +1,39 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
 {% block content %}
-  {% if most_popular_tip %}
-    <h1 class="heading heading--yourtips heading--hero-yourtips">
-      {% trans "Most popular tip" %}
-    </h1>
-    <h4 class="tip__body">{{ most_popular_tip.body }}</h4>
-  {% endif %}
-  {% if most_recent_tip %}
-    <h2 class="heading heading--yourtips-title heading--line-break">
-      {% trans "Most recent tip" %}
-    </h2>
-    <div class="yourtips-list">
-      <div class="yourtips-list__item">
-        <h3 class="yourtips__description">
-          {{ most_recent_tip.body }}
-        </h3>
-      </div>
+<div class="yourtips">
+{% if most_popular_tip %}
+<!--This should only be active when it has a like and more -->
+  <h2 class="heading heading--yourtips-title heading--line-break">
+    {% trans "Most popular tip" %}</h2>
+  <div class="yourtips-list">
+    <div class="yourtips-list__item">
+      {% for block in most_popular_tip.body %}
+        {% if block.block_type == 'paragraph' %}
+          <h3 class="yourtips__description">{{ block.value }}</h3>
+        {% elif block.block_type == 'heading' %}
+          <p class="yourtips__author">{{ block.value }}</p>
+        {% endif %}
+      {% endfor %}
     </div>
-  {% endif %}
+  </div>
+{% endif %}
+
+{% if most_recent_tip %}
+  <h2 class="heading heading--yourtips-title">{% trans "Most recent tip" %}</h2>
+  <div class="yourtips-list">
+    <div class="yourtips-list__item">
+    {% for block in most_recent_tip.body %}
+      {% if block.block_type == 'paragraph' %}
+        <h3 class="yourtips__description">{{ block.value }}</h3>
+      {% elif block.block_type == 'heading' %}
+        <p class="yourtips__author">{{ block.value }}</p>
+      {% endif %}
+    {% endfor %}
+    </div>
+  </div>
   <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item">
     {% trans "See more Tips" %}
   </a>
+{% endif %}
+</div>
 {% endblock %}

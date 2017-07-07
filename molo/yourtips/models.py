@@ -80,6 +80,19 @@ class YourTip(TranslatablePageMixinNotRoutable, Page):
     def get_effective_extra_style_hints(self):
             return self.extra_style_hints
 
+    @staticmethod
+    def get_number_of_tips():
+        print YourTipsArticlePage.objects.all(
+        ).count()
+        return YourTipsArticlePage.objects.all(
+        ).count()
+
+    @staticmethod
+    def get_number_of_popular_tips():
+        return YourTipsArticlePage.objects.filter(
+            votes__gte=1
+        ).count()
+
     class Meta:
         verbose_name = 'YourTip'
         verbose_name_plural = 'YourTips'
@@ -150,7 +163,6 @@ YourTipsArticlePage.promote_panels = [
     MultiFieldPanel(
         YourTipsArticlePage.featured_homepage_promote_panels,
         "Featuring in Homepage"
-    ),
-    MultiFieldPanel(ArticlePage.topic_of_the_day_panels, "Topic of the Day"),
+    )
 ]
 enable_voting_on(YourTipsArticlePage)

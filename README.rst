@@ -4,6 +4,8 @@ molo.yourtips
     :target: https://travis-ci.org/praekeltfoundation/molo.yourtips
 .. image:: https://img.shields.io/pypi/v/molo.yourtips.svg
     :target: https://pypi.python.org/pypi/molo.yourtips
+.. image:: https://coveralls.io/repos/github/praekeltfoundation/molo.yourtips/badge.svg
+    :target: https://coveralls.io/github/praekeltfoundation/molo.yourtips
 
 **This feature enables youth to share short tips with one another.**
 
@@ -74,8 +76,9 @@ Feature List
 YourTips Settings
 =================
 
-#. Homepage Banner Copy
------------------------
+Homepage Banner Copy
+--------------------
+
 #. By default the homepage banner copy is ``Do you have advice you can share with other youth on relationships?``.
 #. The homepage banner copy by adding the copy the yourtips settings.
 

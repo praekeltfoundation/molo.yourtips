@@ -1,7 +1,8 @@
-{% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
+{% load wagtailcore_tags wagtailimages_tags static tip_tags core_tags i18n %}
 {% block content %}
+{% get_your_tip as your_tip %}
 <div class="yourtips">
-{% if most_popular_tip %}
+{% if most_popular_tip and your_tip.get_number_of_popular_tips %}
 <!--This should only be active when it has a like and more -->
   <h2 class="heading heading--yourtips-title heading--line-break">
     {% trans "Most popular tip" %}</h2>
@@ -18,7 +19,7 @@
   </div>
 {% endif %}
 
-{% if most_recent_tip %}
+{% if most_recent_tip and your_tip.get_number_of_tips %}
   <h2 class="heading heading--yourtips-title">{% trans "Most recent tip" %}</h2>
   <div class="yourtips-list">
     <div class="yourtips-list__item">

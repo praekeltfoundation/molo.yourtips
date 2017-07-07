@@ -62,12 +62,15 @@ Installation
     url(r'^yourtips/', include('molo.yourtips.urls',
                                namespace='molo.yourtips')),
 
-#. Create and publish a YourTips page on the CMS.
+#. Create and publish a YourTips page on the CMS. By adding the YourTips page the
 
 Feature List
 ============
 
-#. This feature enables youth to share short (twitter length - 140 characters) tips on the platform.
-with one another.
+#. This feature enables youth to share short (twitter length - 140 characters) tips on the platform with one another.
 #. User submitted tips are curated by content managers and published on the platform.
 #. Users can interact with published tips by liking each others tips or sharing (requires consent from author) on facebook or twitter.
+
+YourTips Settings
+=================
+

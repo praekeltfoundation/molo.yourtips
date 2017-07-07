@@ -24,7 +24,13 @@
       {% endif %}
     {% endif %}
     <!--END -->
-  {% include "patterns/basics/promoted-tips/yourtips-on-submission-form.html" %}
+  {% for block in most_popular_tip.body %}
+    {% if block.block_type == 'paragraph' %}
+      <h3 class="yourtips__description">{{ block.value }}</h3>
+    {% elif block.block_type == 'heading' %}
+      <p class="yourtips__author">{{ block.value }}</p>
+    {% endif %}
+  {% endfor %}
   </div>
 </div>
 {% endif %}
@@ -50,7 +56,14 @@
       {% endif %}
     {% endif %}
     <!--END -->
-  {% include "patterns/basics/promoted-tips/yourtips-on-submission-form.html" %}
+  {% for block in most_recent_tip.body %}
+    {% if block.block_type == 'paragraph' %}
+      <h3 class="yourtips__description">{{ block.value }}</h3>
+    {% elif block.block_type == 'heading' %}
+      <p class="yourtips__author">{{ block.value }}</p>
+    {% endif %}
+  {% endfor %}
+
     </div>
   </div>
   <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item">

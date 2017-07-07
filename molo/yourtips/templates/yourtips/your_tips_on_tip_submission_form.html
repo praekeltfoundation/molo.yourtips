@@ -4,11 +4,44 @@
 {% if most_popular_tip %}
   <h2 class="heading heading--yourtips-title heading--line-break">
     {% trans "Most popular tip" %}</h2>
-    {% include "patterns/basics/promoted-tips/yourtips-on-submission-form.html" %}
+<!--START -->
+  {% if settings.core.SiteSettings.enable_clickable_tags %}
+    {% if most_popular_tip.tags_list|first %}
+    <div class="yourtips__label">
+      {% if most_popular_tip.image %}
+        {% image most_popular_tip.image width-30 jpegquality-70 as yourtips_article_icon %}
+        <img src="{{ yourtips_article_icon.url }}" class="yourtips__article-icon"/>
+      {% endif %}
+      {% for tag in most_popular_tip.tags_list %}
+        {% if forloop.first %}
+          <a class="yourtips__article-anchor">{{tag}}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endif %}
+<!--END -->
+  {% include "patterns/basics/promoted-tips/yourtips-on-submission-form.html" %}
 {% endif %}
-
 {% if most_recent_tip %}
   <h2 class="heading heading--yourtips-title">{% trans "Most recent tip" %}</h2>
+  <!--START -->
+    {% if settings.core.SiteSettings.enable_clickable_tags %}
+      {% if most_recent_tip.tags_list|first %}
+      <div class="yourtips__label">
+        {% if most_recent_tip.image %}
+          {% image most_recent_tip.image width-30 jpegquality-70 as yourtips_article_icon %}
+          <img src="{{ yourtips_article_icon.url }}" class="yourtips__article-icon"/>
+        {% endif %}
+        {% for tag in most_recent_tip.tags_list %}
+          {% if forloop.first %}
+            <a class="yourtips__article-anchor">{{tag}}</a>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endif %}
+  <!--END -->
   {% include "patterns/basics/promoted-tips/yourtips-on-submission-form.html" %}
   <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item">
     {% trans "See more Tips" %}

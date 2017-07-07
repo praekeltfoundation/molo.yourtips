@@ -1,7 +1,6 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
 <div class="yourtips-list">
   <div class="yourtips-list__item">
-    {% include "patterns/basics/promoted-tips/yourtips-article-tag.html" %}
     {% for block in most_popular_tip.body %}
       {% if block.block_type == 'paragraph' %}
         <h3 class="yourtips__description">{{ block.value }}</h3>

@@ -74,3 +74,8 @@ Feature List
 YourTips Settings
 =================
 
+#. Homepage Banner Copy
+-----------------------
+#. By default the homepage banner copy is ``Do you have advice you can share with other youth on relationships?``.
+#. The homepage banner copy by adding the copy the yourtips settings.
+

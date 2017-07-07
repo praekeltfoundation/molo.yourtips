@@ -75,6 +75,7 @@ class YourTip(TranslatablePageMixinNotRoutable, Page):
 
     homepage_action_copy = models.CharField(
         null=True, blank=True,
+        verbose_name="Homepage Banner Copy",
         max_length=255)
 
     def get_effective_extra_style_hints(self):

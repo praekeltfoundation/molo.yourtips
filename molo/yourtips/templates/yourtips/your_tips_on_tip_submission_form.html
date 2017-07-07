@@ -1,4 +1,4 @@
-{% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
+{% load wagtailcore_tags wagtailimages_tags static core_tags tip_tags i18n %}
 {% block content %}
   {% get_your_tip as your_tip %}
   {% if most_popular_tip and your_tip.get_number_of_popular_tips %}

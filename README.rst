@@ -67,7 +67,7 @@ Installation
 Feature List
 ============
 
-- This feature enables youth to share short (twitter length - 140 characters) tips on the platform.
+#. This feature enables youth to share short (twitter length - 140 characters) tips on the platform.
 with one another.
-- User submitted tips are curated by content managers and published on the platform.
-- Users can interact with published tips by liking each others tips or sharing (requires consent from author) on facebook or twitter.
+#. User submitted tips are curated by content managers and published on the platform.
+#. Users can interact with published tips by liking each others tips or sharing (requires consent from author) on facebook or twitter.

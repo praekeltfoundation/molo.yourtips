@@ -2,9 +2,9 @@ import os
 
 from setuptools import setup, find_packages
 
+description_files = ["README.rst", "AUTHORS.rst", "CHANGES.rst"]
+
 here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here, 'README.md')) as f:
-    readme = f.read()
 
 with open(os.path.join(here, 'requirements.txt')) as f:
     requires = filter(None, f.readlines())
@@ -19,7 +19,7 @@ setup(name='molo.yourtips',
       version=version,
       description=('This feature enables youth to share short tips with one '
                    'another'),
-      long_description=readme,
+      long_description="".join([open(f, "r").read() for f in description_files]),
       classifiers=[
           "Programming Language :: Python",
           "Framework :: Django",

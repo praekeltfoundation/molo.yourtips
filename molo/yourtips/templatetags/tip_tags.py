@@ -60,6 +60,7 @@ def your_tips_on_tip_submission_form(context):
 )
 def your_tips_create_tip_on_homepage(context):
     context = copy(context)
+    print get_your_tip(context)
     if get_your_tip(context):
         homepage_action_copy = get_your_tip(context).homepage_action_copy
         context.update({

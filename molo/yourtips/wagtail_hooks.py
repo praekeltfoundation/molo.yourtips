@@ -15,6 +15,7 @@ from molo.yourtips.admin import (
 )
 from molo.yourtips.models import (
     YourTipsEntry,
+    YourTipsArticlePage,
     YourTip
 )
 
@@ -71,14 +72,14 @@ class YourTipsModelAdmin(ModelAdmin, YourTipsAdmin):
 
 
 class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
-    model = YourTipsEntry
+    model = YourTipsArticlePage
     menu_label = 'Tips'
     menu_icon = 'doc-full-inverse'
-    index_view_class = ModelAdminTipTemplate
     add_to_settings_menu = False
     list_display = [
         'title', 'latest_revision_created_at', 'vote_total', 'live'
     ]
+    list_filter = [('latest_revision_created_at', DateFilter)]
 
     def get_queryset(self, request):
         qs = super(YourTipsEntryPageModelAdmin, self).get_queryset(request)

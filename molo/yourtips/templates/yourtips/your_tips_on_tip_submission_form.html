@@ -1,12 +1,13 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
 {% block content %}
-  {% if most_popular_tip %}
+  {% get_your_tip as your_tip %}
+  {% if most_popular_tip and your_tip.get_number_of_popular_tips %}
     <h1 class="heading heading--yourtips heading--hero-yourtips">
       {% trans "Most popular tip" %}
     </h1>
     <h4 class="tip__body">{{ most_popular_tip.body }}</h4>
   {% endif %}
-  {% if most_recent_tip %}
+  {% if most_recent_tip and your_tip.get_number_of_tips %}
     <h2 class="heading heading--yourtips-title heading--line-break">
       {% trans "Most recent tip" %}
     </h2>

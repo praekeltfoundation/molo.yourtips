@@ -1,6 +1,7 @@
 {% load wagtailcore_tags wagtailimages_tags static core_tags i18n %}
 {% block content %}
-{% if article_tip %}
+{% get_your_tip as your_tip %}
+{% if article_tip and your_tip.get_number_of_tips %}
 <div class="yourtips">
   <h1 class="heading heading--yourtips">
     {% trans "Tip of the Day" %}

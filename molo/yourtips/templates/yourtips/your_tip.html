@@ -14,6 +14,7 @@
   </div>
   <div class="yourtips">
     <ul class="yourtips-menu">
+      {% if your_tip.get_number_of_tips %}
       <li class="yourtips-menu__item">
         <!--Menu Icon - from CMS?-->
         <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item">
@@ -21,6 +22,8 @@
           <!--Menu description - From CMS?-->
         </a>
       </li>
+      {% endif %}
+      {% if your_tip.get_number_of_popular_tips %}
       <li class="yourtips-menu__item">
         <!--Menu Icon - from CMS?-->
         <a href="{% url 'molo.yourtips:popular_tips' %}" class="call-to-action__nav-item">
@@ -28,6 +31,7 @@
           <!--Menu description - From CMS?-->
         </a>
       </li>
+      {% endif %}
       <li class="yourtips-menu__item">
         <!--Menu Icon - from CMS?-->
         <a href="{% url 'molo.yourtips:tip_entry' 'your-tips-page' %}" class="call-to-action__nav-item">

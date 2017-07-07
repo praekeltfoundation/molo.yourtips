@@ -22,7 +22,8 @@ def your_tips_on_homepage(context):
             tip_on_homepage = YourTipsArticlePage.objects.all().order_by(
                 '-latest_revision_created_at').first()
 
-        most_popular_tip = YourTipsArticlePage.objects.all(
+        most_popular_tip = YourTipsArticlePage.objects.filter(
+            votes__gte=1
         ).order_by('-total_upvotes').first()
 
         context.update({
@@ -43,7 +44,8 @@ def your_tips_on_tip_submission_form(context):
     most_recent_tip = YourTipsArticlePage.objects.all(
     ).order_by('-latest_revision_created_at').first()
 
-    most_popular_tip = YourTipsArticlePage.objects.all(
+    most_popular_tip = YourTipsArticlePage.objects.filter(
+        votes__gte=1
     ).order_by('-total_upvotes').first()
 
     context.update({
@@ -60,7 +62,6 @@ def your_tips_on_tip_submission_form(context):
 )
 def your_tips_create_tip_on_homepage(context):
     context = copy(context)
-    print get_your_tip(context)
     if get_your_tip(context):
         homepage_action_copy = get_your_tip(context).homepage_action_copy
         context.update({

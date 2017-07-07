@@ -7,6 +7,7 @@
   </h1>
   <div class="yourtips-list">
     <div class="yourtips-list__item">
+      {% include "patterns/basics/promoted-tips/yourtips-article-tag.html" %}
       {% for block in article_tip.body %}
         {% if block.block_type == 'paragraph' %}
           <h3 class="yourtips__description yourtips__description-homepage">

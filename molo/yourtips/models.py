@@ -13,13 +13,13 @@ from wagtail.wagtailadmin.edit_handlers import (
 from molo.core.utils import generate_slug
 from molo.core.models import (
     ArticlePage, TranslatablePageMixinNotRoutable,
-    PreventDeleteMixin, TranslatablePageMixin, Main, index_pages_after_copy,
+    PreventDeleteMixin, Main, index_pages_after_copy,
 )
 
 
 class YourTipsIndexPage(Page, PreventDeleteMixin):
     parent_page_types = ['core.Main']
-    subpage_types = ['yourtips.YourTip', 'yourtips.YourTipsSectionIndexPage']
+    subpage_types = ['yourtips.YourTip']
 
     def copy(self, *args, **kwargs):
         site = kwargs['to'].get_site()
@@ -39,8 +39,8 @@ def create_yourtips_index_page(sender, instance, **kwargs):
         yourtips_tip_page_index.save_revision().publish()
 
 
-class YourTipsSectionIndexPage(Page, PreventDeleteMixin, TranslatablePageMixin):
-    parent_page_types = ['yourtips.YourTipsIndexPage']
+class YourTipsSectionIndexPage(Page, PreventDeleteMixin):
+    parent_page_types = ['core.Main']
     subpage_types = []
 
     def copy(self, *args, **kwargs):

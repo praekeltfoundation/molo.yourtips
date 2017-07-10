@@ -40,7 +40,7 @@ def create_yourtips_index_page(sender, instance, **kwargs):
 
 
 class YourTipsSectionIndexPage(Page, PreventDeleteMixin):
-    parent_page_types = ['yourtips.YourTipsIndexPage']
+    parent_page_types = ['core.Main']
     subpage_types = []
 
     def copy(self, *args, **kwargs):
@@ -83,8 +83,6 @@ class YourTip(TranslatablePageMixinNotRoutable, Page):
 
     @staticmethod
     def get_number_of_tips():
-        print YourTipsArticlePage.objects.all(
-        ).count()
         return YourTipsArticlePage.objects.all(
         ).count()
 

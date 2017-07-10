@@ -1,5 +1,4 @@
 from django.core.urlresolvers import reverse
-from django.contrib.contenttypes.models import ContentType
 
 from molo.yourtips.tests.base import BaseYourTipsTestCase
 from molo.yourtips.models import (

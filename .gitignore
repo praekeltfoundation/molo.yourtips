@@ -1,0 +1,16 @@
+*.pyc
+/ve/
+*.egg
+*.egg-info
+dist
+build
+
+/testapp/
+htmlcov/
+.coverage
+.cache
+*.sqlite3
+/the_app/
+
+.DS_Store
+.idea

@@ -68,6 +68,7 @@ class TestYourTipsViewsTestCase(BaseYourTipsTestCase):
             '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id
         )
         article = YourTipsArticlePage.objects.get(title='Tip-%s' % entry.id)
+        article.add_vote('1.2.3.4', 1)
         article.save_revision().publish()
 
         response = self.client.get(reverse('molo.yourtips:popular_tips'))

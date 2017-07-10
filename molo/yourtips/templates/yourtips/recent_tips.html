@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load tip_tags el_pagination_tags %}
+{% block content %}
+<div class="yourtips">
+  {% your_tips_breadcrumbs active_breadcrumb_title='Recent Tips' %}
+  {% include "patterns/basics/promoted-tips/recent-tips-heading.html" %}
+  {% paginate 15 object_list as articles %}
+  {% include "patterns/basics/promoted-tips/recent-tips-list.html" %}
+</div>
+{% endblock %}

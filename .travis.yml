@@ -1,0 +1,35 @@
+sudo: false
+language: python
+python:
+  - "2.7"
+cache:
+  directories:
+    - $HOME/.pip-cache/
+install:
+  - pip install twine
+  - pip install --upgrade pip --cache-dir $HOME/.pip-cache/
+  - pip install coveralls coverage --cache-dir $HOME/.pip-cache/
+  - pip install flake8 --cache-dir $HOME/.pip-cache/
+  - pip install -r requirements-dev.txt --cache-dir $HOME/.pip-cache/
+  - pip install -e . --cache-dir $HOME/.pip-cache/
+script:
+  - flake8 molo
+  - molo scaffold testapp --include=molo.yourtips ^yourtips/ --include=likes ^likes/
+  - mkdir -p testapp/testapp/templates/core/tags/
+  - cp test_settings.py testapp/testapp/settings/local.py
+  - cp molo/yourtips/test_templates/section_page.html testapp/testapp/templates/core/section_page.html
+  - cp molo/yourtips/test_templates/section_listing_homepage.html testapp/testapp/templates/core/tags/section_listing_homepage.html
+  - flake8 testapp
+  - testapp/./manage.py compress --settings=testapp.settings.production --force
+  - pip install -e testapp
+  - py.test --cov=molo --cov-config .coveragerc
+after_success:
+  - coveralls
+deploy:
+  provider: pypi
+  user: Praekelt
+  password:
+    secure: s1jJTy6xb4+yVCuJRa7RCm+gWTuCD9g2tIno4gyHMTtykJy716wKlwK81h+0fxKlKhRQzyxo9kCoyS+9eg+pwso+N70BzYonTUvgDAb2DklFOucVjpGb52S9muTotpuo3mhrWwJAs9F1avBTgYdv2e6W6YMAAmr535MW7X7tLKjS/dqVWsd0iSCdaBRfmHxe7r5bRfCrucYMv0vPXh/HYmjaNM2Aa8fAb7Be84oN6H/t4AzZ5kzh5NSfEaaVmMvLGxqabqMO6WD2A9OFlcWToiR2x18sqtBxXG3c0oSnEkDNlKBy/Fg3xPLamODcwDGuBc7YhLzZqao/mMYJt3qcNIXLO3NHSw9+OMUQe8zT8GOtQxxdpDtx7ljfvR24ID4+oQCDGnfdOdDGcYgZjmw5xcfCl4p6mroCwZOj/cC3FDJDn8t2H6XGdRc52B/6CX04FDROOgJ9HKH7VvHOBkPkPIpXVNLO3fsH5xh3Pfp+sUrCnGfGOfwn2Bv9X/CHH3jyDc7XyO9wRKYffyGGgQbZbSNh2jZhOdrB63ABuhGmW7iEUmbBKpl54GAyDV1/wrkdcnBWdixzL4U/n11dzZaGgt74T9fJGfGUjK79habQRQXhxaVmJh7/alDMPtIOCil5V/Y6bM+qB90qjVctFo+FClFeTjuy9yWVvwEHNAEzHVI=
+  on:
+    tags: true
+    all_branches: true

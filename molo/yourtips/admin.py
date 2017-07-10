@@ -10,8 +10,7 @@ from django import forms
 from wagtail.wagtailcore.utils import cautious_slugify
 
 from molo.yourtips.models import (
-    YourTipsEntry, YourTip, YourTipsSectionIndexPage, YourTipsArticlePage,
-    YourTipsIndexPage
+    YourTipsEntry, YourTip, YourTipsSectionIndexPage, YourTipsArticlePage
 )
 
 
@@ -24,8 +23,8 @@ def convert_to_article(request, entry_id):
 
     entry = get_object_or_404(YourTipsEntry, pk=entry_id)
     if not entry.converted_article_page:
-        tip_section_index_page = YourTipsSectionIndexPage.objects.descendant_of(
-            request.site.root_page).live().first()
+        tip_section_index_page = YourTipsSectionIndexPage.objects.\
+            descendant_of(request.site.root_page).live().first()
         tip_article = YourTipsArticlePage(
             title='Tip-%s' % str(entry.id),
             slug='yourtips-entry-%s' % cautious_slugify(entry.id),

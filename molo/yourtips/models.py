@@ -90,7 +90,7 @@ class YourTip(TranslatablePageMixinNotRoutable, Page):
     def get_number_of_popular_tips():
         return YourTipsArticlePage.objects.filter(
             votes__gte=1
-        ).count()
+        ).distinct().count()
 
     class Meta:
         verbose_name = 'YourTip'

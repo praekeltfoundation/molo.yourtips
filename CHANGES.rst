@@ -1,4 +1,4 @@
-CHANGE LOG
+Change Log
 ==========
 
 5.0.0

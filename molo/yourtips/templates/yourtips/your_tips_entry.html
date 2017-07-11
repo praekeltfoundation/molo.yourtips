@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags tip_tags static core_tags i18n %}
+{% get_your_tip as your_tip %}
+{% block title %}{% trans "Your Tips" %}{% endblock %}
 {% block content %}
 <div class="yourtips yourtips--page">
   <h1 class="heading heading--yourtips-page">

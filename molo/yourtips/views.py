@@ -76,8 +76,8 @@ class YourTipsPopularView(ListView):
         context = {'request': self.request}
         locale = self.request.LANGUAGE_CODE
         articles = YourTipsArticlePage.objects.filter(
-            votes__gte=1
-        ).descendant_of(main).order_by('-total_upvotes')
+            votes__isnull=False
+        ).descendant_of(main).order_by('-total_upvotes').distinct()
         return get_pages(context, articles, locale)
 
     def get_context_data(self, *args, **kwargs):

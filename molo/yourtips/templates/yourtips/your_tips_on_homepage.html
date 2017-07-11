@@ -13,7 +13,7 @@
         {% if article_tip.tags_list|first %}
         <div class="yourtips__label">
           {% if article_tip.image %}
-            {% image article_tip.image width-30 jpegquality-70 as yourtips_article_icon %}
+            {% image article_tip.image width-20 jpegquality-70 as yourtips_article_icon %}
             <img src="{{ yourtips_article_icon.url }}" class="yourtips__article-icon"/>
           {% endif %}
           {% for tag in article_tip.tags_list %}

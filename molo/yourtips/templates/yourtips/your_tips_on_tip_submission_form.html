@@ -12,7 +12,7 @@
       {% if most_popular_tip.tags_list|first %}
       <div class="yourtips__label">
         {% if most_popular_tip.image %}
-          {% image most_popular_tip.image width-30 jpegquality-70 as yourtips_article_icon %}
+          {% image most_popular_tip.image width-20 jpegquality-70 as yourtips_article_icon %}
           <img src="{{ yourtips_article_icon.url }}" class="yourtips__article-icon"/>
         {% endif %}
         {% for tag in most_popular_tip.tags_list %}
@@ -44,7 +44,7 @@
       {% if most_recent_tip.tags_list|first %}
       <div class="yourtips__label">
         {% if most_recent_tip.image %}
-          {% image most_recent_tip.image width-30 jpegquality-70 as yourtips_article_icon %}
+          {% image most_recent_tip.image width-20 jpegquality-70 as yourtips_article_icon %}
           <img src="{{ yourtips_article_icon.url }}" class="yourtips__article-icon"/>
         {% endif %}
         {% for tag in most_recent_tip.tags_list %}

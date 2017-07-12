@@ -65,9 +65,6 @@ class TestAdminActions(BaseYourTipsTestCase):
                 '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id
             )
 
-            converted_tip = YourTipsArticlePage.objects.first()
-            converted_tip_time = converted_tip.latest_revision_created_at.\
-                strftime("%Y-%m-%d %X.%f+00:00")
 
             response = download_as_csv(YourTipsArticlePageAdmin,
                                        None,

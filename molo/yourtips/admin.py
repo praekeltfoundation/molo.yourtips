@@ -7,13 +7,13 @@ from django.conf.urls import patterns
 from django.http import HttpResponse
 from django.template.defaultfilters import truncatechars
 from django.shortcuts import get_object_or_404, redirect
-from django import forms
 
 from wagtail.wagtailcore.utils import cautious_slugify
 
 from molo.yourtips.models import (
     YourTipsEntry, YourTip, YourTipsSectionIndexPage, YourTipsArticlePage
 )
+from molo.yourtips.forms import YourTipsEntryForm
 
 
 def download_as_csv(YourTipsEntry, request, queryset):
@@ -33,6 +33,11 @@ download_as_csv.short_description = "Download selected as csv"
 
 @staff_member_required
 def convert_to_article(request, entry_id):
+    """
+    This method converts a tip entry to an unpublished article
+    :param entry_id: Tip entry to convert
+    :return: redirect to the edit page of the converted tip
+    """
     def get_entry_author(entry):
         if not entry.optional_name:
             return 'By Anonymous'
@@ -57,13 +62,6 @@ def convert_to_article(request, entry_id):
         entry.converted_article_page = tip_article
         entry.save()
     return redirect('/admin/pages/%d/edit/' % entry.converted_article_page.id)
-
-
-class YourTipsEntryForm(forms.ModelForm):
-
-    class Meta:
-        model = YourTipsEntry
-        fields = ['tip_text', "optional_name"]
 
 
 class YourTipsEntryAdmin(admin.ModelAdmin):

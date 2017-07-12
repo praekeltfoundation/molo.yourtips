@@ -65,7 +65,6 @@ class TestAdminActions(BaseYourTipsTestCase):
                 '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id
             )
 
-
             response = download_as_csv(YourTipsArticlePageAdmin,
                                        None,
                                        YourTipsArticlePage.objects.all())

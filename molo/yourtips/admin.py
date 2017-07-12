@@ -115,6 +115,7 @@ class YourTipsArticlePageAdmin(admin.ModelAdmin):
     list_filter = ['title']
     search_fields = ['title', 'content', 'description']
     date_hierarchy = 'latest_revision_created_at'
+    actions = [download_as_csv]
 
 
 admin.site.register(YourTipsEntry, YourTipsEntryAdmin)

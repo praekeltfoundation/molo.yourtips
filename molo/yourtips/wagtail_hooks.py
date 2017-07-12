@@ -27,9 +27,10 @@ class DateFilter(DateRangeFilter):
 
 
 class YourTipsEntriesResource(resources.ModelResource):
+    exclude = ('id', '_convert', 'converted_article_page')
+
     class Meta:
         model = YourTipsEntry
-exclude = ('id', '_convert', 'converted_article_page')
 
 
 class YourTipsEntriesModelAdminTemplate(IndexView):
@@ -95,9 +96,10 @@ class YourTipsModelAdmin(ModelAdmin, YourTipsAdmin):
 
 
 class YourTipsEntryPageResource(resources.ModelResource):
+    exclude = ('id',)
+
     class Meta:
         model = YourTipsArticlePage
-exclude = ('id',)
 
 
 class YourTipsEntryPageModelAdminTemplate(IndexView):

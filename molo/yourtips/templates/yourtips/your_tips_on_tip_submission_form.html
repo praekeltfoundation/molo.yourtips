@@ -12,7 +12,7 @@
       {% if most_popular_tip.tags_list|first %}
       <div class="yourtips__label">
         {% if most_popular_tip.image %}
-          {% image most_popular_tip.image width-30 jpegquality-70 as yourtips_article_icon %}
+          {% image most_popular_tip.image width-20 jpegquality-70 as yourtips_article_icon %}
           <img src="{{ yourtips_article_icon.url }}" class="yourtips__article-icon"/>
         {% endif %}
         {% for tag in most_popular_tip.tags_list %}
@@ -34,7 +34,6 @@
   </div>
 </div>
 {% endif %}
-
 {% if most_recent_tip and your_tip.get_number_of_tips %}
   <h2 class="heading heading--yourtips-title">{% trans "Most recent tip" %}</h2>
   <div class="yourtips-list">
@@ -44,7 +43,7 @@
       {% if most_recent_tip.tags_list|first %}
       <div class="yourtips__label">
         {% if most_recent_tip.image %}
-          {% image most_recent_tip.image width-30 jpegquality-70 as yourtips_article_icon %}
+          {% image most_recent_tip.image width-20 jpegquality-70 as yourtips_article_icon %}
           <img src="{{ yourtips_article_icon.url }}" class="yourtips__article-icon"/>
         {% endif %}
         {% for tag in most_recent_tip.tags_list %}
@@ -63,7 +62,6 @@
       <p class="yourtips__author">{{ block.value }}</p>
     {% endif %}
   {% endfor %}
-
     </div>
   </div>
   <a href="{% url 'molo.yourtips:recent_tips' %}" class="call-to-action__nav-item">

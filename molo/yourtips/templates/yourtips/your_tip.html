@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags static tip_tags core_tags i18n %}
+{% get_your_tip as your_tip %}
+{% block title %}{% trans "Your Tips" %}{% endblock %}
 {% block content %}
 <div class="yourtips">
-  {% get_your_tip as your_tip %}
   <div class="breadcrumbs">
     <ul class="breadcrumbs-list">
       <li class="breadcrumbs-list__item">

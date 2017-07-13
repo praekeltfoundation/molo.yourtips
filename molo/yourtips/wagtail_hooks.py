@@ -1,5 +1,7 @@
 from daterange_filter.filter import DateRangeFilter
+from import_export import resources
 
+from django.http import HttpResponse
 from django.template.defaultfilters import truncatechars
 
 from wagtail.contrib.modeladmin.options import (
@@ -10,13 +12,11 @@ from wagtail.contrib.modeladmin.options import (
 from wagtail.contrib.modeladmin.views import IndexView
 
 from molo.yourtips.admin import (
-    YourTipsAdmin,
     YourTipsEntryAdmin
 )
 from molo.yourtips.models import (
     YourTipsEntry,
-    YourTipsArticlePage,
-    YourTip
+    YourTipsArticlePage
 )
 
 
@@ -24,10 +24,32 @@ class DateFilter(DateRangeFilter):
     template = 'admin/yourtips/yourtips_date_range_filter.html'
 
 
+class YourTipsEntriesResource(resources.ModelResource):
+    exclude = ('id', '_convert', 'converted_article_page')
+
+    class Meta:
+        model = YourTipsEntry
+
+
+class YourTipsEntriesModelAdminTemplate(IndexView):
+    def post(self, request, *args, **kwargs):
+
+        dataset = YourTipsEntriesResource().export()
+
+        response = HttpResponse(dataset.csv, content_type="csv")
+        response['Content-Disposition'] = \
+            'attachment; filename=yourtips_entries.csv'
+        return response
+
+    def get_template_names(self):
+        return 'admin/yourtips/model_admin_template.html'
+
+
 class YourTipsEntriesModelAdmin(ModelAdmin):
     model = YourTipsEntry
     menu_label = 'Entries'
     menu_icon = 'edit'
+    index_view_class = YourTipsEntriesModelAdminTemplate
     add_to_settings_menu = False
     list_display = [
         'tip', 'submission_date', 'user', 'optional_name',
@@ -52,29 +74,32 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
         return truncatechars(obj.tip_text, 30)
 
 
-class ModelAdminTipTemplate(IndexView):
+class YourTipsEntryPageResource(resources.ModelResource):
+    exclude = ('id',)
+
+    class Meta:
+        model = YourTipsArticlePage
+
+
+class YourTipsEntryPageModelAdminTemplate(IndexView):
+    def post(self, request, *args, **kwargs):
+
+        dataset = YourTipsEntryPageResource().export()
+
+        response = HttpResponse(dataset.csv, content_type="csv")
+        response['Content-Disposition'] = \
+            'attachment; filename=yourtips_convertedarticles.csv'
+        return response
+
     def get_template_names(self):
-        return 'admin/yourtips/model_admin_your_tip_template.html'
-
-
-class YourTipsModelAdmin(ModelAdmin, YourTipsAdmin):
-    model = YourTip
-    menu_label = 'Your Tips Page'
-    menu_icon = 'doc-full'
-    index_view_class = ModelAdminTipTemplate
-    add_to_settings_menu = False
-    list_display = ['title', 'status']
-
-    def get_queryset(self, request):
-        qs = super(YourTipsModelAdmin, self).get_queryset(request)
-        main = request.site.root_page
-        return qs.descendant_of(main)
+        return 'admin/yourtips/model_admin_template.html'
 
 
 class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
     model = YourTipsArticlePage
     menu_label = 'Tips'
     menu_icon = 'doc-full-inverse'
+    index_view_class = YourTipsEntryPageModelAdminTemplate
     add_to_settings_menu = False
     list_display = [
         'title', 'latest_revision_created_at', 'vote_total', 'live'
@@ -92,8 +117,7 @@ class YourTipsAdminGroup(ModelAdminGroup):
     menu_icon = 'folder-open-inverse'
     menu_order = 400
     items = (
-        YourTipsEntriesModelAdmin, YourTipsEntryPageModelAdmin,
-        YourTipsModelAdmin,
+        YourTipsEntriesModelAdmin, YourTipsEntryPageModelAdmin
     )
 
 

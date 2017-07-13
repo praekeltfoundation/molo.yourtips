@@ -10,6 +10,10 @@ from molo.yourtips.models import YourTip, YourTipsArticlePage
 
 
 class YourTipsEntryView(CreateView):
+    """
+    A CreateView for tip entry form.
+    :return: redirect to the thank you page on successful tip submission.
+    """
     form_class = YourTipsEntryForm
     template_name = 'yourtips/your_tips_entry.html'
 
@@ -37,6 +41,9 @@ class YourTipsEntryView(CreateView):
 
 
 class ThankYouView(TemplateView):
+    """
+    A TemplateView for the thank you page.
+    """
     template_name = 'yourtips/thank_you.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -47,6 +54,10 @@ class ThankYouView(TemplateView):
 
 
 class YourTipsRecentView(ListView):
+    """
+    A ListView for the recent tips.
+    :return: All tips ordered by latest_revision_created_at field.
+    """
     template_name = "yourtips/recent_tips.html"
 
     def get_queryset(self, *args, **kwargs):
@@ -69,6 +80,10 @@ class YourTipsRecentView(ListView):
 
 
 class YourTipsPopularView(ListView):
+    """
+    A ListView for the popular tips (most liked).
+    :return: All tips with at least one like ordered by number of likes.
+    """
     template_name = "yourtips/popular_tips.html"
 
     def get_queryset(self, *args, **kwargs):
@@ -76,8 +91,8 @@ class YourTipsPopularView(ListView):
         context = {'request': self.request}
         locale = self.request.LANGUAGE_CODE
         articles = YourTipsArticlePage.objects.filter(
-            votes__gte=1
-        ).descendant_of(main).order_by('-total_upvotes')
+            votes__isnull=False
+        ).descendant_of(main).order_by('-total_upvotes').distinct()
         return get_pages(context, articles, locale)
 
     def get_context_data(self, *args, **kwargs):

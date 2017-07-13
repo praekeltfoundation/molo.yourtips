@@ -1,3 +1,5 @@
+from wkhtmltoimage.views import ImageTemplateView
+
 from molo.yourtips import views
 
 from django.conf.urls import patterns, url
@@ -23,5 +25,10 @@ urlpatterns = patterns(
         r'^popular-tips/$',
         views.YourTipsPopularView.as_view(),
         name='popular_tips'
+    ),
+    url(
+        r'^tip-share-image/(?P<tip_id>\d+)/$',
+        views.ShareImageView.as_view(),
+        name='tip_share'
     )
 )

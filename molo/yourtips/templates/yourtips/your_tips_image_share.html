@@ -1,0 +1,13 @@
+{% load tip_tags %}
+{% block content %}
+{% get_your_tip as your_tip %}
+<div class="yourtips">
+  {% for block in tip.body %}
+    {% if block.block_type == 'paragraph' %}
+      <h3 class="yourtips__description">{{ block.value }}</h3>
+    {% elif block.block_type == 'heading' %}
+      <p class="yourtips__author">{{ block.value }}</p>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endblock %}

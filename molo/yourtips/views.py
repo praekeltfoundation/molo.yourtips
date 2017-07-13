@@ -1,3 +1,5 @@
+from wkhtmltoimage.views import ImageTemplateView
+
 from django.core.urlresolvers import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
@@ -87,5 +89,20 @@ class YourTipsPopularView(ListView):
         context.update({
             'view_title': 'Popular Tips',
             'your_tip_page_slug': YourTip.objects.first().slug,
+        })
+        return context
+
+
+class ShareImageView(ImageTemplateView):
+    filename = 'your-tip.png'
+    template_name = 'yourtips/your_tips_image_share.html'
+    show_content_in_browser = True
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ShareImageView, self).get_context_data(
+            *args, **kwargs
+        )
+        context.update({
+            'tip': YourTipsArticlePage.objects.get(id=self.kwargs.get('tip_id'))
         })
         return context

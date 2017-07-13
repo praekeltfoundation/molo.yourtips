@@ -1,5 +1,6 @@
 from daterange_filter.filter import DateRangeFilter
 
+from django.core.urlresolvers import reverse
 from django.template.defaultfilters import truncatechars
 
 from wagtail.contrib.modeladmin.options import (
@@ -77,7 +78,8 @@ class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
     menu_icon = 'doc-full-inverse'
     add_to_settings_menu = False
     list_display = [
-        'title', 'latest_revision_created_at', 'vote_total', 'live'
+        'title', 'latest_revision_created_at', 'vote_total', 'live',
+        '_convert_to_image'
     ]
     list_filter = [('latest_revision_created_at', DateFilter)]
 
@@ -85,6 +87,15 @@ class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
         qs = super(YourTipsEntryPageModelAdmin, self).get_queryset(request)
         main = request.site.root_page
         return qs.descendant_of(main)
+
+    def _convert_to_image(self, obj, *args, **kwargs):
+        return '<a href="' + reverse(
+            'molo.yourtips:tip_share',
+            args=[obj.id]
+        ) + '" class="addlink">Convert to image</a>'
+
+    _convert_to_image.allow_tags = True
+    _convert_to_image.short_description = ''
 
 
 class YourTipsAdminGroup(ModelAdminGroup):

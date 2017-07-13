@@ -1,4 +1,5 @@
-{% load wagtailimages_tags core_tags tip_tags el_pagination_tags likes_inclusion_tags i18n %}
+{% load wagtailcore_tags wagtailimages_tags core_tags wagtailsettings_tags tip_tags el_pagination_tags likes_inclusion_tags i18n %}
+{% get_settings %}
 <ul class="yourtips-list">
   {% for each_article in articles %}
   <li class="yourtips-list__item">
@@ -12,7 +13,10 @@
         <p class="yourtips__author">{{ block.value }}</p>
       {% endif %}
     {% endfor %}
-    {% likes each_article %}
+    <div class="yourtips__social-media">
+      {% likes each_article %}
+      {% include "patterns/basics/promoted-tips/social-media.html"  %}
+    </div>
   </li>
   {% endfor %}
 </ul>

@@ -4,6 +4,9 @@ from molo.yourtips.models import YourTipsEntry
 
 
 class YourTipsEntryForm(forms.ModelForm):
+    """
+    The user submitted entry form class
+    """
     tip_text = forms.CharField(widget=forms.Textarea(
     ))
 

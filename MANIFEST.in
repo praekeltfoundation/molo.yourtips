@@ -2,6 +2,7 @@ include LICENSE
 include README.rst
 include CHANGES.rst
 include VERSION
+include AUTHORS.rst
 include MANIFEST.in
 include requirements.txt
 include requirements-dev.txt

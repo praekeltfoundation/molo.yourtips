@@ -1,21 +1,43 @@
+import csv
 import json
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import admin
 from django.conf.urls import patterns
+from django.http import HttpResponse
 from django.template.defaultfilters import truncatechars
 from django.shortcuts import get_object_or_404, redirect
-from django import forms
 
 from wagtail.wagtailcore.utils import cautious_slugify
 
 from molo.yourtips.models import (
     YourTipsEntry, YourTip, YourTipsSectionIndexPage, YourTipsArticlePage
 )
+from molo.yourtips.forms import YourTipsEntryForm
+
+
+def download_as_csv(YourTipsEntry, request, queryset):
+    opts = queryset.model._meta
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment;filename=export.csv'
+    writer = csv.writer(response)
+    field_names = [field.name for field in opts.fields]
+    writer.writerow(field_names)
+    for obj in queryset:
+        writer.writerow([getattr(obj, field) for field in field_names])
+    return response
+
+
+download_as_csv.short_description = "Download selected as csv"
 
 
 @staff_member_required
 def convert_to_article(request, entry_id):
+    """
+    This method converts a tip entry to an unpublished article
+    :param entry_id: Tip entry to convert
+    :return: redirect to the edit page of the converted tip
+    """
     def get_entry_author(entry):
         if not entry.optional_name:
             return 'By Anonymous'
@@ -42,13 +64,6 @@ def convert_to_article(request, entry_id):
     return redirect('/admin/pages/%d/edit/' % entry.converted_article_page.id)
 
 
-class YourTipsEntryForm(forms.ModelForm):
-
-    class Meta:
-        model = YourTipsEntry
-        fields = ['tip_text', "optional_name"]
-
-
 class YourTipsEntryAdmin(admin.ModelAdmin):
     list_display = ['truncate_text', 'user', 'optional_name',
                     'submission_date', 'allow_share_on_social_media',
@@ -57,6 +72,7 @@ class YourTipsEntryAdmin(admin.ModelAdmin):
     date_hierarchy = 'submission_date'
     form = YourTipsEntryForm
     readonly_fields = ('tip_text', 'optional_name', 'submission_date')
+    actions = [download_as_csv]
 
     def truncate_text(self, obj, *args, **kwargs):
         return truncatechars(obj.tip_text, 30)
@@ -97,6 +113,7 @@ class YourTipsArticlePageAdmin(admin.ModelAdmin):
     list_filter = ['title']
     search_fields = ['title', 'content', 'description']
     date_hierarchy = 'latest_revision_created_at'
+    actions = [download_as_csv]
 
 
 admin.site.register(YourTipsEntry, YourTipsEntryAdmin)

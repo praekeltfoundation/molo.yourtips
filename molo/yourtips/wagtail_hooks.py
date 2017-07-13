@@ -12,13 +12,11 @@ from wagtail.contrib.modeladmin.options import (
 from wagtail.contrib.modeladmin.views import IndexView
 
 from molo.yourtips.admin import (
-    YourTipsAdmin,
     YourTipsEntryAdmin
 )
 from molo.yourtips.models import (
     YourTipsEntry,
-    YourTipsArticlePage,
-    YourTip
+    YourTipsArticlePage
 )
 
 

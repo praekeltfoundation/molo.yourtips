@@ -76,25 +76,6 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
         return truncatechars(obj.tip_text, 30)
 
 
-class ModelAdminTipTemplate(IndexView):
-    def get_template_names(self):
-        return 'admin/yourtips/model_admin_your_tip_template.html'
-
-
-class YourTipsModelAdmin(ModelAdmin, YourTipsAdmin):
-    model = YourTip
-    menu_label = 'Your Tips Page'
-    menu_icon = 'doc-full'
-    index_view_class = ModelAdminTipTemplate
-    add_to_settings_menu = False
-    list_display = ['title', 'status']
-
-    def get_queryset(self, request):
-        qs = super(YourTipsModelAdmin, self).get_queryset(request)
-        main = request.site.root_page
-        return qs.descendant_of(main)
-
-
 class YourTipsEntryPageResource(resources.ModelResource):
     exclude = ('id',)
 
@@ -138,8 +119,7 @@ class YourTipsAdminGroup(ModelAdminGroup):
     menu_icon = 'folder-open-inverse'
     menu_order = 400
     items = (
-        YourTipsEntriesModelAdmin, YourTipsEntryPageModelAdmin,
-        YourTipsModelAdmin,
+        YourTipsEntriesModelAdmin, YourTipsEntryPageModelAdmin
     )
 
 

@@ -71,7 +71,7 @@ class YourTip(TranslatablePageMixinNotRoutable, Page):
     Note that:
     * title: Is used throughout the module where the name of
         the module need to be displayed.
-    * description: Is used to display the subsection information
+    * description: Is used to display the YourTip description.
     * homepage_action_copy: Is used to change the text of the banner.
     * extra_style_hints: Is used to change style of the link on the main page.
     """
@@ -165,7 +165,7 @@ class YourTipsArticlePage(ArticlePage):
     """
     This model is used to store the converted tip entry as an ArticlePage.
     Note that:
-    * An Article can be promoted to show on the homepage by enabling
+    * A converted tip can be promoted to show on the homepage by enabling
         the featured_in_homepage setting and setting a date range.
     * tag field: The first tag displays as a heading for the tip.
     * image field: The first image displays as an icon for the tip.

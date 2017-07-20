@@ -116,4 +116,4 @@ def get_your_tip(context):
     :param context: takes context
     :return: A YourTip object
     """
-    return YourTip.objects.first()
+    return YourTip.objects.live().first()

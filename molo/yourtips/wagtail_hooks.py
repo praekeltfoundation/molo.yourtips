@@ -1,5 +1,6 @@
+from re import compile, sub
 from daterange_filter.filter import DateRangeFilter
-from import_export import resources
+from import_export import resources, fields
 
 from django.http import HttpResponse
 from django.template.defaultfilters import truncatechars
@@ -75,10 +76,38 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
 
 
 class YourTipsEntryPageResource(resources.ModelResource):
-    exclude = ('id',)
+    tip = fields.Field()
+    author = fields.Field()
+    total_votes = fields.Field()
 
     class Meta:
         model = YourTipsArticlePage
+        fields = (
+            'id', 'title', 'total_votes', 'live',
+            'tip', 'author', 'latest_revision_created_at'
+        )
+        export_order = (
+            'id', 'title', 'live', 'tip', 'author',
+            'total_votes', 'latest_revision_created_at'
+        )
+
+    @staticmethod
+    def dehydrate_tip(articlepage):
+        for block in articlepage.body:
+            if block.block_type == 'paragraph':
+                tip = str(block)
+        return tip.replace('<p>', '').replace('</p>', '')
+
+    @staticmethod
+    def dehydrate_author(articlepage):
+        for block in articlepage.body:
+            if block.block_type == 'heading':
+                tip = str(block)
+        return tip.replace('By ', '')
+
+    @staticmethod
+    def dehydrate_total_votes(articlepage):
+        return articlepage.vote_total
 
 
 class YourTipsEntryPageModelAdminTemplate(IndexView):

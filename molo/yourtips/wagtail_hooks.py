@@ -1,4 +1,3 @@
-from re import compile, sub
 from daterange_filter.filter import DateRangeFilter
 from import_export import resources, fields
 

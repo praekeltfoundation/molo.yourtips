@@ -13,3 +13,9 @@ Change Log
 -----
 - Bug fix popular tip ListView
 - New feature Download CSV
+
+5.0.4
+-----
+- Bug fix: Only activate "YourTips" with published YourTip pages.
+- Change: Verification message on tip submission form show word count now.
+- Change: Download CSV on converted tip articles to only download relevant information.

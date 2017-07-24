@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 from molo.yourtips.models import YourTipsEntry
 
@@ -14,17 +15,13 @@ class YourTipsEntryForm(forms.ModelForm):
         data = self.cleaned_data['tip_text']
         if len(data.split()) > 30:
             raise forms.ValidationError(
-                "Sorry your tip is too long, "
-                "please edit it and cut down %d words." % (
-                    len(data.split()) - 30
-                )
+                _("Sorry your tip is too long, please edit it and cut down"
+                  " %d words.") % (len(data.split()) - 30)
             )
         elif len(data) > 140:
             raise forms.ValidationError(
-                "Sorry your tip is too long, "
-                "please edit it and cut down %d characters." % (
-                    len(data) - 140
-                )
+                _("Sorry your tip is too long, please edit it and cut down"
+                  " %d characters.") % (len(data) - 140)
             )
         return data
 

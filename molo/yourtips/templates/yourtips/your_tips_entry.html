@@ -8,7 +8,7 @@
   </h1>
   <h3 class="yourtips__description">
     {% if your_tip.homepage_action_copy %}
-      {% trans your_tip.homepage_action_copy %}
+      {{ your_tip.homepage_action_copy }}
     {% else %}
       {% trans 'Do you have advice you can share with other youth on relationships?' %}
     {% endif %}

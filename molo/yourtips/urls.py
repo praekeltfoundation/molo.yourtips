@@ -1,5 +1,3 @@
-from django.views.generic import RedirectView
-
 from molo.yourtips import views
 
 from django.conf.urls import patterns, url

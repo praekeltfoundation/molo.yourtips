@@ -11,7 +11,6 @@ from django.http import HttpResponse
 from django.template.defaultfilters import truncatechars
 from django.shortcuts import get_object_or_404, redirect
 
-from wagtail.wagtailimages.models import Image
 from wagtail.wagtailcore.utils import cautious_slugify
 
 from molo.core.content_import.helpers.get_image import Image
@@ -65,8 +64,8 @@ def convert_to_article(request, entry_id):
         tip_article.save_revision()
         if entry.allow_share_on_social_media:
             tip_url = request.get_host() + reverse(
-                    'molo.yourtips:tip_share', args=[tip_article.id]
-                )
+                'molo.yourtips:tip_share', args=[tip_article.id]
+            )
             tip_media_path = settings.MEDIA_ROOT + "/images/tip_" + \
                 str(tip_article.id) + ".png"
             imgkit.from_url(
@@ -75,8 +74,8 @@ def convert_to_article(request, entry_id):
                 options={
                     'format': 'png',
                     'quiet': ''
-                    }
-                )
+                }
+            )
             image = Image.objects.create(
                 title="Tip-%s" % tip_article.id,
                 file=tip_media_path,

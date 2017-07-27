@@ -143,6 +143,7 @@ class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
         return qs.descendant_of(main)
 
     def _share_on_facebook(self, obj):
+        # TODO Check if user allowed share and secure site
         tip_url = 'http://%s' % Site.objects.get_current().domain + reverse(
             'molo.yourtips:tip_share', args=[obj.id]
         )

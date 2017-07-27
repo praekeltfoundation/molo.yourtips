@@ -1,5 +1,3 @@
-from wkhtmltoimage.views import ImageTemplateView
-
 from molo.yourtips import views
 
 from django.conf.urls import patterns, url

@@ -108,10 +108,10 @@ class YourTipsPopularView(ListView):
 
 class ShareImageView(TemplateView):
     """
-    A TemplateView for the social_media image. 
+    A TemplateView for the social_media image.
     Note:
     - This template is used when a tip is converted to an article.
-    - A social_media image will only be generate if the user 
+    - A social_media image will only be generate if the user
         selected allow_share_on_social_media.
     """
     template_name = 'yourtips/your_tips_image_share.html'
@@ -121,6 +121,8 @@ class ShareImageView(TemplateView):
             *args, **kwargs
         )
         context.update({
-            'tip': YourTipsArticlePage.objects.get(id=self.kwargs.get('tip_id'))
+            'tip': YourTipsArticlePage.objects.get(
+                id=self.kwargs.get('tip_id')
+            )
         })
         return context

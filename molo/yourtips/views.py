@@ -1,7 +1,9 @@
 from django.core.urlresolvers import reverse
+from django.contrib.sites.models import Site
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, RedirectView
 
 from molo.core.templatetags.core_tags import get_pages
 
@@ -120,9 +122,28 @@ class ShareImageView(TemplateView):
         context = super(ShareImageView, self).get_context_data(
             *args, **kwargs
         )
+        tip_article = YourTipsArticlePage.objects.get(
+            id=kwargs.get('tip_id')
+        )
         context.update({
-            'tip': YourTipsArticlePage.objects.get(
-                id=self.kwargs.get('tip_id')
-            )
+            'tip': tip_article
         })
         return context
+
+
+class ShareonFacebookRedirectView(RedirectView):
+    url = 'http://www.facebook.com/'
+
+    def get_redirect_url(self, *args, **kwargs):
+        article = get_object_or_404(
+            YourTipsArticlePage,
+            pk=kwargs.get('tip_id')
+        )
+        article.share_increase()
+        self.url = 'http://www.facebook.com/sharer.php?u=http://%s%s' % (
+            Site.objects.get_current().domain,
+            reverse('molo.yourtips:tip_share', args=[article.id])
+        )
+        return super(
+            ShareonFacebookRedirectView, self
+        ).get_redirect_url(*args, **kwargs)

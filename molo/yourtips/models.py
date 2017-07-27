@@ -173,11 +173,17 @@ class YourTipsArticlePage(ArticlePage):
     parent_page_types = ['yourtips.YourTipsSectionIndexPage']
     subpage_types = []
 
+    number_of_shares = models.PositiveIntegerField(default=0)
+
     featured_homepage_promote_panels = [
         FieldPanel('featured_in_homepage'),
         FieldPanel('featured_in_homepage_start_date'),
         FieldPanel('featured_in_homepage_end_date'),
     ]
+
+    def share_increase(self):
+        self.number_of_shares += 1
+        self.save()
 
 
 YourTipsArticlePage.promote_panels = [

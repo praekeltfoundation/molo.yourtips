@@ -132,8 +132,8 @@ class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
     index_view_class = YourTipsEntryPageModelAdminTemplate
     add_to_settings_menu = False
     list_display = [
-        'title', 'latest_revision_created_at', 'vote_total', 'live',
-        '_share_on_facebook'
+        'title', 'latest_revision_created_at', 'vote_total',
+        'number_of_shares', 'live', '_share_on_facebook'
     ]
     list_filter = [('latest_revision_created_at', DateFilter)]
 
@@ -147,7 +147,6 @@ class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
         tip_url = 'http://%s' % Site.objects.get_current().domain + reverse(
             'molo.yourtips:tip_share', args=[obj.id]
         )
-        print tip_url
         return '<a href="http://www.facebook.com/sharer.php?u=%s"' \
                ' class="addlink">Share on Facebook</a>' % tip_url
 

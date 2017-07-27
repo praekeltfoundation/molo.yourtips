@@ -1,6 +1,7 @@
 from daterange_filter.filter import DateRangeFilter
 from import_export import resources, fields
 
+from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.template.defaultfilters import truncatechars
@@ -132,7 +133,7 @@ class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
     add_to_settings_menu = False
     list_display = [
         'title', 'latest_revision_created_at', 'vote_total', 'live',
-        '_convert_to_image'
+        '_share_on_facebook'
     ]
     list_filter = [('latest_revision_created_at', DateFilter)]
 
@@ -141,14 +142,16 @@ class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
         main = request.site.root_page
         return qs.descendant_of(main)
 
-    def _convert_to_image(self, obj, *args, **kwargs):
-        return '<a href="' + reverse(
-            'molo.yourtips:tip_share',
-            args=[obj.id]
-        ) + '" class="addlink">Convert to image</a>'
+    def _share_on_facebook(self, obj):
+        tip_url = 'http://%s' % Site.objects.get_current().domain + reverse(
+            'molo.yourtips:tip_share', args=[obj.id]
+        )
+        print tip_url
+        return '<a href="http://www.facebook.com/sharer.php?u=%s"' \
+               ' class="addlink">Share on Facebook</a>' % tip_url
 
-    _convert_to_image.allow_tags = True
-    _convert_to_image.short_description = ''
+    _share_on_facebook.allow_tags = True
+    _share_on_facebook.short_description = ''
 
 
 class YourTipsAdminGroup(ModelAdminGroup):

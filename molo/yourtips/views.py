@@ -1,5 +1,3 @@
-from wkhtmltoimage.views import ImageTemplateView
-
 from django.core.urlresolvers import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
@@ -108,10 +106,15 @@ class YourTipsPopularView(ListView):
         return context
 
 
-class ShareImageView(ImageTemplateView):
-    filename = 'your-tip.png'
+class ShareImageView(TemplateView):
+    """
+    A TemplateView for the social_media image. 
+    Note:
+    - This template is used when a tip is converted to an article.
+    - A social_media image will only be generate if the user 
+        selected allow_share_on_social_media.
+    """
     template_name = 'yourtips/your_tips_image_share.html'
-    show_content_in_browser = True
 
     def get_context_data(self, *args, **kwargs):
         context = super(ShareImageView, self).get_context_data(

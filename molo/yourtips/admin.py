@@ -1,14 +1,20 @@
 import csv
 import json
+import imgkit
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import admin
+from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.conf.urls import patterns
 from django.http import HttpResponse
 from django.template.defaultfilters import truncatechars
 from django.shortcuts import get_object_or_404, redirect
 
+from wagtail.wagtailimages.models import Image
 from wagtail.wagtailcore.utils import cautious_slugify
+
+from molo.core.content_import.helpers.get_image import Image
 
 from molo.yourtips.models import (
     YourTipsEntry, YourTip, YourTipsSectionIndexPage, YourTipsArticlePage
@@ -57,6 +63,26 @@ def convert_to_article(request, entry_id):
         )
         tip_section_index_page.add_child(instance=tip_article)
         tip_article.save_revision()
+        if entry.allow_share_on_social_media:
+            tip_url = request.get_host() + reverse(
+                    'molo.yourtips:tip_share', args=[tip_article.id]
+                )
+            tip_media_path = settings.MEDIA_ROOT + "/images/tip_" + \
+                str(tip_article.id) + ".png"
+            imgkit.from_url(
+                tip_url,
+                tip_media_path,
+                options={
+                    'format': 'png',
+                    'quiet': ''
+                    }
+                )
+            image = Image.objects.create(
+                title="Tip-%s" % tip_article.id,
+                file=tip_media_path,
+            )
+            tip_article.social_media_image = image
+            tip_article.save_revision()
         tip_article.unpublish()
 
         entry.converted_article_page = tip_article

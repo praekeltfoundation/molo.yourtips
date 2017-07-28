@@ -5,6 +5,9 @@ python:
 cache:
   directories:
     - $HOME/.pip-cache/
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y wkhtmltopdf
 install:
   - pip install twine
   - pip install --upgrade pip --cache-dir $HOME/.pip-cache/

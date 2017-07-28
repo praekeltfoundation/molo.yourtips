@@ -19,6 +19,10 @@ CELERY_ALWAYS_EAGER = True
 
 DEFAULT_SITE_PORT = 8000
 
+INSTALLED_APPS = TESTAPP_INSTALLED_APPS + [
+    'secretballot'
+]
+
 MIDDLEWARE_CLASSES = TESTAPP_MIDDLEWARE_CLASSES + [
     'likes.middleware.SecretBallotUserIpUseragentMiddleware',
 ]

@@ -17,7 +17,7 @@ class TestYourTipsTemplateTags(BaseYourTipsTestCase):
         entry = YourTipsEntry.objects.create(
             optional_name='Test',
             tip_text='test body',
-            allow_share_on_social_media=True,
+            allow_share_on_social_media=False,
         )
 
         self.client.get(
@@ -46,7 +46,7 @@ class TestYourTipsTemplateTags(BaseYourTipsTestCase):
         entry = YourTipsEntry.objects.create(
             optional_name='Test',
             tip_text='test body',
-            allow_share_on_social_media=True,
+            allow_share_on_social_media=False,
         )
 
         self.client.get(

@@ -122,11 +122,12 @@ class ShareImageView(TemplateView):
         context = super(ShareImageView, self).get_context_data(
             *args, **kwargs
         )
-        tip_article = YourTipsArticlePage.objects.get(
-            id=kwargs.get('tip_id')
+        tip_article = get_object_or_404(
+            YourTipsArticlePage,
+            pk=kwargs.get('tip_id')
         )
         context.update({
-            'tip': tip_article
+            'tip_article': tip_article
         })
         return context
 

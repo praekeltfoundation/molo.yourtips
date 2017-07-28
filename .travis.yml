@@ -6,10 +6,6 @@ cache:
   directories:
     - $HOME/.pip-cache/
 
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3
 install:
   - mkdir wkhtmltopdf
   - wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
@@ -22,6 +18,10 @@ install:
   - pip install flake8 --cache-dir $HOME/.pip-cache/
   - pip install -r requirements-dev.txt --cache-dir $HOME/.pip-cache/
   - pip install -e . --cache-dir $HOME/.pip-cache/
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3
 script:
   - flake8 molo
   - molo scaffold testapp --include=molo.yourtips ^yourtips/ --include=likes ^likes/

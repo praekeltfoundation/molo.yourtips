@@ -24,7 +24,7 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
         YourTipsEntry.objects.create(
             optional_name='Test',
             tip_text='test body',
-            allow_share_on_social_media=True,
+            allow_share_on_social_media=False,
         )
 
         response = self.client.post('/admin/yourtips/yourtipsentry/')
@@ -55,7 +55,7 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
         entry = YourTipsEntry.objects.create(
             optional_name='Test',
             tip_text='test body',
-            allow_share_on_social_media=True,
+            allow_share_on_social_media=False,
         )
         self.client.get(
             '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id

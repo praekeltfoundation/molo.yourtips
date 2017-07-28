@@ -9,7 +9,7 @@ cache:
 install:
   - mkdir wkhtmltopdf
   - wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
-  - tar xvjf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz -C wkhtmltopdf
+  - tar xf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz -C wkhtmltopdf
   - mv wkhtmltopdf/wkhtmltox wkhtmltopdf/wkhtmltopdf
   - export PATH=$PATH:$PWD/wkhtmltopdf/
   - pip install twine

@@ -6,6 +6,10 @@ cache:
   directories:
     - $HOME/.pip-cache/
 
+addons:
+  apt:
+    packages:
+    - wkhtmltopdf
 install:
   - apt-get install wkhtmltopdf
   - export PATH=$PATH:$PWD/wkhtmltopdf/wkhtmltopdf/bin

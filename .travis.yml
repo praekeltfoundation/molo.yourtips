@@ -10,8 +10,8 @@ addons:
   apt:
     packages:
     - wkhtmltopdf
+
 install:
-  - export PATH=$PATH:$PWD/wkhtmltopdf/wkhtmltopdf/bin
   - pip install twine
   - pip install --upgrade pip --cache-dir $HOME/.pip-cache/
   - pip install coveralls coverage --cache-dir $HOME/.pip-cache/

@@ -36,7 +36,7 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
             'X-Frame-Options: SAMEORIGIN\r\nContent-Type: csv\r\n\r\nid,'
             'submission_date,optional_name,user,tip_text,'
             'allow_share_on_social_media,converted_article_page\r\n1,' +
-            date + ',Test,,test body,1,\r\n')
+            date + ',Test,,test body,0,\r\n')
         self.assertEquals(str(response), expected_output)
 
     def test_export_article_page_csv(self):

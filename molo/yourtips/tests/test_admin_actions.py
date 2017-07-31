@@ -40,7 +40,7 @@ class TestAdminActions(BaseYourTipsTestCase):
                            'submission_date,optional_name,user,tip_text,'
                            'allow_share_on_social_media,'
                            'converted_article_page\r\n1,' +
-                           date + ',Test,,test body,True,\r\n')
+                           date + ',Test,,test body,False,\r\n')
         self.assertEquals(str(response), expected_output)
 
     def test_download_article_page_as_csv(self):

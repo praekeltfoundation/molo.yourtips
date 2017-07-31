@@ -73,8 +73,7 @@ def convert_to_article(request, entry_id):
                 tip_media_path,
                 options={
                     'format': 'png',
-                    'quiet': '',
-                    'height': 240
+                    'quiet': ''
                 }
             )
             image = Image.objects.create(

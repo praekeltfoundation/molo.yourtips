@@ -63,7 +63,7 @@ def convert_to_article(request, entry_id):
         tip_section_index_page.add_child(instance=tip_article)
         tip_article.save_revision()
         if entry.allow_share_on_social_media:
-            tip_url = request.site.root_url + reverse(
+            tip_url = request.get_host() + reverse(
                 'molo.yourtips:tip_share', kwargs={'tip_id': tip_article.id}
             )
             tip_media_path = settings.MEDIA_ROOT + "/images/tip_" + \

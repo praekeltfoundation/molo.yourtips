@@ -39,8 +39,8 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
             date + ',Test,,test body,1,\r\n')
         self.assertEquals(str(response), expected_output)
         response = self.client.post(
-            '/admin/yourtips/yourtipsentry/?drf__submission_date__gte='
-            + date + '&drf__submission_date__lte=' + date
+            '/admin/yourtips/yourtipsentry/?drf__submission_date__gte=' +
+            date + '&drf__submission_date__lte=' + date
         )
         expected_output = (
             'Content-Disposition: attachment; filename=yourtips_entries.csv'
@@ -76,8 +76,6 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
             slug='test-tip')
         self.tip_index.add_child(instance=tip_page)
         tip_page.save_revision().publish()
-
-        date = str(datetime.datetime.now().date())
 
         entry = YourTipsEntry.objects.create(
             optional_name='Test',

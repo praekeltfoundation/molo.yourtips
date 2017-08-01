@@ -38,6 +38,31 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
             'allow_share_on_social_media,converted_article_page\r\n1,' +
             date + ',Test,,test body,1,\r\n')
         self.assertEquals(str(response), expected_output)
+        response = self.client.post(
+            '/admin/yourtips/yourtipsentry/?drf__submission_date__gte='
+            + date + '&drf__submission_date__lte=' + date
+        )
+        expected_output = (
+            'Content-Disposition: attachment; filename=yourtips_entries.csv'
+            '\r\nContent-Language: en\r\nVary: Accept-Language, Cookie\r\n'
+            'Cache-Control: no-cache, no-store, private, max-age=0\r\n'
+            'X-Frame-Options: SAMEORIGIN\r\nContent-Type: csv\r\n\r\nid,'
+            'submission_date,optional_name,user,tip_text,'
+            'allow_share_on_social_media,converted_article_page\r\n1,' +
+            date + ',Test,,test body,1,\r\n')
+        self.assertEquals(str(response), expected_output)
+        response = self.client.post(
+            '/admin/yourtips/yourtipsentry/?drf__submission_date__gte='
+            '2017-01-01&drf__submission_date__lte=2017-01-01'
+        )
+        expected_output = (
+            'Content-Disposition: attachment; filename=yourtips_entries.csv'
+            '\r\nContent-Language: en\r\nVary: Accept-Language, Cookie\r\n'
+            'Cache-Control: no-cache, no-store, private, max-age=0\r\n'
+            'X-Frame-Options: SAMEORIGIN\r\nContent-Type: csv\r\n\r\nid,'
+            'submission_date,optional_name,user,tip_text,'
+            'allow_share_on_social_media,converted_article_page\r\n')
+        self.assertEquals(str(response), expected_output)
 
     def test_export_article_page_csv(self):
         self.client.login(
@@ -51,6 +76,8 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
             slug='test-tip')
         self.tip_index.add_child(instance=tip_page)
         tip_page.save_revision().publish()
+
+        date = str(datetime.datetime.now().date())
 
         entry = YourTipsEntry.objects.create(
             optional_name='Test',
@@ -68,3 +95,11 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
         expected_output = (
             'Tip-1,1,test body,Test')
         self.assertContains(response, expected_output)
+
+        response = self.client.post('/admin/yourtips/yourtipsarticlepage/'
+                                    '?drf__latest_revision_created_at__gte=2017-01-01'
+                                    '&drf__latest_revision_created_at__lte=2017-01-01')
+
+        expected_output = (
+            'Tip-1,1,test body,Test')
+        self.assertNotContains(response, expected_output)

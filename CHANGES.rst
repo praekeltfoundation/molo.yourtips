@@ -19,3 +19,7 @@ Change Log
 - Bug fix: Only activate "YourTips" with published YourTip pages.
 - Change: Verification message on tip submission form show word count now.
 - Change: Download CSV on converted tip articles to only download relevant information.
+
+5.0.5
+-----
+- Bug fix: Date range filter on tip and entry wagtail admin.

@@ -96,9 +96,11 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
             'Tip-1,1,test body,Test')
         self.assertContains(response, expected_output)
 
-        response = self.client.post('/admin/yourtips/yourtipsarticlepage/'
-                                    '?drf__latest_revision_created_at__gte=2017-01-01'
-                                    '&drf__latest_revision_created_at__lte=2017-01-01')
+        response = self.client.post(
+            '/admin/yourtips/yourtipsarticlepage/?'
+            'drf__latest_revision_created_at__gte=2017-01-01'
+            '&drf__latest_revision_created_at__lte=2017-01-01'
+        )
 
         expected_output = (
             'Tip-1,1,test body,Test')

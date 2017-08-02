@@ -22,8 +22,8 @@ from molo.yourtips.models import (
 )
 
 
-class DateFilter(DateRangeFilter):
-    template = 'admin/yourtips/yourtips_date_range_filter.html'
+class EntryDateFilter(DateRangeFilter):
+    template = 'admin/yourtips/yourtips_entry_date_range_filter.html'
 
 
 class YourTipsEntriesResource(resources.ModelResource):
@@ -35,8 +35,23 @@ class YourTipsEntriesResource(resources.ModelResource):
 
 class YourTipsEntriesModelAdminTemplate(IndexView):
     def post(self, request, *args, **kwargs):
+        drf__submission_date__gte = request.GET.get(
+            'drf__submission_date__gte'
+        )
+        drf__submission_date__lte = request.GET.get(
+            'drf__submission_date__lte'
+        )
 
-        dataset = YourTipsEntriesResource().export()
+        if drf__submission_date__gte and drf__submission_date__lte:
+            queryset = YourTipsEntry.objects.filter(
+                submission_date__range=[
+                    drf__submission_date__gte, drf__submission_date__lte
+                ]
+            )
+        else:
+            queryset = YourTipsEntry.objects.all()
+
+        dataset = YourTipsEntriesResource().export(queryset)
 
         response = HttpResponse(dataset.csv, content_type="csv")
         response['Content-Disposition'] = \
@@ -57,7 +72,7 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
         'tip', 'submission_date', 'user', 'optional_name',
         'allow_share_on_social_media', '_convert'
     ]
-    list_filter = [('submission_date', DateFilter)]
+    list_filter = [('submission_date', EntryDateFilter)]
 
     def _convert(self, obj, *args, **kwargs):
         if obj.converted_article_page:
@@ -74,6 +89,10 @@ class YourTipsEntriesModelAdmin(ModelAdmin):
 
     def tip(self, obj, *args, **kwargs):
         return truncatechars(obj.tip_text, 30)
+
+
+class TipDateFilter(DateRangeFilter):
+    template = 'admin/yourtips/yourtips_tip_date_range_filter.html'
 
 
 class YourTipsEntryPageResource(resources.ModelResource):
@@ -114,7 +133,25 @@ class YourTipsEntryPageResource(resources.ModelResource):
 class YourTipsEntryPageModelAdminTemplate(IndexView):
     def post(self, request, *args, **kwargs):
 
-        dataset = YourTipsEntryPageResource().export()
+        drf__latest_revision_created_at__gte = request.GET.get(
+            'drf__latest_revision_created_at__gte'
+        )
+        drf__latest_revision_created_at__lte = request.GET.get(
+            'drf__latest_revision_created_at__lte'
+        )
+
+        if drf__latest_revision_created_at__gte and \
+                drf__latest_revision_created_at__lte:
+            queryset = YourTipsArticlePage.objects.filter(
+                latest_revision_created_at__range=[
+                    drf__latest_revision_created_at__gte,
+                    drf__latest_revision_created_at__lte
+                ]
+            )
+        else:
+            queryset = YourTipsArticlePage.objects.all()
+
+        dataset = YourTipsEntryPageResource().export(queryset)
 
         response = HttpResponse(dataset.csv, content_type="csv")
         response['Content-Disposition'] = \
@@ -135,7 +172,7 @@ class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
         'title', 'latest_revision_created_at', 'vote_total',
         'number_of_shares', 'live', '_share_on_facebook'
     ]
-    list_filter = [('latest_revision_created_at', DateFilter)]
+    list_filter = [('latest_revision_created_at', TipDateFilter)]
 
     def get_queryset(self, request):
         qs = super(YourTipsEntryPageModelAdmin, self).get_queryset(request)

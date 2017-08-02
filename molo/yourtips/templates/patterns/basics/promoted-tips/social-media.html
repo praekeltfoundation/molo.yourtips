@@ -1,5 +1,6 @@
 {% load wagtailcore_tags wagtailimages_tags core_tags wagtailsettings_tags i18n %}
 {% get_settings %}
+{% if settings.core.SiteSettings.facebook_sharing or settings.core.SiteSettings.twitter_sharing %}
 <div class="social-share">
   <p class="social-share-label">{% trans "Share on:" %}</p>
   {% if settings.core.SiteSettings.facebook_sharing %}
@@ -15,3 +16,4 @@
     </a>
   {% endif %}
 </div>
+{% endif %}

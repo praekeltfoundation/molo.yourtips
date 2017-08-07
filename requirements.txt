@@ -5,3 +5,4 @@ django-import-export
 django-daterange-filter
 django-secretballot==0.7.0
 django-likes==1.11
+imgkit==0.1.7

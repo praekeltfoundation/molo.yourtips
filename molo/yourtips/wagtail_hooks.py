@@ -1,6 +1,8 @@
 from daterange_filter.filter import DateRangeFilter
 from import_export import resources, fields
 
+from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.template.defaultfilters import truncatechars
 
@@ -167,7 +169,8 @@ class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
     index_view_class = YourTipsEntryPageModelAdminTemplate
     add_to_settings_menu = False
     list_display = [
-        'title', 'latest_revision_created_at', 'vote_total', 'live'
+        'title', 'latest_revision_created_at', 'vote_total',
+        'number_of_shares', 'live', '_share_on_facebook'
     ]
     list_filter = [('latest_revision_created_at', TipDateFilter)]
 
@@ -175,6 +178,17 @@ class YourTipsEntryPageModelAdmin(ModelAdmin, YourTipsEntryAdmin):
         qs = super(YourTipsEntryPageModelAdmin, self).get_queryset(request)
         main = request.site.root_page
         return qs.descendant_of(main)
+
+    def _share_on_facebook(self, obj):
+        # TODO Check if user allowed share and secure site
+        tip_url = 'http://%s' % Site.objects.get_current().domain + reverse(
+            'molo.yourtips:tip_share', args=[obj.id]
+        )
+        return '<a href="http://www.facebook.com/sharer.php?u=%s"' \
+               ' class="addlink">Share on Facebook</a>' % tip_url
+
+    _share_on_facebook.allow_tags = True
+    _share_on_facebook.short_description = ''
 
 
 class YourTipsAdminGroup(ModelAdminGroup):

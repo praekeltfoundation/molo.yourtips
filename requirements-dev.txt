@@ -5,3 +5,4 @@ pytest-xdist
 flake8
 responses
 beautifulsoup4
+imgkit==0.1.7

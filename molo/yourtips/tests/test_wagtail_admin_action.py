@@ -24,7 +24,7 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
         YourTipsEntry.objects.create(
             optional_name='Test',
             tip_text='test body',
-            allow_share_on_social_media=True,
+            allow_share_on_social_media=False,
         )
 
         response = self.client.post('/admin/yourtips/yourtipsentry/')
@@ -36,7 +36,7 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
             'X-Frame-Options: SAMEORIGIN\r\nContent-Type: csv\r\n\r\nid,'
             'submission_date,optional_name,user,tip_text,'
             'allow_share_on_social_media,converted_article_page\r\n1,' +
-            date + ',Test,,test body,1,\r\n')
+            date + ',Test,,test body,0,\r\n')
         self.assertEquals(str(response), expected_output)
         response = self.client.post(
             '/admin/yourtips/yourtipsentry/?drf__submission_date__gte=' +
@@ -80,7 +80,7 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
         entry = YourTipsEntry.objects.create(
             optional_name='Test',
             tip_text='test body',
-            allow_share_on_social_media=True,
+            allow_share_on_social_media=False,
         )
         self.client.get(
             '/django-admin/yourtips/yourtipsentry/%d/convert/' % entry.id

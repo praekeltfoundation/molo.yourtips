@@ -23,5 +23,14 @@ urlpatterns = patterns(
         r'^popular-tips/$',
         views.YourTipsPopularView.as_view(),
         name='popular_tips'
-    )
+    ),
+    url(
+        r'^tip-share-image/(?P<tip_id>\d+)/$',
+        views.ShareImageView.as_view(),
+        name='tip_share'
+    ),
+    url(
+        r'^share-tip-on-facebook/(?P<tip_id>\d+)/$',
+        views.ShareonFacebookRedirectView.as_view(),
+        name='share_tip_on_facebook'),
 )

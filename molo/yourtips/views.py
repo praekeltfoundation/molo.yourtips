@@ -1,7 +1,9 @@
 from django.core.urlresolvers import reverse
+from django.contrib.sites.models import Site
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, RedirectView
 
 from molo.core.templatetags.core_tags import get_pages
 
@@ -104,3 +106,45 @@ class YourTipsPopularView(ListView):
             'your_tip_page_slug': YourTip.objects.first().slug,
         })
         return context
+
+
+class ShareImageView(TemplateView):
+    """
+    A TemplateView for the social_media image.
+    Note:
+    - This template is used when a tip is converted to an article.
+    - A social_media image will only be generate if the user
+        selected allow_share_on_social_media.
+    """
+    template_name = 'yourtips/your_tips_image_share.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ShareImageView, self).get_context_data(
+            *args, **kwargs
+        )
+        tip_article = get_object_or_404(
+            YourTipsArticlePage,
+            pk=kwargs.get('tip_id')
+        )
+        context.update({
+            'tip_article': tip_article
+        })
+        return context
+
+
+class ShareonFacebookRedirectView(RedirectView):
+    url = 'http://www.facebook.com/'
+
+    def get_redirect_url(self, *args, **kwargs):
+        article = get_object_or_404(
+            YourTipsArticlePage,
+            pk=kwargs.get('tip_id')
+        )
+        article.share_increase()
+        self.url = 'http://www.facebook.com/sharer.php?u=http://%s%s' % (
+            Site.objects.get_current().domain,
+            reverse('molo.yourtips:tip_share', args=[article.id])
+        )
+        return super(
+            ShareonFacebookRedirectView, self
+        ).get_redirect_url(*args, **kwargs)

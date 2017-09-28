@@ -18,6 +18,9 @@ from molo.core.models import (
 
 
 class YourTipsIndexPage(Page, PreventDeleteMixin):
+    """
+    The YourTips page is created inside this index.
+    """
     parent_page_types = ['core.Main']
     subpage_types = ['yourtips.YourTip']
 
@@ -40,11 +43,16 @@ def create_yourtips_index_page(sender, instance, **kwargs):
 
 
 class YourTipsSectionIndexPage(Page, PreventDeleteMixin):
+    """
+    All the converted tips are listed under this index.
+    """
     parent_page_types = ['core.Main']
     subpage_types = []
 
     def copy(self, *args, **kwargs):
-        YourTipsSectionIndexPage.objects.child_of(YourTipsIndexPage).delete()
+        site = kwargs['to'].get_site()
+        main = site.root_page
+        YourTipsSectionIndexPage.objects.child_of(main).delete()
         super(YourTipsSectionIndexPage, self).copy(*args, **kwargs)
 
 
@@ -60,6 +68,15 @@ def create_yourtips_section_index_page(sender, instance, **kwargs):
 
 
 class YourTip(TranslatablePageMixinNotRoutable, Page):
+    """
+    This model links the views and store settings for the yourtips module.
+    Note that:
+    * title: Is used throughout the module where the name of
+        the module need to be displayed.
+    * description: Is used to display the YourTip description.
+    * homepage_action_copy: Is used to change the text of the banner.
+    * extra_style_hints: Is used to change style of the link on the main page.
+    """
     parent_page_types = [
         'yourtips.YourTipsIndexPage'
     ]
@@ -90,7 +107,7 @@ class YourTip(TranslatablePageMixinNotRoutable, Page):
     def get_number_of_popular_tips():
         return YourTipsArticlePage.objects.filter(
             votes__gte=1
-        ).count()
+        ).distinct().count()
 
     class Meta:
         verbose_name = 'YourTip'
@@ -117,6 +134,13 @@ YourTip.settings_panels = [
 
 
 class YourTipsEntry(models.Model):
+    """
+    This model is used to store the user submitted tip entries.
+    Note that:
+    * If the user is logged in, the user will be saved in the user field.
+    * The optional_name field allows the user to
+        enter a name to display with his/her tip.
+    """
     submission_date = models.DateField(null=True, blank=True,
                                        auto_now_add=True)
     optional_name = models.CharField(null=True, blank=True, max_length=30)
@@ -134,20 +158,20 @@ class YourTipsEntry(models.Model):
             'Your tip article page to which the entry was converted to')
     )
 
-    panels = [
-        MultiFieldPanel(
-            [
-                FieldPanel('tip_text')
-            ],
-            heading="Entry Settings",)
-    ]
-
     class Meta:
         verbose_name = 'YourTips Entry'
         verbose_name_plural = 'YourTips Entries'
 
 
 class YourTipsArticlePage(ArticlePage):
+    """
+    This model is used to store the converted tip entry as an ArticlePage.
+    Note that:
+    * A converted tip can be promoted to show on the homepage by enabling
+        the featured_in_homepage setting and setting a date range.
+    * tag field: The first tag displays as a heading for the tip.
+    * image field: The first image displays as an icon for the tip.
+    """
     parent_page_types = ['yourtips.YourTipsSectionIndexPage']
     subpage_types = []
 

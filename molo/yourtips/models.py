@@ -50,7 +50,9 @@ class YourTipsSectionIndexPage(Page, PreventDeleteMixin):
     subpage_types = []
 
     def copy(self, *args, **kwargs):
-        YourTipsSectionIndexPage.objects.child_of(YourTipsIndexPage).delete()
+        site = kwargs['to'].get_site()
+        main = site.root_page
+        YourTipsSectionIndexPage.objects.child_of(main).delete()
         super(YourTipsSectionIndexPage, self).copy(*args, **kwargs)
 
 

@@ -1,3 +1,4 @@
+import mock
 from django.template import Template, Context
 
 from molo.yourtips.models import (
@@ -31,8 +32,13 @@ class TestYourTipsTemplateTags(BaseYourTipsTestCase):
         {% your_tips_on_homepage %}
         """)
 
+        # create mock request with Site
+        request = mock.Mock()
+        request.site = self.site
+
         output = template.render(Context({
             'object': self.user,
+            'request': request,
         }))
 
         self.assertTrue('test body' in output)
@@ -60,6 +66,10 @@ class TestYourTipsTemplateTags(BaseYourTipsTestCase):
         {% your_tips_on_tip_submission_form %}
         """)
 
-        output = template.render(Context())
+        # create mock request with Site
+        request = mock.Mock()
+        request.site = self.site
+
+        output = template.render(Context({'request': request}))
 
         self.assertTrue('test body' in output)

@@ -21,19 +21,25 @@ def your_tips_on_homepage(context):
     :param context: takes context
     """
     context = copy(context)
+    site_main = context['request'].site.root_page
     if get_your_tip(context):
-
-        tip_on_homepage = YourTipsArticlePage.objects.filter(
-            featured_in_homepage=True).order_by(
-                '-featured_in_homepage_start_date').first()
-
-        if not tip_on_homepage:
-            tip_on_homepage = YourTipsArticlePage.objects.all().order_by(
-                '-total_upvotes').first()
+        tip_on_homepage = (YourTipsArticlePage.objects
+                           .descendant_of(site_main)
+                           .filter(featured_in_homepage=True)
+                           .order_by('-featured_in_homepage_start_date')
+                           .first())
 
         if not tip_on_homepage:
-            tip_on_homepage = YourTipsArticlePage.objects.all().order_by(
-                '-latest_revision_created_at').first()
+            tip_on_homepage = (YourTipsArticlePage.objects
+                               .descendant_of(site_main)
+                               .order_by('-total_upvotes')
+                               .first())
+
+        if not tip_on_homepage:
+            tip_on_homepage = (YourTipsArticlePage.objects
+                               .descendant_of(site_main)
+                               .order_by('-latest_revision_created_at')
+                               .first())
 
         context.update({
             'article_tip': tip_on_homepage,
@@ -53,13 +59,18 @@ def your_tips_on_tip_submission_form(context):
     :param context: takes context
     """
     context = copy(context)
+    site_main = context['request'].site.root_page
 
-    most_recent_tip = YourTipsArticlePage.objects.all(
-    ).order_by('-latest_revision_created_at').first()
+    most_recent_tip = (YourTipsArticlePage.objects
+                       .descendant_of(site_main)
+                       .order_by('-latest_revision_created_at')
+                       .first())
 
-    most_popular_tip = YourTipsArticlePage.objects.filter(
-        votes__gte=1
-    ).order_by('-total_upvotes').first()
+    most_popular_tip = (YourTipsArticlePage.objects
+                        .descendant_of(site_main)
+                        .filter(votes__gte=1)
+                        .order_by('-total_upvotes')
+                        .first())
 
     context.update({
         'most_popular_tip': most_popular_tip,
@@ -116,4 +127,5 @@ def get_your_tip(context):
     :param context: takes context
     :return: A YourTip object
     """
-    return YourTip.objects.live().first()
+    site_main = context['request'].site.root_page
+    return YourTip.objects.descendant_of(site_main).live().first()

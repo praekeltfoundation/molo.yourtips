@@ -18,8 +18,8 @@ class YourTipsEntryView(CreateView):
     template_name = 'yourtips/your_tips_entry.html'
 
     def get_context_data(self, *args, **kwargs):
-        context = super(
-            YourTipsEntryView, self).get_context_data(*args, **kwargs)
+        context = (super(YourTipsEntryView, self)
+                   .get_context_data(*args, **kwargs))
         tip_page = YourTip.objects.all().first()
         context.update({'tip_page': tip_page})
         return context
@@ -32,7 +32,9 @@ class YourTipsEntryView(CreateView):
     def form_valid(self, form):
         tip_page = YourTip.objects.all().first()
         form.instance.tip_page = (
-            tip_page.get_main_language_page().specific)
+            tip_page
+            .get_main_language_page()
+            .specific)
         if self.request.user.is_anonymous():
             form.instance.user = None
         else:
@@ -47,7 +49,8 @@ class ThankYouView(TemplateView):
     template_name = 'yourtips/thank_you.html'
 
     def get_context_data(self, *args, **kwargs):
-        context = super(ThankYouView, self).get_context_data(*args, **kwargs)
+        context = (super(ThankYouView, self)
+                   .get_context_data(*args, **kwargs))
         tip_page = YourTip.objects.all().first()
         context.update({'tip_page': tip_page})
         return context
@@ -64,14 +67,14 @@ class YourTipsRecentView(ListView):
         main = self.request.site.root_page
         context = {'request': self.request}
         locale = self.request.LANGUAGE_CODE
-        articles = YourTipsArticlePage.objects.all(
-        ).descendant_of(main).order_by('-latest_revision_created_at')
+        articles = (YourTipsArticlePage.objects
+                    .descendant_of(main)
+                    .order_by('-latest_revision_created_at'))
         return get_pages(context, articles, locale)
 
     def get_context_data(self, *args, **kwargs):
-        context = super(YourTipsRecentView, self).get_context_data(
-            *args, **kwargs
-        )
+        context = (super(YourTipsRecentView, self)
+                   .get_context_data(*args, **kwargs))
         context.update({
             'view_title': 'Recent Tips',
             'your_tip_page_slug': YourTip.objects.first().slug
@@ -90,15 +93,16 @@ class YourTipsPopularView(ListView):
         main = self.request.site.root_page
         context = {'request': self.request}
         locale = self.request.LANGUAGE_CODE
-        articles = YourTipsArticlePage.objects.filter(
-            votes__isnull=False
-        ).descendant_of(main).order_by('-total_upvotes').distinct()
+        articles = (YourTipsArticlePage.objects
+                    .descendant_of(main)
+                    .filter(votes__isnull=False)
+                    .order_by('-total_upvotes')
+                    .distinct())
         return get_pages(context, articles, locale)
 
     def get_context_data(self, *args, **kwargs):
-        context = super(YourTipsPopularView, self).get_context_data(
-            *args, **kwargs
-        )
+        context = (super(YourTipsPopularView, self)
+                   .get_context_data(*args, **kwargs))
         context.update({
             'view_title': 'Popular Tips',
             'your_tip_page_slug': YourTip.objects.first().slug,

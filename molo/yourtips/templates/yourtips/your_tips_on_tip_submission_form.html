@@ -25,11 +25,7 @@
     {% endif %}
     <!--END -->
   {% for block in most_popular_tip.body %}
-    {% if block.block_type == 'paragraph' %}
-      <h3 class="yourtips__description">{{ block.value }}</h3>
-    {% elif block.block_type == 'heading' %}
-      <p class="yourtips__author">{{ block.value }}</p>
-    {% endif %}
+    {% include "patterns/basics/promoted-tips/yourtips-on-submission-form.html" %}
   {% endfor %}
   </div>
 </div>
@@ -56,11 +52,7 @@
     {% endif %}
     <!--END -->
   {% for block in most_recent_tip.body %}
-    {% if block.block_type == 'paragraph' %}
-      <h3 class="yourtips__description">{{ block.value }}</h3>
-    {% elif block.block_type == 'heading' %}
-      <p class="yourtips__author">{{ block.value }}</p>
-    {% endif %}
+    {% include "patterns/basics/promoted-tips/yourtips-on-submission-form.html" %}
   {% endfor %}
     </div>
   </div>

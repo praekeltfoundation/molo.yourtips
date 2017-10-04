@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+5.0.7
+-----
+- Bug Fix: filter content by site in the template tags
+
+
 5.0.6
 -----
 - Bug Fix: change the parent page for yourtips tip section index page when copy

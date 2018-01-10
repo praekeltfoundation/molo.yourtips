@@ -33,11 +33,11 @@ class YourTipsIndexPage(Page, PreventDeleteMixin):
 
 @receiver(index_pages_after_copy, sender=Main)
 def create_yourtips_index_page(sender, instance, **kwargs):
-    if not instance.get_children().filter(
-            title='Your tips').exists:
+    index_title = 'Your Tips'
+    if not instance.get_children().filter(title=index_title).exists():
         yourtips_tip_page_index = YourTipsIndexPage(
-            title='Your tips', slug=('yourtips-%s' % (
-                generate_slug(instance.title), )))
+            title=index_title,
+            slug='yourtips-{}'.format(generate_slug(instance.title)))
         instance.add_child(instance=yourtips_tip_page_index)
         yourtips_tip_page_index.save_revision().publish()
 
@@ -50,17 +50,19 @@ class YourTipsSectionIndexPage(Page, PreventDeleteMixin):
     subpage_types = []
 
     def copy(self, *args, **kwargs):
-        YourTipsSectionIndexPage.objects.child_of(YourTipsIndexPage).delete()
+        site = kwargs['to'].get_site()
+        main = site.root_page
+        YourTipsSectionIndexPage.objects.child_of(main).delete()
         super(YourTipsSectionIndexPage, self).copy(*args, **kwargs)
 
 
 @receiver(index_pages_after_copy, sender=Main)
 def create_yourtips_section_index_page(sender, instance, **kwargs):
-    if not instance.get_children().filter(
-            title='Tips').exists:
+    index_title = 'Converted Tips'
+    if not instance.get_children().filter(title=index_title).exists():
         yourtips_tip_section_page_index = YourTipsSectionIndexPage(
-            title='Tips', slug=('tips-%s' % (
-                generate_slug(instance.title), )))
+            title=index_title,
+            slug='tips-{}'.format(generate_slug(instance.title)))
         instance.add_child(instance=yourtips_tip_section_page_index)
         yourtips_tip_section_page_index.save_revision().publish()
 
@@ -94,7 +96,7 @@ class YourTip(TranslatablePageMixinNotRoutable, Page):
         max_length=255)
 
     def get_effective_extra_style_hints(self):
-            return self.extra_style_hints
+        return self.extra_style_hints
 
     @staticmethod
     def get_number_of_tips():

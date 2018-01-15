@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+5.0.8
+-----
+- Molo plugin templates refactor and cleanup
+
+
 5.0.7
 -----
 - Bug Fix: filter content by site in the template tags

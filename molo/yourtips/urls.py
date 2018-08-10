@@ -1,10 +1,9 @@
 from molo.yourtips import views
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(
         r'^entry/(?P<slug>[\w-]+)/$',
         views.YourTipsEntryView.as_view(),
@@ -24,4 +23,4 @@ urlpatterns = patterns(
         views.YourTipsPopularView.as_view(),
         name='popular_tips'
     )
-)
+]

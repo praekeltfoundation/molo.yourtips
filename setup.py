@@ -19,7 +19,8 @@ setup(name='molo.yourtips',
       version=version,
       description=('This feature enables youth to share short tips with one '
                    'another'),
-      long_description="".join([open(f, "r").read() for f in description_files]),
+      long_description="".join([open(item, "r").read()
+                                for item in description_files]),
       classifiers=[
           "Programming Language :: Python",
           "Framework :: Django",

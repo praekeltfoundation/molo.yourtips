@@ -30,37 +30,48 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
         response = self.client.post('/admin/yourtips/yourtipsentry/')
         date = str(datetime.datetime.now().date())
         expected_output = (
-            'Content-Disposition: attachment; filename=yourtips_entries.csv'
-            '\r\nContent-Language: en\r\nVary: Accept-Language, Cookie\r\n'
-            'Cache-Control: no-cache, no-store, private, max-age=0\r\n'
-            'X-Frame-Options: SAMEORIGIN\r\nContent-Type: csv\r\n\r\nid,'
-            'submission_date,optional_name,user,tip_text,'
-            'allow_share_on_social_media,converted_article_page\r\n1,' +
-            date + ',Test,,test body,1,\r\n')
+            'Content-Length: 132\r\n'
+            'Content-Language: en\r\n'
+            'Content-Disposition: attachment;'
+            ' filename=yourtips_entries.csv\r\n'
+            'Vary: Accept-Language, Cookie\r\n'
+            'Cache-Control: no-cache, no-store, private, max-age=0'
+            '\r\nX-Frame-Options: SAMEORIGIN\r\n'
+            'Content-Type: csv\r\n\r\n'
+            'id,submission_date,optional_name,user,tip_text,'
+            'allow_share_on_social_media,converted_article_page\r\n'
+            '1,' + date + ',Test,,test body,1,\r\n')
         self.assertEquals(str(response), expected_output)
         response = self.client.post(
             '/admin/yourtips/yourtipsentry/?drf__submission_date__gte=' +
             date + '&drf__submission_date__lte=' + date
         )
         expected_output = (
-            'Content-Disposition: attachment; filename=yourtips_entries.csv'
-            '\r\nContent-Language: en\r\nVary: Accept-Language, Cookie\r\n'
+            'Content-Length: 132\r\n'
+            'Content-Language: en\r\n'
+            'Content-Disposition: attachment; '
+            'filename=yourtips_entries.csv\r\n'
+            'Vary: Accept-Language, Cookie\r\n'
             'Cache-Control: no-cache, no-store, private, max-age=0\r\n'
-            'X-Frame-Options: SAMEORIGIN\r\nContent-Type: csv\r\n\r\nid,'
-            'submission_date,optional_name,user,tip_text,'
-            'allow_share_on_social_media,converted_article_page\r\n1,' +
-            date + ',Test,,test body,1,\r\n')
+            'X-Frame-Options: SAMEORIGIN\r\n'
+            'Content-Type: csv\r\n\r\n'
+            'id,submission_date,optional_name,user,tip_text,'
+            'allow_share_on_social_media,converted_article_page\r\n'
+            '1,' + date + ',Test,,test body,1,\r\n')
         self.assertEquals(str(response), expected_output)
         response = self.client.post(
             '/admin/yourtips/yourtipsentry/?drf__submission_date__gte='
             '2017-01-01&drf__submission_date__lte=2017-01-01'
         )
         expected_output = (
-            'Content-Disposition: attachment; filename=yourtips_entries.csv'
-            '\r\nContent-Language: en\r\nVary: Accept-Language, Cookie\r\n'
+            'Content-Length: 99\r\n'
+            'Content-Language: en\r\n'
+            'Content-Disposition: attachment; '
+            'filename=yourtips_entries.csv\r\n'
+            'Vary: Accept-Language, Cookie\r\n'
             'Cache-Control: no-cache, no-store, private, max-age=0\r\n'
-            'X-Frame-Options: SAMEORIGIN\r\nContent-Type: csv\r\n\r\nid,'
-            'submission_date,optional_name,user,tip_text,'
+            'X-Frame-Options: SAMEORIGIN\r\nContent-Type: csv\r\n\r\n'
+            'id,submission_date,optional_name,user,tip_text,'
             'allow_share_on_social_media,converted_article_page\r\n')
         self.assertEquals(str(response), expected_output)
 

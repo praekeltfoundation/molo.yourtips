@@ -49,7 +49,8 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
         expected_output = (
             'Content-Length: 132\r\n'
             'Content-Language: en\r\n'
-            'Content-Disposition: attachment; filename=yourtips_entries.csv\r\n'
+            'Content-Disposition: attachment; '
+            'filename=yourtips_entries.csv\r\n'
             'Vary: Accept-Language, Cookie\r\n'
             'Cache-Control: no-cache, no-store, private, max-age=0\r\n'
             'X-Frame-Options: SAMEORIGIN\r\n'
@@ -65,7 +66,8 @@ class TestWagtailAdminActions(BaseYourTipsTestCase):
         expected_output = (
             'Content-Length: 99\r\n'
             'Content-Language: en\r\n'
-            'Content-Disposition: attachment; filename=yourtips_entries.csv\r\n'
+            'Content-Disposition: attachment; '
+            'filename=yourtips_entries.csv\r\n'
             'Vary: Accept-Language, Cookie\r\n'
             'Cache-Control: no-cache, no-store, private, max-age=0\r\n'
             'X-Frame-Options: SAMEORIGIN\r\nContent-Type: csv\r\n\r\n'

@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+6.0.0
+-----
+- Molo 6 compatibility
+
 5.0.8
 -----
 - Molo plugin templates refactor and cleanup

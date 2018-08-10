@@ -90,9 +90,12 @@ class TestAdminActions(BaseYourTipsTestCase):
         article = YourTipsArticlePage.objects.get(title='Tip-%s' % entry.id)
         entry = YourTipsEntry.objects.get(pk=entry.pk)
         self.assertEquals(entry.converted_article_page, article)
-        self.assertEquals(article.body.stream_data, [
-            {"type": "paragraph", "value": entry.tip_text},
-            {"type": "heading", "value": "By Test"}
+        data = article.body.stream_data
+        self.assertEquals(data, [{
+                u"id": data[0]['id'], u"type": u"paragraph",
+                u"value": unicode(entry.tip_text)
+            },
+            {u"id": data[1]['id'], u"type": u"heading", u"value": u"By Test"}
         ])
 
         self.assertEquals(YourTipsArticlePage.objects.all().count(), 1)

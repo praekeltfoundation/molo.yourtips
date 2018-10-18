@@ -95,6 +95,13 @@ class YourTip(TranslatablePageMixinNotRoutable, Page):
         verbose_name="Homepage Banner Copy",
         max_length=255)
 
+    language = models.ForeignKey('core.SiteLanguage',
+                                 blank=True,
+                                 null=True,
+                                 on_delete=models.SET_NULL,
+                                 )
+    translated_pages = models.ManyToManyField("self", blank=True)
+
     def get_effective_extra_style_hints(self):
         return self.extra_style_hints
 

@@ -1,6 +1,15 @@
 Change Log
 ==========
 
+7.0.0
+-----
+- Add support for Molo 7
+
+6.0.1
+-----
+- Uses objects instead of default_manager in the migration
+    http://django-mptt.github.io/django-mptt/upgrade.html#id1
+
 6.0.0
 -----
 - Molo 6 compatibility
@@ -8,7 +17,6 @@ Change Log
 5.0.8
 -----
 - Molo plugin templates refactor and cleanup
-
 
 5.0.7
 -----

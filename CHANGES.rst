@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+7.0.0
+-----
+- Add support for Molo 7
+
 6.0.1
 -----
 - Uses objects instead of default_manager in the migration

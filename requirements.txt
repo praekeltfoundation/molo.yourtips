@@ -1,4 +1,4 @@
-molo.core~=7.0.1
+molo.core~=7.0.2
 
 django_compressor==2.2
 django-import-export
